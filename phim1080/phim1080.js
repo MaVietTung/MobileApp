@@ -6,6 +6,21 @@ logoImage.style.width = '50px';
 logoImage.style.height = '50px';
 }
 
+var notification = document.querySelector('.notification');
+if(notification){
+    notification.style.display = 'none';
+}
+
+var rophim = document.querySelector('img[src*=rophim]');
+if(rophim){
+    rophim.style.display = 'none';
+}
+
+var rophim2 = document.querySelector('.buttons a[href*=rophim]');
+if(rophim2){
+    rophim2.style.display = 'none';
+}
+
 var footer = document.querySelector('#footer');
 
 if(footer){
