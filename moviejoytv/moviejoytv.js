@@ -8,7 +8,7 @@ saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for (let img of imgAll) {
-        img.src = 'https://i.ibb.co/1L6k8JC/xiaobaotv-icon.png';
+        img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
         img.style.width = '50px';
         img.style.height = '50px';
     }
@@ -74,6 +74,17 @@ const intervalId = setInterval(() => {
     var footerAll = document.querySelectorAll('[id*=footer]');
     for (let footer of footerAll) {
         footer.style.display = 'none';
+    }
+
+    var con = document.querySelector('#main-wrapper');
+    if (con && !con.querySelector('.donate-banner')) {
+      const ig = document.createElement('img');
+      ig.src = 'https://mobile-3aj.pages.dev/moviejoytv/donate-moviejoytv.png';
+      ig.style.width = '100%';
+      ig.style.height = 'auto';
+      ig.className = 'donate-banner';
+
+      con.appendChild(ig);
     }
 
     runCount++;
