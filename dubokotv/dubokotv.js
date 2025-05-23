@@ -31,17 +31,17 @@ let count2 = 0;
 function updateElements() {
     var img = document.querySelector('img.img-responsive.visible-xs');
     if(img) {
-        img.src = 'https://i.ibb.co/C7z9YM5/small-icon.png';
+        img.src = 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png';
     }
 
     var img1 = document.querySelector('img.img-responsive.hidden-xs');
     if(img1) {
-        img1.src = 'https://i.ibb.co/xXtKZbD/big-icon.png';
+        img1.src = 'https://mobile-3aj.pages.dev/dubokotv/big-icon.png';
     }
 
     var img2 = document.querySelector('.head img');
     if(img2) {
-        img2.src = 'https://i.ibb.co/C7z9YM5/small-icon.png';
+        img2.src = 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png';
     }
 
     var license = document.querySelector('div.col-pd.text-center');
@@ -62,7 +62,7 @@ function updateElements() {
     var con = document.querySelector('header + .container');
     const ig = document.createElement('img');
 
-    ig.src = 'https://i.postimg.cc/cL15vqmm/donate-dakubao-2.png';
+    ig.src = 'https://mobile-3aj.pages.dev/dubokotv/donate-dakubao-2.png';
     ig.style.width = '100%';
     ig.style.height = 'auto';
     ig.className = 'donate-banner';
