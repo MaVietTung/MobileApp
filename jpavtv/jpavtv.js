@@ -271,7 +271,7 @@ const intervalId = setInterval(() => {
     }
     var customLogo = document.querySelector('#logo-mobile img');
     if (customLogo) {
-        customLogo.src = 'https://i.postimg.cc/vZk1cQLD/jpavtv-logo.jpg';
+        customLogo.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
         customLogo.style.height = '70px';
         customLogo.style.border = '2px solid white';
         Object.defineProperty(customLogo, 'src', {
@@ -327,7 +327,7 @@ const intervalId = setInterval(() => {
     var con = document.querySelectorAll('.container')[2];
     if (con && !con.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
-        ig.src = 'https://i.postimg.cc/761npCM7/donate-pandratv.png';
+        ig.src = 'https://mobile-3aj.pages.dev/jpavtv/donate-jpavtv.png';
         ig.style.width = '100%';
         ig.style.height = 'auto';
         ig.className = 'donate-banner';
