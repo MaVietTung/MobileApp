@@ -14,7 +14,7 @@ const intervalId = setInterval(() => {
 
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for(let img of imgAll){
-        img.src = 'https://i.ibb.co/XJhCQSz/aimetv-icon.png';
+        img.src = 'https://mobile-3aj.pages.dev/wibuanimetv/wibuanimetv-icon.png';
     }
     
     var home = document.querySelector('a#logo');
@@ -81,7 +81,7 @@ const intervalId = setInterval(() => {
     var con = document.querySelector('#main-content');
     if (con && count === 0) {
         const ig = document.createElement('img');
-        ig.src = 'https://i.postimg.cc/zXpwTwy4/donate-animehay.png';
+        ig.src = 'https://mobile-3aj.pages.dev/wibuanimetv/donate-wibuanimetv.png';
         ig.style.width = '100%';
         ig.style.height = 'auto';
         con.appendChild(ig);
