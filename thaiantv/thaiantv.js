@@ -9,7 +9,7 @@ const intervalId = setInterval(function () {
     var customLogo = document.querySelector('.site-title');
 
     if (customLogo) {
-        customLogo.style.backgroundImage = 'URL(https://i.ibb.co/26qvGfH/thaiantv-icon.jpg)';
+        customLogo.style.backgroundImage = 'URL(https://mobile-3aj.pages.dev/thaiantv/thaiantv-icon.jpg)';
         customLogo.style.height = '70px';
         Object.defineProperty(customLogo, 'src', {
             writable: false,
@@ -36,7 +36,7 @@ const intervalId = setInterval(function () {
 
     if (con && !document.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
-        ig.src = 'https://i.ibb.co/VVsxjrL/donate-thaiantv.png';
+        ig.src = 'https://mobile-3aj.pages.dev/thaiantv/donate-thaiantv.png';
         ig.style.width = '100%';
         ig.style.height = 'auto';
         ig.className = 'donate-banner';
