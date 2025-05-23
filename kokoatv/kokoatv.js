@@ -2,12 +2,20 @@
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
+
+  function saveCurrentDateToLocalStorage() {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+    localStorage.setItem('lasttime', formattedDate);
+  }
+
   await sleep(2000);
   let runCount = 0;
   let maxRuns = 5;
   let previousUrl = window.location.href;
   let intervalId;
+  saveCurrentDateToLocalStorage();
+
 
   function startInterval() {
     intervalId = setInterval(() => {
@@ -28,7 +36,7 @@
 
   startInterval();
 
-  document.addEventListener('click', function() {
+  document.addEventListener('click', function () {
     let currentUrl = window.location.href;
 
     if (currentUrl !== previousUrl) {
@@ -57,7 +65,7 @@
         img.style.maxWidth = '50px';
 
         matIcon.replaceWith(img);
-        img.addEventListener('click', function() {
+        img.addEventListener('click', function () {
           window.location.href = '/';
         });
       }
@@ -69,12 +77,12 @@
     }
 
     var ads = document.querySelectorAll('iframe');
-    ads.forEach(function(ad) {
+    ads.forEach(function (ad) {
       ad.style.display = 'none';
     });
 
     var accounts = document.querySelectorAll('app-account');
-    accounts.forEach(function(account) {
+    accounts.forEach(function (account) {
       account.style.display = 'none';
     });
 
@@ -84,7 +92,7 @@
     }
 
     var footers = document.querySelectorAll('app-footer');
-    footers.forEach(function(footer) {
+    footers.forEach(function (footer) {
       footer.style.display = 'none';
     });
 

@@ -1,17 +1,19 @@
 let count = 0;
+function saveCurrentDateToLocalStorage() {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+    localStorage.setItem('lasttime', formattedDate);
+}
+saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
-    if (document.location.href === 'https://9animetv.to/') {
-        location.href = '/home';
-    }
-
     var desc = document.querySelector('.modal-body .description');
     if (desc) {
     desc.textContent = 'WibuAnimeTV - the best place to watch anime for free, every day!';
     }
 
 
-    var img = document.querySelector('#logo img');
-    if (img) {
+    var imgAll = document.querySelectorAll('img[src*=logo]');
+    for(let img of imgAll){
         img.src = 'https://i.ibb.co/XJhCQSz/aimetv-icon.png';
     }
     
@@ -26,9 +28,24 @@ const intervalId = setInterval(() => {
     }
 
 
-    var desiTitle = document.querySelector('.deslide-wrap');
+    var desiTitle = document.querySelector('.show-share');
     if (desiTitle) {
         desiTitle.style.display = 'none';
+    }
+
+    var text = document.querySelector('#mw-text');
+    if(text){
+        text.style.display = 'none';
+    }
+
+    var text2= document.querySelector('#xsearch .description');
+    if(text2){
+        text2.textContent = 'WibuAnimeTV - Just a better place to watch anime online for free!';
+    }
+
+    var text3= document.querySelector('#xsearch .block');
+    if(text3){
+        text3.style.display = 'none';
     }
 
     var rate = document.querySelector('.show-share');
