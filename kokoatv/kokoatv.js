@@ -58,7 +58,7 @@
         var matIcon = matIcons[i];
 
         var img = document.createElement('img');
-        img.src = 'https://i.ibb.co/zhNpmJt9/kokoatv-logo.png';
+        img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
         img.alt = 'KokoaTV Logo';
         img.style.width = '50px';
         img.style.height = '50px';
@@ -99,7 +99,7 @@
     var con = document.querySelector('app-user-layout');
     if (con && !con.querySelector('.donate-banner')) {
       const ig = document.createElement('img');
-      ig.src = 'https://i.postimg.cc/761npCM7/donate-pandratv.png';
+      ig.src = 'https://mobile-3aj.pages.dev/kokoatv/donate-kokoatv.png';
       ig.style.width = '100%';
       ig.style.height = 'auto';
       ig.className = 'donate-banner';
