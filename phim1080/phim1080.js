@@ -79,7 +79,7 @@ var interval = setInterval(function() {
     if (count < 5) {
         var logoImages = document.querySelectorAll('.logo img');
         for (let logoImage of logoImages) {
-            logoImage.src = 'https://i.ibb.co/NYn04bY/phim1080-logo.jpg';
+            logoImage.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg';
             logoImage.style.width = '30px';
             logoImage.style.height = '30px';
             Object.defineProperty(logoImage, 'src', {
@@ -101,7 +101,7 @@ var interval = setInterval(function() {
         var con = document.querySelector('.wrapper');
         if (con  && !con.querySelector('.donate-banner')) {
             const ig = document.createElement('img');
-            ig.src = 'https://i.postimg.cc/KvLtRmYX/phim1080-donate-banner.png';
+            ig.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-donate-banner.png';
             ig.style.width = '100%';
             ig.style.height = 'auto';
             ig.className = 'donate-banner';
