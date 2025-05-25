@@ -1,3 +1,8 @@
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/thaiantv/thaiantv.js';
+ document.head.appendChild(script);
+ */
 function saveCurrentDateToLocalStorage() {
     const now = new Date();
     const formattedDate = now.toISOString();

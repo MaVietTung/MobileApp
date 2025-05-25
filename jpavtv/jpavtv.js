@@ -253,6 +253,12 @@ document.head.appendChild(script);*/
     return savedDate < compareDate;
 }*/
 
+/*
+var script = document.createElement('script');
+script.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv.js';
+document.head.appendChild(script);
+*/
+
 let counter = 0;
 let maxRuns = Infinity;
 

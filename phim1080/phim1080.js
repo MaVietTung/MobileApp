@@ -68,6 +68,12 @@ var interval = setInterval(function() {
     }
 }, 1000);*/
 
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080.js';
+ document.head.appendChild(script);
+ */
+
 var count = 0;
 function saveCurrentDateToLocalStorage() {
     const now = new Date();

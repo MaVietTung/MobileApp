@@ -1,3 +1,8 @@
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv.js';
+ document.head.appendChild(script);
+ */
 (async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

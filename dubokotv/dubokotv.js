@@ -1,3 +1,9 @@
+
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/dubokotv/dubokotv.js';
+ document.head.appendChild(script);
+ */
 saveCurrentDateToLocalStorage();
 
 function hideAds() {

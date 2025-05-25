@@ -1,3 +1,8 @@
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv.js';
+ document.head.appendChild(script);
+ */
 let runCount = 0;
 function saveCurrentDateToLocalStorage() {
     const now = new Date();
@@ -37,7 +42,10 @@ const intervalId = setInterval(() => {
     var ads = document.querySelectorAll('iframe');
     for (let ad of ads) {
         try {
-            ad.click();
+            var spans = ad.contentWindow.document.querySelectorAll('span');
+            for(let span of spans){
+                span.click();
+            }
         } catch (e) { }
     }
 

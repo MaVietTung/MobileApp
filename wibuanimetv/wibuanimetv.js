@@ -1,3 +1,9 @@
+
+/**
+ var script = document.createElement('script');
+ script.src = 'https://mobile-3aj.pages.dev/wibuanimetv/wibuanimetv.js';
+ document.head.appendChild(script);
+ */
 let count = 0;
 function saveCurrentDateToLocalStorage() {
     const now = new Date();
