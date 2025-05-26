@@ -11,10 +11,10 @@ function saveCurrentDateToLocalStorage() {
 saveCurrentDateToLocalStorage();
 let count = 0;
 const intervalId = setInterval(function () {
-    var customLogo = document.querySelector('.site-title');
+    var customLogo = document.querySelector('.logo img');
 
     if (customLogo) {
-        customLogo.style.backgroundImage = 'URL(https://mobile-3aj.pages.dev/thaiantv/thaiantv-icon.jpg)';
+        customLogo.src = 'https://mobile-3aj.pages.dev/thaiantv/thaiantv-icon.jpg';
         customLogo.style.height = '70px';
         Object.defineProperty(customLogo, 'src', {
             writable: false,
@@ -22,22 +22,22 @@ const intervalId = setInterval(function () {
         });
     }
 
-    var lincese = document.querySelector('.footer-credit');
+    var lincese = document.querySelector('#footer');
     if (lincese) {
         lincese.style.display = 'none';
     }
 
-    var ads = document.querySelectorAll('[id*=banner]');
+    var ads = document.querySelectorAll('[class*=rIdV]');
     for (let ad of ads) {
         ad.style.display = 'none';
     }
 
-    var comment = document.querySelector('iframe[class*=fb]');
-    if(comment){
+    var comments = document.querySelectorAll('iframe[title*=fb]');
+    for(let comment of comments){
         comment.style.display = 'none';
     }
 
-    var con = document.querySelector('#wrapper');
+    var con = document.querySelector('.main-content');
 
     if (con && !document.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
