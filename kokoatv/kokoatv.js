@@ -3,7 +3,7 @@
  script.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv.js';
  document.head.appendChild(script);
  */
-/**(async () => {
+(async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -114,7 +114,7 @@
   }
 
   return 'done';
-})();*/
+})();
 /*(async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -223,7 +223,7 @@
   startInterval();
 })();*/
 
-var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
+/*var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
 for(var logo of logos){
   logo.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
   logo.alt = 'KokoaTV Logo';
@@ -234,7 +234,7 @@ for(var logo of logos){
 var ad = document.querySelector('[dir*=ltr]')
 if(ad){
   ad.style.display = 'none';
-}
+}*/
 
 
 
