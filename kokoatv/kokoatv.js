@@ -231,5 +231,10 @@ for(var logo of logos){
   logo.style.height = '50px';
   logo.style.maxWidth = '50px';
 }
+var ad = document.querySelector('[dir*=ltr]')
+if(ad){
+  ad.style.display = 'none';
+}
+
 
 
