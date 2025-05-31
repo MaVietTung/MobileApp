@@ -223,3 +223,13 @@
   startInterval();
 })();*/
 
+var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
+for(var logo of logos){
+  logo.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
+  logo.alt = 'KokoaTV Logo';
+  logo.style.width = '50px';
+  logo.style.height = '50px';
+  logo.style.maxWidth = '50px';
+}
+
+
