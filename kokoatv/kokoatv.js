@@ -115,7 +115,7 @@
 
   return 'done';
 })();*/
-(async () => {
+/*(async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -221,5 +221,5 @@
   }
 
   startInterval();
-})();
+})();*/
 
