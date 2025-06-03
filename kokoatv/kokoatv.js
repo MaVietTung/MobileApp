@@ -247,15 +247,21 @@ var topmobile = document.querySelector('.topmobile')
 if(topmobile){
   topmobile.style.display = 'none';
 }
-var con = doc.querySelector('#content');
+var con = document.querySelector('#content');
 if (con && !con.querySelector('.donate-banner')) {
-  const ig = doc.createElement('img');
+  const ig = document.createElement('img');
   ig.src = 'https://mobile-3aj.pages.dev/kokoatv/donate-kokoatv.png';
   ig.style.width = '100%';
   ig.style.height = 'auto';
   ig.className = 'donate-banner';
-
   con.appendChild(ig);
+}
+if (con && !con.querySelector('#AmazonProduct')) {
+  const udiv = document.createElement('div');
+  udiv.style.width = '100%';
+  udiv.style.height = 'auto';
+  udiv.id = 'AmazonProduct';
+  con.appendChild(udiv);
 }
 
 
