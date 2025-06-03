@@ -235,6 +235,10 @@ var ad = document.querySelector('[dir*=ltr]')
 if(ad){
   ad.style.display = 'none';
 }
+var telegram = document.querySelector('.widget_text.section');
+if(telegram){
+  telegram.style.display = 'none';
+}
 var footer = document.querySelector('#footer');
 if(footer){
   footer.style.display = 'none';
