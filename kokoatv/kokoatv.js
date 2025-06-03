@@ -243,6 +243,10 @@ var footer = document.querySelector('#footer');
 if (footer) {
   footer.style.display = 'none';
 }
+var topmobile = document.querySelector('.topmobile')
+if(topmobile){
+  topmobile.style.display = 'none';
+}
 var con = doc.querySelector('#content');
 if (con && !con.querySelector('.donate-banner')) {
   const ig = doc.createElement('img');
