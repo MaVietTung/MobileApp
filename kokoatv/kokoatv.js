@@ -224,7 +224,7 @@
 })();*/
 
 var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
-for(var logo of logos){
+for (var logo of logos) {
   logo.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
   logo.alt = 'KokoaTV Logo';
   logo.style.width = '50px';
@@ -232,16 +232,26 @@ for(var logo of logos){
   logo.style.maxWidth = '50px';
 }
 var ad = document.querySelector('[dir*=ltr]')
-if(ad){
+if (ad) {
   ad.style.display = 'none';
 }
 var telegram = document.querySelector('.widget_text.section');
-if(telegram){
+if (telegram) {
   telegram.style.display = 'none';
 }
 var footer = document.querySelector('#footer');
-if(footer){
+if (footer) {
   footer.style.display = 'none';
+}
+var con = doc.querySelector('#content');
+if (con && !con.querySelector('.donate-banner')) {
+  const ig = doc.createElement('img');
+  ig.src = 'https://mobile-3aj.pages.dev/kokoatv/donate-kokoatv.png';
+  ig.style.width = '100%';
+  ig.style.height = 'auto';
+  ig.className = 'donate-banner';
+
+  con.appendChild(ig);
 }
 
 
