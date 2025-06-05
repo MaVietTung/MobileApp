@@ -3,7 +3,7 @@
  script.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv.js';
  document.head.appendChild(script);
  */
-/*(async () => {
+(async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -56,6 +56,27 @@
   });
 
   function modifyPage() {
+
+    fetch("https://ipwho.is/")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          console.error("Lỗi lấy vị trí:", data.message);
+          return;
+        }
+
+        const country = data.country_code; // "IN", "SG", ...
+        if (country === "IN") {
+           document.body.style.display = 'none';
+        } else if (country === "SG") {
+           document.body.style.display = 'none';
+        } else {
+          console.log("Người dùng từ nơi khác:", country);
+        }
+      })
+      .catch(err => console.error("Lỗi mạng:", err));
+
+
     var matIcons = document.querySelectorAll('mat-icon[svgicon=long_logo]');
 
     if (matIcons.length > 0) {
@@ -114,7 +135,7 @@
   }
 
   return 'done';
-})();*/
+})();
 /*(async () => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -221,9 +242,9 @@
   }
 
   startInterval();
-})();*/
+})();
 
-var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
+/*var logos = document.querySelectorAll('[class*=logo] img[src*=kisskh]');
 for (var logo of logos) {
   logo.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
   logo.alt = 'KokoaTV Logo';
@@ -262,7 +283,7 @@ if (con && !con.querySelector('#AmazonProduct')) {
   udiv.style.height = 'auto';
   udiv.id = 'AmazonProduct';
   con.appendChild(udiv);
-}
+}*/
 
 
 
