@@ -70,7 +70,10 @@
            document.body.style.display = 'none';
         } else if (country === "SG") {
            document.body.style.display = 'none';
-        } else {
+        } else if (country == "PK") {
+           document.body.style.display = 'none';
+        }
+         else {
           console.log("Người dùng từ nơi khác:", country);
         }
       })
