@@ -14,27 +14,6 @@
     localStorage.setItem('lasttime', formattedDate);
   }
 
-  fetch("https://ipwho.is/")
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success) {
-        return;
-      }
-
-      const country = data.country_code;
-      if (country === "IN") {
-        document.body.style.display = 'none';
-      } else if (country === "SG") {
-        document.body.style.display = 'none';
-      } else if (country == "PK") {
-        document.body.style.display = 'none';
-      }
-      else {
-        console.log("Người dùng từ nơi khác:", country);
-      }
-    })
-    .catch(err => console.error("Lỗi mạng:", err));
-
   await sleep(2000);
   let runCount = 0;
   let maxRuns = 5;
@@ -78,7 +57,24 @@
 
   function modifyPage() {
 
+    fetch("https://ipwho.is/")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          return;
+        }
 
+        const country = data.country_code;
+        if (country === "IN") {
+          document.body.style.display = 'none';
+        } else if (country === "SG") {
+          document.body.style.display = 'none';
+        }
+        else {
+          console.log("Người dùng từ nơi khác:", country);
+        }
+      })
+      .catch(err => console.error("Lỗi mạng:", err));
     var matIcons = document.querySelectorAll('mat-icon[svgicon=long_logo]');
 
     if (matIcons.length > 0) {
