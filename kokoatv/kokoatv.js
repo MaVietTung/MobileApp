@@ -24,17 +24,11 @@
 
   function startInterval() {
     intervalId = setInterval(() => {
-      const hasVideo = document.querySelector('video') !== null;
-
-      if (hasVideo) {
-        if (runCount < maxRuns) {
-          modifyPage();
-          runCount++;
-        } else {
-          clearInterval(intervalId);
-        }
-      } else {
+      if (runCount < maxRuns) {
         modifyPage();
+        runCount++;
+      } else {
+        clearInterval(intervalId);
       }
     }, 1000);
   }
