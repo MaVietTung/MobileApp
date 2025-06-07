@@ -49,7 +49,7 @@
     }
   });
 
-  async function locationAction() {
+  function locationAction() {
     fetch('https://ipwho.is/')
       .then(response => response.json())
       .then(data => {
