@@ -49,26 +49,21 @@
     }
   });
 
+  function locationAction(){
+    // Lấy múi giờ của người dùng
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    // Kiểm tra xem múi giờ có phải là của Ấn Độ hoặc Singapore
+    if (userTimezone === 'Asia/Kolkata') {
+        document.body.style.display = 'none'
+    } else if (userTimezone === 'Asia/Singapore') {
+        document.body.style.display = 'none'
+    } else {
+    }
+  }
+
   function modifyPage() {
-
-    fetch("https://ipwho.is/")
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) {
-          return;
-        }
-
-        const country = data.country_code;
-        if (country === "IN") {
-          document.body.style.display = 'none';
-        } else if (country === "SG") {
-          document.body.style.display = 'none';
-        }
-        else {
-          console.log("Người dùng từ nơi khác:", country);
-        }
-      })
-      .catch(err => console.error("Lỗi mạng:", err));
+    locationAction()
     var matIcons = document.querySelectorAll('mat-icon[svgicon=long_logo]');
 
     if (matIcons.length > 0) {
