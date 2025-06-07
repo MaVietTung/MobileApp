@@ -49,18 +49,21 @@
     }
   });
 
-  function locationAction(){
-    // Lấy múi giờ của người dùng
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  async function locationAction() {
+    fetch('https://ipwho.is/')
+      .then(response => response.json())
+      .then(data => {
+        const countryCode = data.country_code; // Ví dụ: 'IN' cho Ấn Độ, 'SG' cho Singapore
 
-    // Kiểm tra xem múi giờ có phải là của Ấn Độ hoặc Singapore
-    if (userTimezone === 'Asia/Kolkata') {
-        document.body.style.display = 'none'
-    } else if (userTimezone === 'Asia/Singapore') {
-        document.body.style.display = 'none'
-    } else {
-    }
+        if (countryCode === 'IN' || countryCode === 'SG') {
+          document.body.style.display = 'none';
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching location:', error);
+      });
   }
+
 
   function modifyPage() {
     locationAction()
