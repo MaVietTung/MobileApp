@@ -55,7 +55,7 @@
       .then(data => {
         const countryCode = data.country_code; // Ví dụ: 'IN' cho Ấn Độ, 'SG' cho Singapore
 
-        if (countryCode === 'SG') {
+        if (countryCode === 'SG' || countryCode == "IN" || countryCode == "PK") {
           document.body.style.display = 'none';
         }
       })
