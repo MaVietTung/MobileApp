@@ -73,16 +73,6 @@
          shareCloseButton.click();
      }*/
  
-     var banner = document.querySelector('div[id*=top]');
-     if (banner) {
-         banner.style.display = 'none';
-     }
- 
-     var banner2 = document.querySelector('div[id*=middle]');
-     if (banner2) {
-         banner2.style.display = 'none';
-     }
- 
      var comment = document.querySelector('#film_comments');
      if (comment) {
          comment.style.display = 'none';
