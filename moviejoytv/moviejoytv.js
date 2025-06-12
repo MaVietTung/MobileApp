@@ -39,16 +39,6 @@ const intervalId = setInterval(() => {
         homeButton2.style.display = 'none';
     }
 
-    var ads = document.querySelectorAll('iframe');
-    for (let ad of ads) {
-        try {
-            var spans = ad.contentWindow.document.querySelectorAll('span');
-            for(let span of spans){
-                span.click();
-            }
-        } catch (e) { }
-    }
-
     var apkLink = document.querySelector('a[href*=apk]');
     if (apkLink) {
         apkLink.style.display = 'none';
