@@ -39,6 +39,18 @@ const intervalId = setInterval(() => {
         homeButton2.style.display = 'none';
     }
 
+    var ads = document.querySelectorAll('iframe');
+    for (let ad of ads) {
+        try {
+            if (!document.querySelector('#iframe-embed')) {
+                var spans = ad.contentWindow.document.querySelectorAll('span');
+                for (let span of spans) {
+                    span.click();
+                }
+            }
+        } catch (e) { }
+    }
+
     var apkLink = document.querySelector('a[href*=apk]');
     if (apkLink) {
         apkLink.style.display = 'none';
@@ -76,13 +88,13 @@ const intervalId = setInterval(() => {
 
     var con = document.querySelector('#main-wrapper');
     if (con && !con.querySelector('.donate-banner')) {
-      const ig = document.createElement('img');
-      ig.src = 'https://mobile-3aj.pages.dev/moviejoytv/donate-moviejoytv.png';
-      ig.style.width = '100%';
-      ig.style.height = 'auto';
-      ig.className = 'donate-banner';
+        const ig = document.createElement('img');
+        ig.src = 'https://mobile-3aj.pages.dev/moviejoytv/donate-moviejoytv.png';
+        ig.style.width = '100%';
+        ig.style.height = 'auto';
+        ig.className = 'donate-banner';
 
-      con.appendChild(ig);
+        con.appendChild(ig);
     }
 
     runCount++;
