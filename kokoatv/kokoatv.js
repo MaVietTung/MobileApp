@@ -68,10 +68,10 @@
          apkLink.style.display = 'none';
      }
  
-     var shareCloseButton = document.querySelector('#modalshare .modal-header button');
+     /*var shareCloseButton = document.querySelector('#modalshare .modal-header button');
      if (shareCloseButton) {
          shareCloseButton.click();
-     }
+     }*/
  
      var banner = document.querySelector('div[id*=top]');
      if (banner) {
