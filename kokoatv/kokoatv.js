@@ -43,6 +43,13 @@
      if (homeButton2) {
          homeButton2.style.display = 'none';
      }
+
+     var buttonHome3 =  document.querySelectorAll('.mw-buttons a')
+     for( let button of buttonHome3){
+       button.childNodes[0].nodeValue = 'Go to Home ';
+     }
+
+
  
      /*var ads = document.querySelectorAll('iframe');
      for (let ad of ads) {
