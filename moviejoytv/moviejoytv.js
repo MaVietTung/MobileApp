@@ -11,6 +11,77 @@ function saveCurrentDateToLocalStorage() {
 }
 saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
+
+    let reloaded = false;
+let startY = 0;
+let isPulling = false;
+let pullThreshold = 60;
+let pullStartTime = null;
+let holdTime = 500; // 1 giây giữ ở đầu trang
+
+// Tạo spinner
+const spinner = document.createElement('div');
+spinner.style.position = 'fixed';
+spinner.style.left = '45%';
+spinner.style.top = '20%';
+spinner.style.transform = 'translate(-50%, -50%)';
+spinner.style.width = '40px';
+spinner.style.height = '40px';
+spinner.style.border = '4px solid #ccc';
+spinner.style.borderTop = '4px solid #3498db';
+spinner.style.borderRadius = '50%';
+spinner.style.animation = 'spin 1s linear infinite';
+spinner.style.zIndex = '9999';
+spinner.style.display = 'none';
+document.body.appendChild(spinner);
+
+// Keyframes animation
+const style = document.createElement('style');
+style.innerHTML = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+
+// Bắt đầu chạm
+window.addEventListener('touchstart', (e) => {
+  if (window.scrollY === 0 && !reloaded) {
+    startY = e.touches[0].clientY;
+    isPulling = true;
+    pullStartTime = Date.now();
+  }
+});
+
+// Di chuyển ngón tay
+window.addEventListener('touchmove', (e) => {
+  if (!isPulling || reloaded) return;
+
+  const currentY = e.touches[0].clientY;
+  const deltaY = currentY - startY;
+
+  if (deltaY > pullThreshold) {
+    spinner.style.display = 'block';
+
+    const heldEnough = Date.now() - pullStartTime >= holdTime;
+    if (heldEnough) {
+      reloaded = true;
+      setTimeout(() => {
+        location.reload();
+      }, 300);
+    }
+  }
+});
+
+// Thả tay ra
+window.addEventListener('touchend', () => {
+  isPulling = false;
+  pullStartTime = null;
+  spinner.style.display = 'none';
+});
+
+ 
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for (let img of imgAll) {
         img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
