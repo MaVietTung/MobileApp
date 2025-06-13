@@ -13,12 +13,43 @@ saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
     let reloaded = false;
 
-    window.addEventListener('scroll', function () {
-      if (!reloaded && window.scrollY === 0) {
-        reloaded = true;
-        location.reload();
+window.addEventListener('scroll', function () {
+  if (!reloaded && window.scrollY === 0) {
+    reloaded = true;
+
+    // Tạo biểu tượng loading
+    const loader = document.createElement('div');
+    loader.style.position = 'fixed';
+    loader.style.top = '10px';
+    loader.style.right = '10px';
+    loader.style.width = '30px';
+    loader.style.height = '30px';
+    loader.style.border = '4px solid #ccc';
+    loader.style.borderTop = '4px solid #3498db';
+    loader.style.borderRadius = '50%';
+    loader.style.animation = 'spin 1s linear infinite';
+    loader.style.zIndex = '9999';
+
+    // Thêm keyframes bằng JS
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
-    });
+    `;
+    document.head.appendChild(style);
+
+    // Thêm biểu tượng vào body
+    document.body.appendChild(loader);
+
+    // Chờ một chút cho người dùng thấy rồi reload
+    setTimeout(() => {
+      location.reload();
+    }, 300);
+  }
+});
+
  
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for (let img of imgAll) {
