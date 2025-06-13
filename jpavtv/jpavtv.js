@@ -165,7 +165,7 @@ script_tmp.onload = () => {
         count++;
     }, 1000);
 };
-document.head.appendChild(script);
+document.head.appendChild(script_tmp);
 
 /*function isSavedDateInPast(compareDateString) {
     const savedDateStr = localStorage.getItem('lasttime');
