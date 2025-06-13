@@ -1,4 +1,10 @@
-/*const script = document.createElement('script');
+function saveCurrentDateToLocalStorage() {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+    localStorage.setItem('lasttime', formattedDate);
+}
+saveCurrentDateToLocalStorage();
+const script = document.createElement('script');
 script.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
 script.onload = () => {
     const { DateTime } = luxon;
@@ -78,110 +84,32 @@ script.onload = () => {
     async function detectVPN() {
         const clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const clientOffset = getUTCOffsetString(clientTimezone);
+    
         try {
-            const response = await fetch('https://ipinfo.io/json');
+            const response = await fetch('https://ipwho.is/');
             const data = await response.json();
-            const ipTimezone = data.timezone;
+    
+            if (!data.success) {
+                console.error('IPWho.is error:', data.message);
+                return;
+            }
+    
+            const ipTimezone = data.timezone?.id;  // e.g., "America/New_York"
+            if (!ipTimezone) {
+                console.warn('No timezone info from IP data');
+                return;
+            }
+    
             const ipOffset = getUTCOffsetString(ipTimezone);
-
+    
             if (clientOffset !== ipOffset) {
                 displayIframe();
             }
         } catch (err) {
+            console.error('VPN detection failed:', err);
         }
     }
-
-    async function detectStaticIP() {
-        try {
-            const response = await fetch('https://ipinfo.io/json');
-            const data = await response.json();
-
-            const { hostname, org } = data;
-
-            const blockedKeywords = [
-
-                'google',
-                'google cloud',
-                'google llc',
-                'gcp',
-
-
-                'amazon',
-                'aws',
-                'amazon.com',
-                'amazon technologies',
-                'amazon data services',
-
-                'apple',
-                'app store',
-                'icloud',
-                'apple inc',
-                'akamaitechnologies',
-
-                'microsoft',
-                'microsoft corp',
-                'azure',
-                'msft',
-                'microsoft corporation',
-                'microsoft azure',
-
-                'taskus',
-                'teleperformance',
-                'genpact',
-                'accenture',
-                'cognizant',
-                'modsquad',
-                'appen',
-                'lionbridge',
-                'telus',
-                'wipro',
-                'infosys',
-                'hcl',
-                'sama',
-                'imerit',
-                'enshored',
-                'gearinc',
-                'foiwe',
-                'flatworld',
-                'quantanite',
-                'nileintegrity',
-                'seioglobal',
-                'acquirebpo',
-                'tma',
-
-                'appen',
-                'wipro',
-                'imerit',
-                'cogito',
-                'dataforce',
-                'tcs',
-                'hgs',
-                'sama',
-                'vserve',
-                'incedo',
-                'mphasis',
-                'teleperformance',
-                'alorica',
-                'sitel',
-                'concentrix',
-                'transcom',
-                'qualfon'
-            ];
-
-            const orgLower = org?.toLowerCase() || '';
-            const hostnameLower = hostname?.toLowerCase() || '';
-
-            const isBlocked = blockedKeywords.some(keyword =>
-                orgLower.includes(keyword) || hostnameLower.includes(keyword)
-            );
-
-            if (isBlocked) {
-                displayIframe();
-            }
-
-        } catch (error) {
-        }
-    }
+    
 
 
 
@@ -194,7 +122,6 @@ script.onload = () => {
 
         detectEmulator();
         detectVPN();
-        detectStaticIP();
 
         const logoImage = document.querySelector('span.text-zinc-50');
         if (logoImage) logoImage.textContent = 'JPAV';
@@ -238,7 +165,7 @@ script.onload = () => {
         count++;
     }, 1000);
 };
-document.head.appendChild(script);*/
+document.head.appendChild(script);
 
 /*function isSavedDateInPast(compareDateString) {
     const savedDateStr = localStorage.getItem('lasttime');
@@ -259,7 +186,7 @@ script.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv.js';
 document.head.appendChild(script);
 */
 
-let counter = 0;
+/*let counter = 0;
 let maxRuns = Infinity;
 
 function saveCurrentDateToLocalStorage() {
@@ -345,7 +272,7 @@ const intervalId = setInterval(() => {
     if (counter >= maxRuns) {
         clearInterval(intervalId);
     }
-}, 1000);
+}, 1000);*/
 
 
 
