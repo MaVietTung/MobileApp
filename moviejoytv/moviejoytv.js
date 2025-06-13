@@ -22,6 +22,7 @@ window.addEventListener('scroll', function () {
     const loader = document.createElement('div');
     loader.style.position = 'fixed';
     loader.style.left = '50%';
+    loader.style.top = '50%';
     loader.style.transform = 'translate(-50%, -50%)';
     loader.style.width = '40px';
     loader.style.height = '40px';
