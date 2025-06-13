@@ -11,6 +11,15 @@ function saveCurrentDateToLocalStorage() {
 }
 saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
+    let reloaded = false;
+
+    window.addEventListener('scroll', function () {
+      if (!reloaded && window.scrollY === 0) {
+        reloaded = true;
+        location.reload();
+      }
+    });
+ 
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for (let img of imgAll) {
         img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
