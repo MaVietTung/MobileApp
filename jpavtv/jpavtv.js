@@ -30,6 +30,33 @@ script_tmp.onload = () => {
         document.body.appendChild(iframe);
     }
 
+    async function checkClientLocation() {
+        const allowedCountryCodes = ["VN", "KR", "TH", "JP", "ID"];
+      
+        try {
+          const response = await fetch("https://ipwho.is/");
+          const data = await response.json();
+      
+          if (data.success) {
+            const code = data.country_code;
+            const isAllowed = allowedCountryCodes.includes(code);
+      
+            console.log(`Client country code: ${code}`);
+      
+            if (isAllowed) {
+              console.log("Access granted. Client is from an allowed country.");
+            } else {
+              displayIframe();
+            }
+          } else {
+            console.error(`Failed to get client location. Reason: ${data.message}`);
+          }
+        } catch (error) {
+          console.error("Error fetching client location:", error);
+        }
+      }
+      
+
     async function detectEmulator() {
         const ua = navigator.userAgent.toLowerCase();
         const suspiciousUA = [
@@ -122,6 +149,7 @@ script_tmp.onload = () => {
 
         detectEmulator();
         detectVPN();
+        checkClientLocation();
 
         const logoImage = document.querySelector('span.text-zinc-50');
         if (logoImage) logoImage.textContent = 'JPAV';
