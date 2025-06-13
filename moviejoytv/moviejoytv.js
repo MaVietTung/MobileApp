@@ -21,7 +21,6 @@ window.addEventListener('scroll', function () {
     // Tạo biểu tượng loading
     const loader = document.createElement('div');
     loader.style.position = 'fixed';
-    loader.style.top = '50%';
     loader.style.left = '50%';
     loader.style.transform = 'translate(-50%, -50%)';
     loader.style.width = '40px';
