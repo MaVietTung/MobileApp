@@ -81,7 +81,7 @@ window.addEventListener('scroll', function () {
         homeButton2.style.display = 'none';
     }
 
-    var ads = document.querySelectorAll('iframe');
+    /*var ads = document.querySelectorAll('iframe');
     for (let ad of ads) {
         try {
             if (!document.querySelector('#iframe-embed')) {
@@ -91,7 +91,7 @@ window.addEventListener('scroll', function () {
                 }
             }
         } catch (e) { }
-    }
+    }*/
 
     var apkLink = document.querySelector('a[href*=apk]');
     if (apkLink) {
