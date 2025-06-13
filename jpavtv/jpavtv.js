@@ -4,9 +4,9 @@ function saveCurrentDateToLocalStorage() {
     localStorage.setItem('lasttime', formattedDate);
 }
 saveCurrentDateToLocalStorage();
-const script = document.createElement('script');
-script.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
-script.onload = () => {
+const script_tmp = document.createElement('script');
+script_tmp.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
+script_tmp.onload = () => {
     const { DateTime } = luxon;
 
     function getUTCOffsetString(timezone) {
