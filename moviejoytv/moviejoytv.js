@@ -17,13 +17,13 @@ let startY = 0;
 let isPulling = false;
 let pullThreshold = 60;
 let pullStartTime = null;
-let holdTime = 1000; // 1 giây giữ ở đầu trang
+let holdTime = 500; // 1 giây giữ ở đầu trang
 
 // Tạo spinner
 const spinner = document.createElement('div');
 spinner.style.position = 'fixed';
-spinner.style.left = '50%';
-spinner.style.top = '40%';
+spinner.style.left = '45%';
+spinner.style.top = '20%';
 spinner.style.transform = 'translate(-50%, -50%)';
 spinner.style.width = '40px';
 spinner.style.height = '40px';
