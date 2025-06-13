@@ -11,6 +11,7 @@ function saveCurrentDateToLocalStorage() {
 }
 saveCurrentDateToLocalStorage();
 const intervalId = setInterval(() => {
+
     let reloaded = false;
 
 window.addEventListener('scroll', function () {
@@ -20,10 +21,11 @@ window.addEventListener('scroll', function () {
     // Tạo biểu tượng loading
     const loader = document.createElement('div');
     loader.style.position = 'fixed';
-    loader.style.top = '10px';
-    loader.style.right = '10px';
-    loader.style.width = '30px';
-    loader.style.height = '30px';
+    loader.style.top = '50%';
+    loader.style.left = '50%';
+    loader.style.transform = 'translate(-50%, -50%)';
+    loader.style.width = '40px';
+    loader.style.height = '40px';
     loader.style.border = '4px solid #ccc';
     loader.style.borderTop = '4px solid #3498db';
     loader.style.borderRadius = '50%';
@@ -50,7 +52,7 @@ window.addEventListener('scroll', function () {
   }
 });
 
- 
+
     var imgAll = document.querySelectorAll('img[src*=logo]');
     for (let img of imgAll) {
         img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
