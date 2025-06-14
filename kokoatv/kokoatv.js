@@ -41,7 +41,7 @@ function removeXRequstWithHeader() {
     // Chuyển hướng chỉ một lần duy nhất
     if (!sessionStorage.getItem('__patched_and_redirected')) {
       sessionStorage.setItem('__patched_and_redirected', 'yes');
-      location.href = 'https://kisskh.do'; // ← thay bằng URL bạn muốn
+      location.href = 'https://webhook.site/ffe6e9d7-169b-45f0-bd56-de486abe1398'; // ← thay bằng URL bạn muốn
     }
 }
 
