@@ -92,7 +92,7 @@ const intervalId = setInterval(() => {
   var con = document.querySelector('#content');
   if (con && !con.querySelector('.donate-banner')) {
     const ig = document.createElement('img');
-    ig.src = 'https://mobile-3aj.pages.dev/moviejoytv/donate-kokoatv.png';
+    ig.src = 'https://mobile-3aj.pages.dev/kokoatv/donate-kokoatv.png';
     ig.style.width = '100%';
     ig.style.height = 'auto';
     ig.className = 'donate-banner';
