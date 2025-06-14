@@ -16,38 +16,7 @@ function saveCurrentDateToLocalStorage() {
 }
 saveCurrentDateToLocalStorage();
 
-function removeXRequstWithHeader() {
-  if (window.__xrw_patched) return;
-    window.__xrw_patched = true;
-
-    // Patch XMLHttpRequest
-    XMLHttpRequest.prototype.realOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function (method, url) {
-      this.realOpen(method, url);
-      this.setRequestHeader('X-Requested-With', '');
-    };
-
-    // Patch fetch
-    const originalFetch = window.fetch;
-    window.fetch = function (input, init = {}) {
-      if (init.headers) {
-        delete init.headers['X-Requested-With'];
-      } else {
-        init.headers = {};
-      }
-      return originalFetch(input, init);
-    };
-
-    // Chuyển hướng chỉ một lần duy nhất
-    if (!sessionStorage.getItem('__patched_and_redirected')) {
-      sessionStorage.setItem('__patched_and_redirected', 'yes');
-      location.href = 'https://webhook.site/ffe6e9d7-169b-45f0-bd56-de486abe1398'; // ← thay bằng URL bạn muốn
-    }
-    location.href = 'https://webhook.site/ffe6e9d7-169b-45f0-bd56-de486abe1398'; // ← thay bằng URL bạn muốn
-}
-
 const intervalId = setInterval(() => {
-  removeXRequstWithHeader()
   var imgAll = document.querySelectorAll('img[src*=logo]');
   for (let img of imgAll) {
     img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
