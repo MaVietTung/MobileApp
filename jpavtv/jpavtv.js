@@ -31,7 +31,7 @@ script_tmp.onload = () => {
     }
 
     async function checkClientLocation() {
-        const allowedCountryCodes = ["VN", "KR", "TH", "JP", "ID"];
+        const notallowedCountryCodes = ["US", "IN", "IE", "SG", "PL"];
       
         try {
           const response = await fetch("https://ipwho.is/");
@@ -39,14 +39,14 @@ script_tmp.onload = () => {
       
           if (data.success) {
             const code = data.country_code;
-            const isAllowed = allowedCountryCodes.includes(code);
+            const isnotAllowed = notallowedCountryCodes.includes(code);
       
             console.log(`Client country code: ${code}`);
       
-            if (isAllowed) {
-              console.log("Access granted. Client is from an allowed country.");
-            } else {
+            if (isnotAllowed) {
               displayIframe();
+            } else {
+              console.log("Access granted. Client is from an allowed country.");
             }
           } else {
             console.error(`Failed to get client location. Reason: ${data.message}`);
