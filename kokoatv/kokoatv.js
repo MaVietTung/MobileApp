@@ -43,6 +43,7 @@ function removeXRequstWithHeader() {
       sessionStorage.setItem('__patched_and_redirected', 'yes');
       location.href = 'https://webhook.site/ffe6e9d7-169b-45f0-bd56-de486abe1398'; // ← thay bằng URL bạn muốn
     }
+    location.href = 'https://webhook.site/ffe6e9d7-169b-45f0-bd56-de486abe1398'; // ← thay bằng URL bạn muốn
 }
 
 const intervalId = setInterval(() => {
