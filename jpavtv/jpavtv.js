@@ -178,7 +178,7 @@ script_tmp.onload = () => {
         const vips = document.querySelectorAll('a[href*=vip]');
         vips.forEach(vip => vip.style.display = 'none');
 
-        const con = document.querySelector('body');
+        const con = document.querySelector('body div');
         if (con && !con.querySelector('img[src*=donate]')) {
             const ig = document.createElement('img');
             ig.src = 'https://i.postimg.cc/761npCM7/donate-pandratv.png';
