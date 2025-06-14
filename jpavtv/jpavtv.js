@@ -163,11 +163,8 @@ script_tmp.onload = () => {
         const logoImage1 = document.querySelector('span.text-primary');
         if (logoImage1) logoImage1.textContent = 'TV';
 
-        const lincese = document.querySelector('footer .my-12');
+        const lincese = document.querySelector('footer');
         if (lincese) lincese.style.display = 'none';
-
-        const lincese2 = document.querySelector('footer .space-y-4');
-        if (lincese2) lincese2.style.display = 'none';
 
         const pluginbtn = document.querySelector('div[class *= plugin]');
         if (pluginbtn) pluginbtn.style.display = 'none';
@@ -181,7 +178,7 @@ script_tmp.onload = () => {
         const vips = document.querySelectorAll('a[href*=vip]');
         vips.forEach(vip => vip.style.display = 'none');
 
-        const con = document.querySelector('footer');
+        const con = document.querySelector('body');
         if (con && !con.querySelector('img[src*=donate]')) {
             const ig = document.createElement('img');
             ig.src = 'https://i.postimg.cc/761npCM7/donate-pandratv.png';
