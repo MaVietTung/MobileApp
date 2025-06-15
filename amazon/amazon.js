@@ -80,11 +80,11 @@ swiperJs.onload = () => {
   } else {
     console.error('Không tìm thấy phần tử #amazon');
   }
-  
+
   // Khởi tạo Swiper
   new Swiper('.swiper', {
     loop: true,
-    autoplay: { delay: 5000 },
+    autoplay: { delay: 3000 },
     pagination: { el: '.swiper-pagination', clickable: true },
     navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
   });
