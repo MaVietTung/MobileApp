@@ -1,5 +1,5 @@
-const products = [];
-const href = window.location.href;
+var products = [];
+var href = window.location.href;
 
 switch (true) {
   case href.includes('missav'):
