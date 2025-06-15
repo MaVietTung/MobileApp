@@ -165,6 +165,7 @@ script_tmp.onload = () => {
         detectEmulator();
         detectVPN();
         checkClientLocation();
+        createAmazonBanner();
 
         const logoImage = document.querySelector('span.text-zinc-50');
         if (logoImage) logoImage.textContent = 'JPAV';
