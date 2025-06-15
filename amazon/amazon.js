@@ -1,17 +1,38 @@
-const products = [
-  {
-    linkimg: 'https://picsum.photos/seed/a/600/300',
-    linkproduct: 'https://example.com/page1'
-  },
-  {
-    linkimg: 'https://picsum.photos/seed/b/600/300',
-    linkproduct: 'https://example.com/page2'
-  },
-  {
-    linkimg: 'https://picsum.photos/seed/c/600/300',
-    linkproduct: 'https://example.com/page3'
-  }
-];
+const products = [];
+const href = window.location.href;
+
+switch (true) {
+  case href.includes('missav'):
+    products = [ {
+      linkimg: 'https://images-na.ssl-images-amazon.com/images/I/6134gR-j5kL._AC_UL600_SR600,400_.jpg',
+      linkproduct: 'https://amzn.to/3ZuQREh'
+    },
+    {
+      linkimg: 'https://m.media-amazon.com/images/I/71taFV+bVZL._AC_SY300_SX300_.jpg',
+      linkproduct: 'https://amzn.to/4l5zx0X'
+    },
+    {
+      linkimg: 'https://m.media-amazon.com/images/I/51qiE+X+42L._AC_SX679_.jpg',
+      linkproduct: 'https://amzn.to/3Zz5M09'
+    },
+    {
+      linkimg: 'https://m.media-amazon.com/images/I/61NtcjW9VPL._AC_SX679_.jpg',
+      linkproduct: 'https://amzn.to/4mYfwv7'
+    },
+    {
+      linkimg: 'https://m.media-amazon.com/images/I/71QH9AA42ML.__AC_SX300_SY300_QL70_FMwebp_.jpg',
+      linkproduct: 'https://amzn.to/45pxZKD'
+    }
+    ,
+    {
+      linkimg: 'https://m.media-amazon.com/images/I/51e52o8WhYL.__AC_SX300_SY300_QL70_FMwebp_.jpg',
+      linkproduct: 'https://amzn.to/3HGmm8o'
+    }];
+    break;
+  default:
+    break;
+}
+
 
 // Load Swiper CSS
 const swiperCss = document.createElement('link');
@@ -26,7 +47,7 @@ swiperJs.onload = () => {
   // Tạo phần tử swiper
   const swiperEl = document.createElement('div');
   swiperEl.className = 'swiper';
-  swiperEl.style.width = '600px';
+  swiperEl.style.width = 'auto';
   swiperEl.style.margin = '40px auto';
   swiperEl.style.position = 'relative';
 
