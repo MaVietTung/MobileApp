@@ -1,137 +1,104 @@
-// Tracking ID của bạn
-const trackingID = "020099008110-20";
-
-// Danh sách sản phẩm Amazon
-const asinList = [
+const products = [
   {
-    asin: "B09B8V8MQL",
-    title: "Echo Dot (5th Gen, 2022)",
-    image: "https://m.media-amazon.com/images/I/71yRY8YlAbL._AC_SY450_.jpg"
+    linkimg: 'https://picsum.photos/seed/a/600/300',
+    linkproduct: 'https://example.com/page1'
   },
   {
-    asin: "B07ZZWZG5L",
-    title: "Fire TV Stick with Alexa",
-    image: "https://m.media-amazon.com/images/I/71Wt1thqZEL._AC_SY300_SX300_.jpg"
+    linkimg: 'https://picsum.photos/seed/b/600/300',
+    linkproduct: 'https://example.com/page2'
   },
   {
-    asin: "B08KTZ8249",
-    title: "Kindle Paperwhite (8GB)",
-    image: "https://m.media-amazon.com/images/I/71FWKtSIYUL._AC_SX679_.jpg"
+    linkimg: 'https://picsum.photos/seed/c/600/300',
+    linkproduct: 'https://example.com/page3'
   }
 ];
 
-// Tạo link affiliate từ ASIN
-function generateAffiliateLink(asin) {
-  return `https://www.amazon.com/dp/${asin}?tag=${trackingID}`;
-}
+// Load Swiper CSS
+const swiperCss = document.createElement('link');
+swiperCss.rel = 'stylesheet';
+swiperCss.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+document.head.appendChild(swiperCss);
 
-// Tạo banner trong div có ID 'AmazonProduct'
-function createAmazonBanner() {
-  const container = document.getElementById("AmazonProduct");
-  if (!container) return;
+// Load Swiper JS
+const swiperJs = document.createElement('script');
+swiperJs.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+swiperJs.onload = () => {
+  // Tạo phần tử swiper
+  const swiperEl = document.createElement('div');
+  swiperEl.className = 'swiper';
+  swiperEl.style.width = '600px';
+  swiperEl.style.margin = '40px auto';
+  swiperEl.style.position = 'relative';
 
-  // Thêm CSS chỉ 1 lần
-  if (!document.getElementById("amazonBannerStyle")) {
-    const style = document.createElement("style");
-    style.id = "amazonBannerStyle";
-    style.textContent = `
-      .carousel-container {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
-        padding: 20px 0;
-      }
-      .amazon-product-card {
-        flex: 0 0 auto;
-        min-width: 300px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        scroll-snap-align: start;
-        position: relative;
-      }
-      .amazon-product-card img {
-        width: 100%;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        display: block;
-      }
-      .btn-copy {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: rgba(0,0,0,0.7);
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        font-size: 12px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      .btn-copy:hover {
-        background: #ff9900;
-      }
-      .amazon-product-card h4 {
-        font-size: 15px;
-        margin: 10px;
-      }
-      .btn-view {
-        display: block;
-        margin: 0 10px 10px;
-        padding: 8px;
-        background: #ff9900;
-        color: #fff;
-        text-align: center;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 5px;
-      }
-      .btn-view:hover {
-        background: #cc7a00;
-      }
+  const wrapper = document.createElement('div');
+  wrapper.className = 'swiper-wrapper';
+  swiperEl.appendChild(wrapper);
+
+  // Tạo slide từ mảng products
+  products.forEach((p, index) => {
+    const slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    slide.style.position = 'relative';
+
+    slide.innerHTML = `
+      <a href="${p.linkproduct}" target="_blank">
+        <img src="${p.linkimg}" style="width:100%; border-radius:10px;" />
+      </a>
+      <button class="copy-btn" data-link="${p.linkproduct}"
+        style="
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          padding: 6px 12px;
+          border: none;
+          border-radius: 8px;
+          background-color: white;
+          color: black;
+          font-weight: bold;
+          cursor: pointer;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        ">🔗 Link</button>
     `;
-    document.head.appendChild(style);
-  }
-
-  const carousel = document.createElement("div");
-  carousel.className = "carousel-container";
-
-  asinList.forEach(item => {
-    const link = generateAffiliateLink(item.asin);
-
-    const card = document.createElement("div");
-    card.className = "amazon-product-card";
-
-    card.innerHTML = `
-      <img src="${item.image}" alt="${item.title}">
-      <button class="btn-copy">📋 Copy Link</button>
-      <h4>${item.title}</h4>
-      <a href="${link}" target="_blank" class="btn-view">🔗 Xem trên Amazon</a>
-    `;
-
-    card.querySelector(".btn-copy").addEventListener("click", () => {
-      navigator.clipboard.writeText(link)
-        .then(() => alert("✅ Link đã được copy!"))
-        .catch(() => alert("❌ Không thể copy link."));
-    });
-
-    carousel.appendChild(card);
+    wrapper.appendChild(slide);
   });
 
-  container.appendChild(carousel);
-}
+  // Navigation & pagination
+  const nextBtn = document.createElement('div');
+  nextBtn.className = 'swiper-button-next';
+  const prevBtn = document.createElement('div');
+  prevBtn.className = 'swiper-button-prev';
+  const pagination = document.createElement('div');
+  pagination.className = 'swiper-pagination';
 
-// Quan sát xem #AmazonProduct có xuất hiện chưa
-const observer = new MutationObserver(() => {
-  const container = document.getElementById("AmazonProduct");
-  if (container && !container.dataset.loaded) {
-    container.dataset.loaded = "true";
-    createAmazonBanner();
+  swiperEl.appendChild(pagination);
+  swiperEl.appendChild(prevBtn);
+  swiperEl.appendChild(nextBtn);
+  
+  const container = document.getElementById('amazon');
+  if (container) {
+    container.appendChild(swiperEl);
+  } else {
+    console.error('Không tìm thấy phần tử #amazon');
   }
-});
+  
+  // Khởi tạo Swiper
+  new Swiper('.swiper', {
+    loop: true,
+    autoplay: { delay: 5000 },
+    pagination: { el: '.swiper-pagination', clickable: true },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+  });
 
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
+  // Xử lý nút Copy Link
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('copy-btn')) {
+      const link = e.target.getAttribute('data-link');
+      navigator.clipboard.writeText(link).then(() => {
+        e.target.innerText = "✅ Copied!";
+        setTimeout(() => e.target.innerText = "🔗 Link", 1500);
+      });
+    }
+  });
+};
+
+document.body.appendChild(swiperJs);
