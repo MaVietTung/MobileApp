@@ -65,7 +65,7 @@ function updateElements() {
         comment.style.display = 'none';
     }
 
-    var con = document.querySelector('header + .container');
+    /*var con = document.querySelector('header + .container');
     const ig = document.createElement('img');
 
     ig.src = 'https://mobile-3aj.pages.dev/dubokotv/donate-dakubao-2.png';
@@ -75,7 +75,7 @@ function updateElements() {
 
     if(con && !document.querySelector('.donate-banner')){
         con.appendChild(ig);
-    }
+    }*/
 
     count2++;
     if (count2 >= 5) {

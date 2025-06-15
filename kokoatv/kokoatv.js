@@ -89,7 +89,7 @@ const intervalId = setInterval(() => {
     footer.style.display = 'none';
   }
 
-  var con = document.querySelector('#content');
+  /*var con = document.querySelector('#content');
   if (con && !con.querySelector('.donate-banner')) {
     const ig = document.createElement('img');
     ig.src = 'https://mobile-3aj.pages.dev/kokoatv/donate-kokoatv.png';
@@ -98,7 +98,7 @@ const intervalId = setInterval(() => {
     ig.className = 'donate-banner';
 
     con.appendChild(ig);
-  }
+  }*/
 
   runCount++;
   if (runCount >= 3) {

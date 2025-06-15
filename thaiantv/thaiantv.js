@@ -39,14 +39,14 @@ const intervalId = setInterval(function () {
 
     var con = document.querySelector('.main-content');
 
-    if (con && !document.querySelector('.donate-banner')) {
+    /*if (con && !document.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
         ig.src = 'https://mobile-3aj.pages.dev/thaiantv/donate-thaiantv.png';
         ig.style.width = '100%';
         ig.style.height = 'auto';
         ig.className = 'donate-banner';
         con.appendChild(ig);
-    }
+    }*/
 
     count++;
 

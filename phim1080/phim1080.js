@@ -104,7 +104,7 @@ var interval = setInterval(function() {
             ad.click();
         }
 
-        var con = document.querySelector('.wrapper');
+        /*var con = document.querySelector('.wrapper');
         if (con  && !con.querySelector('.donate-banner')) {
             const ig = document.createElement('img');
             ig.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-donate-banner.png';
@@ -112,7 +112,7 @@ var interval = setInterval(function() {
             ig.style.height = 'auto';
             ig.className = 'donate-banner';
             con.appendChild(ig);
-        }
+        }*/
 
         count++;
     } else {

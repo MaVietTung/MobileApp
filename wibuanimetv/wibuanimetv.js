@@ -84,14 +84,14 @@ const intervalId = setInterval(() => {
         android2.style.display = 'none';
     }
 
-    var con = document.querySelector('#main-content');
+    /*var con = document.querySelector('#main-content');
     if (con && count === 0) {
         const ig = document.createElement('img');
         ig.src = 'https://mobile-3aj.pages.dev/wibuanimetv/donate-wibuanimetv.png';
         ig.style.width = '100%';
         ig.style.height = 'auto';
         con.appendChild(ig);
-    }
+    }*/
 
     count++;
     if (count >= 5) {
