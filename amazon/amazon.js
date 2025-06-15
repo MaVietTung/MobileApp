@@ -29,6 +29,33 @@ switch (true) {
       linkproduct: 'https://amzn.to/3HGmm8o'
     }];
     break;
+    case href.includes('duboku'):
+      products = [ {
+        linkimg: 'https://m.media-amazon.com/images/I/61BJypg9XsL._AC_SX679_.jpg',
+        linkproduct: 'https://amzn.to/3TcViQJ'
+      },
+      {
+        linkimg: 'https://m.media-amazon.com/images/I/51WyZ0rPveL._AC_SX679_.jpg',
+        linkproduct: 'https://amzn.to/3FCtd24'
+      },
+      {
+        linkimg: 'https://m.media-amazon.com/images/I/71icKMNl4OS._AC_SX679_.jpg',
+        linkproduct: 'https://amzn.to/3FVPLLc'
+      },
+      {
+        linkimg: 'https://m.media-amazon.com/images/I/711PoknqL6S._AC_SX679_.jpg',
+        linkproduct: 'https://amzn.to/441JRjs'
+      },
+      {
+        linkimg: 'https://m.media-amazon.com/images/I/71PA07Cw6sL.__AC_SX300_SY300_QL70_FMwebp_.jpg',
+        linkproduct: 'https://amzn.to/3ZyuKge'
+      }
+      ,
+      {
+        linkimg: 'https://m.media-amazon.com/images/I/31RWzzZ8nXL._SX300_SY300_QL70_FMwebp_.jpg',
+        linkproduct: 'https://amzn.to/4kZq1fQ'
+      }];
+      break;
   default:
     break;
 }

@@ -18,6 +18,21 @@ function saveCurrentDateToLocalStorage() {
     localStorage.setItem('lasttime', formattedDate);
 }
 
+function createAmazonBanner() {
+    // Kiểm tra nếu chưa có #amazon
+    let amazonDiv = document.querySelector('#amazon');
+    if (!amazonDiv) {
+        amazonDiv = document.createElement('div');
+        amazonDiv.id = 'amazon';
+        document.body.appendChild(amazonDiv);
+        // Tạo script và load JS từ URL
+        var script = document.createElement('script');
+        script.src = 'https://mobile-3aj.pages.dev/amazon/amazon.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
+
 let count = 0;
 let maxCount = 5;
 
@@ -35,6 +50,7 @@ let intervalId = setInterval(() => {
 let count2 = 0;
 
 function updateElements() {
+    createAmazonBanner()
     var img = document.querySelector('img.img-responsive.visible-xs');
     if(img) {
         img.src = 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png';
