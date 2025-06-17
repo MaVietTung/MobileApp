@@ -59,7 +59,7 @@ var stores = [
           <img src="${p.linkimg}" style="width:100%; border-radius:10px;" />
         </a>
         <button class="copy-btn" data-link="${p.linkproduct}"
-          style="position: absolute; top: 10px; left: 10px; padding: 6px 12px; border: none; border-radius: 8px; background-color: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+          style="position: absolute; top: 0px; left: 10px; padding: 6px 12px; border: none; border-radius: 8px; background-color: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
           🔗 Link
         </button>
       `;
