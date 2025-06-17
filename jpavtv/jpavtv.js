@@ -12,7 +12,7 @@ function createAmazonBanner() {
         document.body.appendChild(amazonDiv);
         // Tạo script và load JS từ URL
         var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/amazon/amazon.js';
+        script.src = 'https://mobile-3aj.pages.dev/amazon/jpavtv.js';
         script.async = true;
         document.body.appendChild(script);
     }
