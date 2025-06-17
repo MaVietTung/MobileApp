@@ -109,7 +109,7 @@ var stores = [
         if (!notallowedCountryCodes.includes(code)) {
           products.push({
             linkimg: 'https://mobile-3aj.pages.dev/jpavtv/jpavtvbanner.jpg',
-            linkproduct: 'https://amzn.to/3HGmm8o'
+            linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.jpavtv'
           });
         }
       } else {
