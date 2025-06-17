@@ -11,7 +11,22 @@ function saveCurrentDateToLocalStorage() {
     localStorage.setItem('lasttime', formattedDate);
 }
 saveCurrentDateToLocalStorage();
+function createAmazonBanner() {
+    // Kiểm tra nếu chưa có #amazon
+    let amazonDiv = document.querySelector('#amazon');
+    if (!amazonDiv) {
+        amazonDiv = document.createElement('div');
+        amazonDiv.id = 'amazon';
+        document.body.appendChild(amazonDiv);
+        // Tạo script và load JS từ URL
+        var script = document.createElement('script');
+        script.src = 'https://mobile-3aj.pages.dev/amazon/wibuanimetv.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
 const intervalId = setInterval(() => {
+    createAmazonBanner()
     var desc = document.querySelector('.modal-body .description');
     if (desc) {
     desc.textContent = 'WibuAnimeTV - the best place to watch anime for free, every day!';
