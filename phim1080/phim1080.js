@@ -81,8 +81,23 @@ function saveCurrentDateToLocalStorage() {
     localStorage.setItem('lasttime', formattedDate);
 }
 saveCurrentDateToLocalStorage();
+function createAmazonBanner() {
+    // Kiểm tra nếu chưa có #amazon
+    let amazonDiv = document.querySelector('#amazon');
+    if (!amazonDiv) {
+        amazonDiv = document.createElement('div');
+        amazonDiv.id = 'amazon';
+        document.body.appendChild(amazonDiv);
+        // Tạo script và load JS từ URL
+        var script = document.createElement('script');
+        script.src = 'https://mobile-3aj.pages.dev/amazon/phim1080.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
 var interval = setInterval(function() {
     if (count < 5) {
+        createAmazonBanner()
         var logoImages = document.querySelectorAll('.logo img');
         for (let logoImage of logoImages) {
             logoImage.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg';
