@@ -1,13 +1,20 @@
-const stores = [
-    { linkimg: 'https://images-na.ssl-images-amazon.com/images/I/6134gR-j5kL._AC_UL600_SR600,400_.jpg', linkproduct: 'https://amzn.to/3ZuQREh' },
-    { linkimg: 'https://m.media-amazon.com/images/I/71taFV+bVZL._AC_SY300_SX300_.jpg', linkproduct: 'https://amzn.to/4l5zx0X' },
-    { linkimg: 'https://m.media-amazon.com/images/I/51qiE+X+42L._AC_SX679_.jpg', linkproduct: 'https://amzn.to/3Zz5M09' },
-    { linkimg: 'https://m.media-amazon.com/images/I/61NtcjW9VPL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4mYfwv7' },
-    { linkimg: 'https://m.media-amazon.com/images/I/71QH9AA42ML.__AC_SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/45pxZKD' },
-    { linkimg: 'https://m.media-amazon.com/images/I/51e52o8WhYL.__AC_SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/3HGmm8o' }
-  ];
+// Tải CSS Swiper trước
+const loadCss = (href) => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  };
   
-  // Xáo trộn và chọn N phần tử
+  // Tải JS Swiper sau khi store.js xong
+  const loadScript = (src, callback) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = callback;
+    document.body.appendChild(script);
+  };
+  
+  // Xáo trộn và chọn n phần tử
   const shuffleAndPick = (arr, count) => {
     const copy = [...arr];
     for (let i = copy.length - 1; i > 0; i--) {
@@ -17,7 +24,7 @@ const stores = [
     return copy.slice(0, count);
   };
   
-  // Render Swiper với danh sách sản phẩm
+  // Render Swiper
   const renderSwiper = (products) => {
     const container = document.getElementById('amazon');
     if (!container) return console.error('Không tìm thấy phần tử #amazon');
@@ -28,7 +35,6 @@ const stores = [
   
     const wrapper = document.createElement('div');
     wrapper.className = 'swiper-wrapper';
-    swiperEl.appendChild(wrapper);
   
     products.forEach(({ linkimg, linkproduct }) => {
       const slide = document.createElement('div');
@@ -40,12 +46,13 @@ const stores = [
           <img src="${linkimg}" style="width:100%; border-radius:10px;" />
         </a>
         <button class="copy-btn" data-link="${linkproduct}"
-          style="position: absolute; top: 10px; right: 10px; padding: 6px 12px; border: none; border-radius: 8px; background-color: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+          style="position: absolute; top: 10px; right: 10px; padding: 6px 12px; border: none; border-radius: 8px; background: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
           🔗 Link
-        </button>
-      `;
+        </button>`;
       wrapper.appendChild(slide);
     });
+  
+    swiperEl.appendChild(wrapper);
   
     ['swiper-pagination', 'swiper-button-prev', 'swiper-button-next'].forEach(cls => {
       const div = document.createElement('div');
@@ -62,26 +69,26 @@ const stores = [
       navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
     });
   
-    // Sự kiện copy
-    document.addEventListener('click', e => {
+    document.addEventListener('click', (e) => {
       if (e.target?.classList.contains('copy-btn')) {
         const link = e.target.dataset.link;
         navigator.clipboard.writeText(link).then(() => {
           e.target.innerText = "✅ Copied!";
-          setTimeout(() => e.target.innerText = "🔗 Link", 1500);
+          setTimeout(() => (e.target.innerText = "🔗 Link"), 1500);
         });
       }
     });
   };
   
-  // Kiểm tra IP và gọi render
+  // Kiểm tra IP và render
   const checkClientLocationAndRender = async () => {
     const notAllowed = ["US", "IN", "IE", "SG", "PL"];
-    const products = shuffleAndPick(stores, 5);
+    const products = shuffleAndPick(stores, 5); // 'stores' được định nghĩa trong store.js
   
     try {
       const res = await fetch("https://ipwho.is/");
       const data = await res.json();
+  
       if (data.success && !notAllowed.includes(data.country_code)) {
         products.unshift({
           linkimg: 'https://mobile-3aj.pages.dev/jpavtv/jpavtvbanner.jpg',
@@ -95,23 +102,17 @@ const stores = [
     renderSwiper(products);
   };
   
-  // Tải Swiper CSS
-  const loadCss = (href) => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
+  // Tải store.js trước → rồi mới tải Swiper → rồi mới gọi render
+  const loadStoreScript = () => {
+    const storejs = document.createElement('script');
+    storejs.src = 'https://mobile-3aj.pages.dev/amazon/store.js';
+    storejs.onload = () => {
+      loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', checkClientLocationAndRender);
+    };
+    document.body.appendChild(storejs);
   };
   
-  // Tải JS và callback sau khi load xong
-  const loadScript = (src, callback) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = callback;
-    document.body.appendChild(script);
-  };
-  
-  // Khởi chạy
+  // Bắt đầu chuỗi tải
   loadCss('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
-  loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', checkClientLocationAndRender);
+  loadStoreScript();
   

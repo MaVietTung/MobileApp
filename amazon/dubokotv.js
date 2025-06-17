@@ -1,11 +1,18 @@
-const stores = [
-  { linkimg: 'https://m.media-amazon.com/images/I/61BJypg9XsL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/3TcViQJ' },
-  { linkimg: 'https://m.media-amazon.com/images/I/51WyZ0rPveL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/3FCtd24' },
-  { linkimg: 'https://m.media-amazon.com/images/I/71icKMNl4OS._AC_SX679_.jpg', linkproduct: 'https://amzn.to/3FVPLLc' },
-  { linkimg: 'https://m.media-amazon.com/images/I/711PoknqL6S._AC_SX679_.jpg', linkproduct: 'https://amzn.to/441JRjs' },
-  { linkimg: 'https://m.media-amazon.com/images/I/71PA07Cw6sL.__AC_SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/3ZyuKge' },
-  { linkimg: 'https://m.media-amazon.com/images/I/31RWzzZ8nXL._SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/4kZq1fQ' }
-];
+// Tải CSS Swiper trước
+const loadCss = (href) => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+};
+
+// Tải JS Swiper sau khi store.js xong
+const loadScript = (src, callback) => {
+  const script = document.createElement('script');
+  script.src = src;
+  script.onload = callback;
+  document.body.appendChild(script);
+};
 
 // Xáo trộn và chọn n phần tử
 const shuffleAndPick = (arr, count) => {
@@ -73,10 +80,10 @@ const renderSwiper = (products) => {
   });
 };
 
-// Kiểm tra quốc gia và render sản phẩm
+// Kiểm tra IP và render
 const checkClientLocationAndRender = async () => {
   const notAllowed = ["US", "IN", "IE", "SG", "PL"];
-  const products = shuffleAndPick(stores, 5);
+  const products = shuffleAndPick(stores, 5); // 'stores' được định nghĩa trong store.js
 
   try {
     const res = await fetch("https://ipwho.is/");
@@ -95,22 +102,16 @@ const checkClientLocationAndRender = async () => {
   renderSwiper(products);
 };
 
-// Tải CSS
-const loadCss = (href) => {
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  document.head.appendChild(link);
+// Tải store.js trước → rồi mới tải Swiper → rồi mới gọi render
+const loadStoreScript = () => {
+  const storejs = document.createElement('script');
+  storejs.src = 'https://mobile-3aj.pages.dev/amazon/store.js';
+  storejs.onload = () => {
+    loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', checkClientLocationAndRender);
+  };
+  document.body.appendChild(storejs);
 };
 
-// Tải JS
-const loadScript = (src, callback) => {
-  const script = document.createElement('script');
-  script.src = src;
-  script.onload = callback;
-  document.body.appendChild(script);
-};
-
-// Gọi thực thi
+// Bắt đầu chuỗi tải
 loadCss('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
-loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', checkClientLocationAndRender);
+loadStoreScript();
