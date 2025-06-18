@@ -16,5 +16,9 @@ const stores = [
     { linkimg: 'https://m.media-amazon.com/images/I/81PHnCv3OCL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4jVnBxI' },
     { linkimg: 'https://m.media-amazon.com/images/I/81wvyvlrbQS.__AC_SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/3G2R8aX' },
     { linkimg: 'https://m.media-amazon.com/images/I/61Y+DP+L3fL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4eaVYj4' },
-    { linkimg: 'https://m.media-amazon.com/images/I/81AHrm8rhWL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4kJfplo' }
+    { linkimg: 'https://m.media-amazon.com/images/I/81AHrm8rhWL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4kJfplo' },
+    { linkimg: 'https://m.media-amazon.com/images/I/71G9F+PKc1L._AC_SY741_.jpg', linkproduct: 'https://amzn.to/3TvAZOi' },
+    { linkimg: 'https://m.media-amazon.com/images/I/51jdi4yyz9L.__AC_SX300_SY300_QL70_FMwebp_.jpg', linkproduct: 'https://amzn.to/4482cM8' },
+    { linkimg: 'https://m.media-amazon.com/images/I/51FJ0B42ZHL._AC_SX679_.jpg', linkproduct: 'https://amzn.to/4e7Nn0x' },
+    { linkimg: 'https://m.media-amazon.com/images/I/61LNpiveSeL._AC_SY741_.jpg', linkproduct: 'https://amzn.to/4e4WTS2' }
   ];
