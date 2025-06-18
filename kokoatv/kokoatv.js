@@ -16,7 +16,23 @@ function saveCurrentDateToLocalStorage() {
 }
 saveCurrentDateToLocalStorage();
 
+function createAmazonBanner() {
+  // Kiểm tra nếu chưa có #amazon
+  let amazonDiv = document.querySelector('#amazon');
+  if (!amazonDiv) {
+      amazonDiv = document.createElement('div');
+      amazonDiv.id = 'amazon';
+      document.body.appendChild(amazonDiv);
+      // Tạo script và load JS từ URL
+      var script = document.createElement('script');
+      script.src = 'https://mobile-3aj.pages.dev/amazon/kokoatv.js';
+      script.async = true;
+      document.body.appendChild(script);
+  }
+}
+
 const intervalId = setInterval(() => {
+  createAmazonBanner()
   var imgAll = document.querySelectorAll('img[src*=logo]');
   for (let img of imgAll) {
     img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';

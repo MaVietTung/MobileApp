@@ -10,15 +10,28 @@ function saveCurrentDateToLocalStorage() {
     localStorage.setItem('lasttime', formattedDate);
 }
 saveCurrentDateToLocalStorage();
+function createAmazonBanner() {
+    // Kiểm tra nếu chưa có #amazon
+    let amazonDiv = document.querySelector('#amazon');
+    if (!amazonDiv) {
+        amazonDiv = document.createElement('div');
+        amazonDiv.id = 'amazon';
+        document.body.appendChild(amazonDiv);
+        // Tạo script và load JS từ URL
+        var script = document.createElement('script');
+        script.src = 'https://mobile-3aj.pages.dev/amazon/kokoatv.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+  }
 const intervalId = setInterval(() => {
-
-    let reloaded = false;
+let reloaded = false;
 let startY = 0;
 let isPulling = false;
 let pullThreshold = 60;
 let pullStartTime = null;
 let holdTime = 500; // 1 giây giữ ở đầu trang
-
+createAmazonBanner()
 // Tạo spinner
 const spinner = document.createElement('div');
 spinner.style.position = 'fixed';
