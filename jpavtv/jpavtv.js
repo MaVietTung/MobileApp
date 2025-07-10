@@ -167,8 +167,10 @@ script_tmp.onload = () => {
         checkClientLocation();
         createAmazonBanner();
 
-        const logoImage = document.querySelector('span.text-zinc-50');
-        if (logoImage) logoImage.textContent = 'JPAV';
+        const logoImages = document.querySelectorAll('img[src*=logo]');
+        for(var logoImage of logoImages){
+            logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+        }
 
         const images = document.querySelectorAll('img[src*=mio]');
         const matchingDivs = Array.from(images).map(img =>
