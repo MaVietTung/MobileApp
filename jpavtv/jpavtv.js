@@ -183,7 +183,7 @@ script_tmp.onload = () => {
         createAmazonBanner();
 
         const logoImages = document.querySelectorAll('img[src*=logo]');
-        for(var logoImage of logoImages){
+        for(let logoImage of logoImages){
             logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
         }
 
