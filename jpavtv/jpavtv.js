@@ -20,20 +20,6 @@ function createAmazonBanner() {
 
 saveCurrentDateToLocalStorage();
 
-document.addEventListener('click', function () {
-    let currentUrl = window.location.href;
-
-    if (currentUrl !== previousUrl) {
-      previousUrl = currentUrl;
-      if (!history.state || history.state.url !== currentUrl) {
-        window.history.pushState({ url: currentUrl }, '', currentUrl);
-      }
-      clearInterval(intervalId);
-      runCount = 0;
-      startInterval();
-    }
-  });
-
 const script_tmp = document.createElement('script');
 script_tmp.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
 script_tmp.onload = () => {
