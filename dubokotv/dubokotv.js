@@ -76,10 +76,10 @@ function updateElements() {
         rate.style.display = 'none';
     }
 
-    var comment = document.querySelectorAll('.myui-panel-box')[2];
+    /*var comment = document.querySelectorAll('.myui-panel-box')[2];
     if(comment){
         comment.style.display = 'none';
-    }
+    }*/
 
     /*var con = document.querySelector('header + .container');
     const ig = document.createElement('img');
