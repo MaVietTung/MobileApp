@@ -176,8 +176,8 @@ script_tmp.onload = () => {
                 configurable: false
             });
         }
-        const logoImage1 = document.querySelector('span.text-zinc-50');
-        if (logoImage1) logoImage1.textContent = 'JPAV';
+        const logoImage2 = document.querySelector('span.text-zinc-50');
+        if (logoImage2) logoImage2.textContent = 'JPAV';
 
         const images = document.querySelectorAll('img[src*=mio]');
         const matchingDivs = Array.from(images).map(img =>
