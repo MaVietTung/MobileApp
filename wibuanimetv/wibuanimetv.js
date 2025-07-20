@@ -22,7 +22,7 @@ function createAmazonBanner() {
         var script = document.createElement('script');
         script.src = 'https://mobile-3aj.pages.dev/amazon/wibuanimetv.js';
         script.async = true;
-        document.body.appendChild(script);
+        //document.body.appendChild(script);
     }
 }
 const intervalId = setInterval(() => {
