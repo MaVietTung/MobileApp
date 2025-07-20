@@ -54,6 +54,11 @@ const intervalId = setInterval(function () {
 
     var con = document.querySelector('.main-content');
 
+    var watchlink = document.querySelector('.watch-link')
+    if(watchlink){
+        watchlink.style.display = 'none';
+    }
+
     /*if (con && !document.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
         ig.src = 'https://mobile-3aj.pages.dev/thaiantv/donate-thaiantv.png';
