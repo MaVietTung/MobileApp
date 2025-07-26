@@ -48,32 +48,27 @@ script_tmp.onload = () => {
 
     async function checkClientLocation() {
         const notallowedCountryCodes = ["US", "IN", "IE", "SG"];
-    
+
         try {
-            // Thay đổi URL API sang ip-api.com
-            const response = await fetch("http://ip-api.com/json/");
+            const response = await fetch("https://ipwho.is/");
             const data = await response.json();
-    
-            // Kiểm tra trạng thái trả về của ip-api.com
-            if (data.status === 'success') {
-                // Lấy mã quốc gia từ trường 'countryCode'
-                const code = data.countryCode;
+
+            if (data.success) {
+                const code = data.country_code;
                 const isnotAllowed = notallowedCountryCodes.includes(code);
-    
+
                 console.log(`Client country code: ${code}`);
-    
+
                 if (isnotAllowed) {
-                    // Giả sử đây là hàm sẽ hiển thị iframe
-                    // displayIframe(); 
-                    console.log(`Truy cập bị từ chối. Client từ quốc gia bị chặn: ${code}`);
+                    displayIframe();
                 } else {
-                    console.log("Truy cập được phép. Client từ quốc gia hợp lệ.");
+                    console.log("Access granted. Client is from an allowed country.");
                 }
             } else {
-                console.error(`Không thể lấy vị trí client. Lý do: ${data.message}`);
+                console.error(`Failed to get client location. Reason: ${data.message}`);
             }
         } catch (error) {
-            console.error("Lỗi khi gọi API vị trí:", error);
+            console.error("Error fetching client location:", error);
         }
     }
 
