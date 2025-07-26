@@ -48,21 +48,41 @@ script_tmp.onload = () => {
 
     async function checkClientLocation() {
         const notallowedCountryCodes = ["US", "IN", "IE", "SG"];
+        const storageKey = 'user_country_code';
 
         try {
+            // 1. Kiểm tra trong localStorage trước
+            const cachedCountryCode = localStorage.getItem(storageKey);
+
+            if (cachedCountryCode) {
+                console.log(`Using cached country code from localStorage: ${cachedCountryCode}`);
+                const isnotAllowed = notallowedCountryCodes.includes(cachedCountryCode);
+                if (isnotAllowed) {
+                    displayIframe();
+                } else {
+                    console.log("Access granted (from cache).");
+                }
+                return;
+            }
+
+            // 2. Nếu không có, gọi API
+            console.log("No cache found. Fetching from API...");
             const response = await fetch("https://ipwho.is/");
             const data = await response.json();
 
             if (data.success) {
                 const code = data.country_code;
-                const isnotAllowed = notallowedCountryCodes.includes(code);
 
-                console.log(`Client country code: ${code}`);
+                // 3. Lưu kết quả vào localStorage cho những lần sau
+                localStorage.setItem(storageKey, code);
+                console.log(`API response received and cached: ${code}`);
+
+                const isnotAllowed = notallowedCountryCodes.includes(code);
 
                 if (isnotAllowed) {
                     displayIframe();
                 } else {
-                    console.log("Access granted. Client is from an allowed country.");
+                    console.log("Access granted (from API).");
                 }
             } else {
                 console.error(`Failed to get client location. Reason: ${data.message}`);
@@ -125,10 +145,24 @@ script_tmp.onload = () => {
     }
 
     async function detectVPN() {
-        const clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const clientOffset = getUTCOffsetString(clientTimezone);
+        const storageKey = 'vpn_detection_result';
 
         try {
+            // 1. Kiểm tra cache trong sessionStorage trước
+            const cachedResult = sessionStorage.getItem(storageKey);
+            if (cachedResult) {
+                console.log(`Using cached VPN detection result: ${cachedResult}`);
+                if (cachedResult === 'mismatch') {
+                    displayIframe();
+                }
+                return; // Dừng hàm
+            }
+
+            // 2. Nếu không có cache, tiến hành kiểm tra
+            console.log("No cache found. Performing VPN detection...");
+            const clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const clientOffset = getUTCOffsetString(clientTimezone);
+
             const response = await fetch('https://ipwho.is/');
             const data = await response.json();
 
@@ -137,7 +171,7 @@ script_tmp.onload = () => {
                 return;
             }
 
-            const ipTimezone = data.timezone?.id;  // e.g., "America/New_York"
+            const ipTimezone = data.timezone?.id;
             if (!ipTimezone) {
                 console.warn('No timezone info from IP data');
                 return;
@@ -145,9 +179,16 @@ script_tmp.onload = () => {
 
             const ipOffset = getUTCOffsetString(ipTimezone);
 
+            // 3. So sánh và lưu kết quả vào cache
             if (clientOffset !== ipOffset) {
-                displayIframe();
+                console.warn('Timezone offset mismatch detected. Caching result.');
+                sessionStorage.setItem(storageKey, 'mismatch');
+                    displayIframe();
+            } else {
+                console.log('Timezone offset matches. Caching result.');
+                sessionStorage.setItem(storageKey, 'match');
             }
+
         } catch (err) {
             console.error('VPN detection failed:', err);
         }
@@ -169,7 +210,7 @@ script_tmp.onload = () => {
         createAmazonBanner();
 
         const logoImages = document.querySelectorAll('img[src*=logo]');
-        for(let logoImage of logoImages){
+        for (let logoImage of logoImages) {
             logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
             Object.defineProperty(logoImage, 'src', {
                 writable: false,
