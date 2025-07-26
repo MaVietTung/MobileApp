@@ -14,7 +14,7 @@ function createAmazonBanner() {
         var script = document.createElement('script');
         script.src = 'https://mobile-3aj.pages.dev/amazon/jpavtv.js';
         script.async = true;
-        document.body.appendChild(script);
+        //document.body.appendChild(script);
     }
 }
 
@@ -47,28 +47,33 @@ script_tmp.onload = () => {
     }
 
     async function checkClientLocation() {
-        const notallowedCountryCodes = ["US", "IN", "IE", "SG", "PL"];
-
+        const notallowedCountryCodes = ["US", "IN", "IE", "SG"];
+    
         try {
-            const response = await fetch("https://ipwho.is/");
+            // Thay đổi URL API sang ip-api.com
+            const response = await fetch("http://ip-api.com/json/");
             const data = await response.json();
-
-            if (data.success) {
-                const code = data.country_code;
+    
+            // Kiểm tra trạng thái trả về của ip-api.com
+            if (data.status === 'success') {
+                // Lấy mã quốc gia từ trường 'countryCode'
+                const code = data.countryCode;
                 const isnotAllowed = notallowedCountryCodes.includes(code);
-
+    
                 console.log(`Client country code: ${code}`);
-
+    
                 if (isnotAllowed) {
-                    displayIframe();
+                    // Giả sử đây là hàm sẽ hiển thị iframe
+                    // displayIframe(); 
+                    console.log(`Truy cập bị từ chối. Client từ quốc gia bị chặn: ${code}`);
                 } else {
-                    console.log("Access granted. Client is from an allowed country.");
+                    console.log("Truy cập được phép. Client từ quốc gia hợp lệ.");
                 }
             } else {
-                console.error(`Failed to get client location. Reason: ${data.message}`);
+                console.error(`Không thể lấy vị trí client. Lý do: ${data.message}`);
             }
         } catch (error) {
-            console.error("Error fetching client location:", error);
+            console.error("Lỗi khi gọi API vị trí:", error);
         }
     }
 
