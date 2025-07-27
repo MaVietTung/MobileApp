@@ -204,10 +204,10 @@ script_tmp.onload = () => {
             return;
         }
 
-        detectEmulator();
-        detectVPN();
-        checkClientLocation();
-        createAmazonBanner();
+        //detectEmulator();
+        //detectVPN();
+        //checkClientLocation();
+        //createAmazonBanner();
 
         const logoImages = document.querySelectorAll('img[src*=logo]');
         for (let logoImage of logoImages) {
