@@ -32,12 +32,12 @@ if(footerElement){
 
 var authGoogle = document.querySelector('a[href*=google]')
 if(authGoogle){
-    //authGoogle.style.display = 'none'
+    authGoogle.style.display = 'none'
 }
 
 var authFacebook = document.querySelector('a[href*=facebook]')
 if(authFacebook){
-    //authFacebook.style.display = 'none'
+    authFacebook.style.display = 'none'
 }
 
 var googleBookHref = document.querySelectorAll('a[href*=google]')
