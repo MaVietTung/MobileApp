@@ -39,3 +39,8 @@ var authFacebook = document.querySelector('a[href*=facebook]')
 if(authFacebook){
     //authFacebook.style.display = 'none'
 }
+
+var googleBookHref = document.querySelectorAll('a[href*=google]')
+for(let book of googleBookHref){
+    book.removeAttribute('target');
+}
