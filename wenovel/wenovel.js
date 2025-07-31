@@ -65,7 +65,7 @@ const bodyChildren = document.body.children;
 // Lặp qua tất cả các phần tử con của <body>
 for (const element of bodyChildren) {
   // Nếu ID của phần tử không phải là 'wrapper', hãy ẩn nó đi
-  if (element.id !== 'wrapper') {
+  if (element !== bodyChildren[0]) {
     element.style.display = 'none';
   }
 }
