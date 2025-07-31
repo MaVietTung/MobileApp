@@ -137,25 +137,6 @@ var interval = setInterval(function() {
     }
 }, 1000);
 
-//chỉ giữ lại body element
-const documentChildren = document.documentElement.children;
-for (const element of documentChildren) {
-  if (element !== document.body) {
-    element.style.display = 'none';
-  }
-}
-
-// Lấy tất cả các phần tử con trực tiếp của thẻ <body>
-const bodyChildren = document.body.children;
-
-// Lặp qua tất cả các phần tử con của <body>
-for (const element of bodyChildren) {
-  // Nếu ID của phần tử không phải là 'wrapper', hãy ẩn nó đi
-  if (element !== bodyChildren[0]) {
-    element.style.display = 'none';
-  }
-}
-
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
     for (const mutation of mutationsList) {
