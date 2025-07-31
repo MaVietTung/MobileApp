@@ -44,3 +44,54 @@ var googleBookHref = document.querySelectorAll('a[href*=google]')
 for(let book of googleBookHref){
     book.removeAttribute('target');
 }
+
+// Ẩn toàn bộ nội dung trong thẻ <head>
+// Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
+if (document.head) {
+    document.head.style.display = 'none';
+}
+
+//chỉ giữ lại body element
+const documentChildren = document.children[0].children;
+for (const element of documentChildren) {
+  if (element !== document.body) {
+    element.style.display = 'none';
+  }
+}
+
+// Lấy tất cả các phần tử con trực tiếp của thẻ <body>
+const bodyChildren = document.body.children;
+
+// Lặp qua tất cả các phần tử con của <body>
+for (const element of bodyChildren) {
+  // Nếu ID của phần tử không phải là 'wrapper', hãy ẩn nó đi
+  if (element.id !== 'wrapper') {
+    element.style.display = 'none';
+  }
+}
+
+
+// Đảm bảo phần tử 'wrapper' và thẻ <body> được hiển thị
+const wrapperElement = document.getElementById('wrapper');
+if (wrapperElement) {
+    document.body.style.display = 'block';
+    wrapperElement.style.display = 'block'; // Hoặc 'flex', 'grid', tùy thuộc vào thiết kế gốc
+}
+
+// XPath expression để tìm tất cả các thẻ (*) có chứa (contains) văn bản (text()) là "Novel Bin"
+let xpath = "//*[contains(text(), 'Novel Bin')]";
+
+// Thực thi câu lệnh XPath
+let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+
+// Lấy ra phần tử đầu tiên tìm thấy
+let firstElement = results.snapshotItem(0);
+
+if(firstElement){
+  firstElement.textContent = "WeNovel"
+}
+
+let ads = document.querySelectorAll('[data-unit]')
+for (let ad of ads){
+  ad.style.display = 'none'
+}
