@@ -95,3 +95,37 @@ let ads = document.querySelectorAll('[data-unit]')
 for (let ad of ads){
   ad.style.display = 'none'
 }
+
+
+// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+const callback = (mutationsList, observer) => {
+  // Lặp qua danh sách các thay đổi đã xảy ra
+  for (const mutation of mutationsList) {
+    // Chỉ quan tâm đến những thay đổi về việc thêm/bớt phần tử con
+    if (mutation.type === 'childList') {
+      // Lặp qua tất-cả các-phần-tử-mới-được-thêm-vào
+      for (const node of mutation.addedNodes) {
+        // Kiểm tra xem node có phải là một element không (loại bỏ text, comment...)
+        if (node.nodeType === 1) { // 1 là mã của ELEMENT_NODE
+          // Ẩn element mới này đi
+          node.style.display = 'none';
+          console.log('Phát hiện và ẩn một element mới:', node);
+        }
+      }
+    }
+  }
+};
+
+// Tạo một đối tượng observer với hàm callback ở trên
+const observer = new MutationObserver(callback);
+
+// Cấu hình để observer theo dõi
+const config = {
+  childList: true, // Theo dõi việc thêm hoặc bớt phần tử con
+  subtree: true    // Theo dõi tất cả các phần tử con cháu, không chỉ con trực tiếp
+};
+
+// Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+observer.observe(document.documentElement, config);
+
+console.log('Đang bắt đầu theo dõi... Mọi element mới được thêm vào sẽ bị ẩn.');
