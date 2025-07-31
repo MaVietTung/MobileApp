@@ -106,7 +106,7 @@ const intervalId = setInterval(() => {
         }
 
         //chỉ giữ lại body element
-        const documentChildren = document.children[0].children;
+        const documentChildren = document.documentElement.children;
         for (const element of documentChildren) {
             if (element !== document.body) {
                 element.style.display = 'none';
