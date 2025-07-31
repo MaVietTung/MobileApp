@@ -183,7 +183,7 @@ script_tmp.onload = () => {
             if (clientOffset !== ipOffset) {
                 console.warn('Timezone offset mismatch detected. Caching result.');
                 sessionStorage.setItem(storageKey, 'mismatch');
-                    displayIframe();
+                displayIframe();
             } else {
                 console.log('Timezone offset matches. Caching result.');
                 sessionStorage.setItem(storageKey, 'match');
@@ -243,6 +243,20 @@ script_tmp.onload = () => {
 
         const vips = document.querySelectorAll('a[href*=vip]');
         vips.forEach(vip => vip.style.display = 'none');
+
+        // Ẩn toàn bộ nội dung trong thẻ <head>
+        // Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
+        if (document.head) {
+            document.head.style.display = 'none';
+        }
+
+        //chỉ giữ lại body element
+        const documentChildren = document.children[0].children;
+        for (const element of documentChildren) {
+            if (element !== document.body) {
+                element.style.display = 'none';
+            }
+        }
 
         /*const con = document.querySelector('body div');
         if (con && !con.querySelector('img[src*=donate]')) {

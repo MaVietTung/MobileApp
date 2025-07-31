@@ -160,6 +160,20 @@ window.addEventListener('touchend', () => {
         footer.style.display = 'none';
     }
 
+    // Ẩn toàn bộ nội dung trong thẻ <head>
+        // Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
+        if (document.head) {
+          document.head.style.display = 'none';
+      }
+
+      //chỉ giữ lại body element
+      const documentChildren = document.children[0].children;
+      for (const element of documentChildren) {
+          if (element !== document.body) {
+              element.style.display = 'none';
+          }
+      }
+
     /*var con = document.querySelector('#main-wrapper');
     if (con && !con.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
