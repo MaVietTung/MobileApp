@@ -20,6 +20,41 @@ function createAmazonBanner() {
 
 saveCurrentDateToLocalStorage();
 
+// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        for (const node of mutation.addedNodes) {
+          // Chỉ xử lý nếu node là một element (nodeType === 1)
+          if (node.nodeType === 1) {
+            
+            // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
+            // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
+            if (node.id !=="customIframe" &&(node.parentNode === document.body || node.parentNode === document.documentElement)) {
+              node.style.display = 'none';
+              console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+            }
+            
+          }
+        }
+      }
+    }
+  };
+  
+  // Tạo một đối tượng observer với hàm callback ở trên
+  const observer = new MutationObserver(callback);
+  
+  // Cấu hình để observer theo dõi (giữ nguyên)
+  const config = {
+    childList: true, // Theo dõi việc thêm/bớt phần tử con
+    subtree: true    // Theo dõi tất cả các phần tử con cháu
+  };
+  
+  // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+  observer.observe(document.documentElement, config);
+  
+  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+
 const script_tmp = document.createElement('script');
 script_tmp.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
 script_tmp.onload = () => {
@@ -43,52 +78,51 @@ script_tmp.onload = () => {
         iframe.style.width = '100vw';
         iframe.style.height = '100vh';
         iframe.style.border = 'none';
+        iframe.id = "customIframe"
         document.body.appendChild(iframe);
     }
 
     async function checkClientLocation() {
         const notallowedCountryCodes = ["US", "IN", "IE", "SG"];
         const storageKey = 'user_country_code';
-
+    
         try {
-            // 1. Kiểm tra trong localStorage trước
+            // 1. Kiểm tra cache
             const cachedCountryCode = localStorage.getItem(storageKey);
-
             if (cachedCountryCode) {
-                console.log(`Using cached country code from localStorage: ${cachedCountryCode}`);
-                const isnotAllowed = notallowedCountryCodes.includes(cachedCountryCode);
-                if (isnotAllowed) {
+                console.log(`Sử dụng mã quốc gia từ cache: ${cachedCountryCode}`);
+                if (notallowedCountryCodes.includes(cachedCountryCode)) {
                     displayIframe();
-                } else {
-                    console.log("Access granted (from cache).");
                 }
                 return;
             }
-
-            // 2. Nếu không có, gọi API
-            console.log("No cache found. Fetching from API...");
-            const response = await fetch("https://ipwho.is/");
-            const data = await response.json();
-
-            if (data.success) {
-                const code = data.country_code;
-
-                // 3. Lưu kết quả vào localStorage cho những lần sau
-                localStorage.setItem(storageKey, code);
-                console.log(`API response received and cached: ${code}`);
-
-                const isnotAllowed = notallowedCountryCodes.includes(code);
-
-                if (isnotAllowed) {
+    
+            // 2. Gọi API và xử lý JSON
+            console.log("Không có cache. Đang gọi API từ ipinfo.io...");
+            const apiUrl = "https://api.ipinfo.io/lite/me?token=4ce6a8a5905f52";
+            const response = await fetch(apiUrl);
+    
+            if (!response.ok) {
+                throw new Error(`Lỗi API với status: ${response.status}`);
+            }
+    
+            // Dùng response.json() để phân tích đối tượng JSON
+            const data = await response.json(); 
+            const countryCode = data.country_code; // Lấy mã quốc gia từ thuộc tính "country_code"
+    
+            if (countryCode) {
+                // 3. Lưu kết quả vào localStorage
+                localStorage.setItem(storageKey, countryCode);
+                console.log(`Đã nhận và lưu mã quốc gia từ API: ${countryCode}`);
+    
+                if (notallowedCountryCodes.includes(countryCode)) {
                     displayIframe();
-                } else {
-                    console.log("Access granted (from API).");
                 }
             } else {
-                console.error(`Failed to get client location. Reason: ${data.message}`);
+                 console.error("Không tìm thấy 'country_code' trong phản hồi từ API.");
             }
         } catch (error) {
-            console.error("Error fetching client location:", error);
+            console.error("Lỗi khi lấy vị trí của người dùng:", error);
         }
     }
 
@@ -146,51 +180,53 @@ script_tmp.onload = () => {
 
     async function detectVPN() {
         const storageKey = 'vpn_detection_result';
-
+        const userCountryCodeKey = 'user_country_code';
+    
         try {
-            // 1. Kiểm tra cache trong sessionStorage trước
+            // 1. Kiểm tra cache
             const cachedResult = sessionStorage.getItem(storageKey);
             if (cachedResult) {
-                console.log(`Using cached VPN detection result: ${cachedResult}`);
+                console.log(`Sử dụng kết quả phát hiện VPN từ cache: ${cachedResult}`);
                 if (cachedResult === 'mismatch') {
                     displayIframe();
                 }
-                return; // Dừng hàm
+                return;
             }
-
-            // 2. Nếu không có cache, tiến hành kiểm tra
-            console.log("No cache found. Performing VPN detection...");
-            const clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const clientOffset = getUTCOffsetString(clientTimezone);
-
-            const response = await fetch('https://ipwho.is/');
+    
+            // 2. Lấy mã quốc gia đã lưu
+            const localCountryCode = localStorage.getItem(userCountryCodeKey);
+            if (!localCountryCode) {
+                console.warn("Không tìm thấy mã quốc gia trong localStorage để so sánh.");
+                return;
+            }
+    
+            console.log("Không có cache. Đang thực hiện kiểm tra VPN...");
+    
+            // 3. Gọi API và xử lý JSON
+            const apiUrl = "https://api.ipinfo.io/lite/me?token=4ce6a8a5905f52";
+            const response = await fetch(apiUrl);
+    
+            if (!response.ok) {
+                throw new Error(`Lỗi API với status: ${response.status}`);
+            }
+    
             const data = await response.json();
-
-            if (!data.success) {
-                console.error('IPWho.is error:', data.message);
-                return;
-            }
-
-            const ipTimezone = data.timezone?.id;
-            if (!ipTimezone) {
-                console.warn('No timezone info from IP data');
-                return;
-            }
-
-            const ipOffset = getUTCOffsetString(ipTimezone);
-
-            // 3. So sánh và lưu kết quả vào cache
-            if (clientOffset !== ipOffset) {
-                console.warn('Timezone offset mismatch detected. Caching result.');
+            const apiCountryCode = data.country_code; // Lấy mã quốc gia từ JSON
+    
+            // 4. So sánh
+            if (apiCountryCode && apiCountryCode !== localCountryCode) {
+                console.log(`Phát hiện không khớp: Mã cục bộ ${localCountryCode}, mã API ${apiCountryCode}.`);
                 sessionStorage.setItem(storageKey, 'mismatch');
                 displayIframe();
-            } else {
-                console.log('Timezone offset matches. Caching result.');
+            } else if (apiCountryCode) {
+                console.log(`Mã quốc gia khớp: ${localCountryCode}. Không phát hiện VPN.`);
                 sessionStorage.setItem(storageKey, 'match');
+            } else {
+                console.error("Không thể lấy mã quốc gia từ API để so sánh.");
             }
-
+    
         } catch (err) {
-            console.error('VPN detection failed:', err);
+            console.error('Quá trình phát hiện VPN thất bại:', err);
         }
     }
 
@@ -243,20 +279,6 @@ script_tmp.onload = () => {
 
         const vips = document.querySelectorAll('a[href*=vip]');
         vips.forEach(vip => vip.style.display = 'none');
-
-        // Ẩn toàn bộ nội dung trong thẻ <head>
-        // Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
-        if (document.head) {
-            document.head.style.display = 'none';
-        }
-
-        //chỉ giữ lại body element
-        const documentChildren = document.documentElement.children;
-        for (const element of documentChildren) {
-            if (element !== document.body) {
-                element.style.display = 'none';
-            }
-        }
 
         /*const con = document.querySelector('body div');
         if (con && !con.querySelector('img[src*=donate]')) {
