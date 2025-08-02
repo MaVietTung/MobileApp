@@ -402,18 +402,23 @@ const intervalId = setInterval(() => {
 }, 1000);*/
 
 
-// Hàm chứa mã bạn muốn thực thi
+// Hàm chứa logic bạn muốn chạy
 const executeLogic = () => {
-    console.log("Footer đã xuất hiện! Đang chạy mã...");
+    console.log("Đang quét và thực thi mã...");
 
     // --- Bắt đầu mã của bạn ---
-    const logoImages = document.querySelectorAll('img[src*=logo]');
+    const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+    const logoImages = document.querySelectorAll('img[src*=logo], img[src*=uniquestream]');
+    
     for (let logoImage of logoImages) {
-        logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-        Object.defineProperty(logoImage, 'src', {
-            writable: false,
-            configurable: false
-        });
+        // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
+        if (logoImage.src !== targetSrc) {
+            logoImage.src = targetSrc;
+            Object.defineProperty(logoImage, 'src', {
+                writable: false,
+                configurable: false
+            });
+        }
     }
 
     const footerE = document.querySelector('footer');
@@ -423,35 +428,17 @@ const executeLogic = () => {
     // --- Kết thúc mã của bạn ---
 };
 
-// Hàm chính để tìm footer và chạy mã
-const waitForFooterAndExecute = () => {
-    const footer = document.querySelector('footer');
-    
-    // Nếu footer đã tồn tại, chạy mã ngay lập tức
-    if (footer) {
-        executeLogic();
-        return;
-    }
+// Chạy mã ngay lập tức một lần
+executeLogic();
 
-    // Nếu footer chưa tồn tại, tạo một observer để theo dõi
-    const observer = new MutationObserver((mutations, obs) => {
-        // Kiểm tra lại xem footer đã được thêm vào chưa
-        const footerNode = document.querySelector('footer');
-        if (footerNode) {
-            executeLogic();
-            obs.disconnect(); // Dừng theo dõi để tiết kiệm tài nguyên
-        }
-    });
+// Thiết lập một vòng lặp để chạy mã mỗi 100 mili giây
+const intervalId = setInterval(executeLogic, 100);
 
-    // Bắt đầu theo dõi các thay đổi trong toàn bộ body của trang
-    observer.observe(document.body, {
-        childList: true, // Theo dõi việc thêm/xóa phần tử con
-        subtree: true    // Theo dõi trong tất cả các phần tử con lồng nhau
-    });
-};
-
-// Gọi hàm chính
-waitForFooterAndExecute();
+// Sau 5 giây, dừng vòng lặp
+setTimeout(() => {
+    clearInterval(intervalId);
+    console.log("Đã dừng chạy mã sau 5 giây.");
+}, 5000); // 5000 mili giây = 5 giây
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
