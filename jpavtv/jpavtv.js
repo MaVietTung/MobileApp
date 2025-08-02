@@ -439,6 +439,23 @@ for (const span of spans) {
   }
 }
 
+document.addEventListener('click', () => {
+    // Sửa 'oldurl' thành 'oldUrl' để nhất quán
+    var oldUrl = sessionStorage.getItem('oldurl');
+    var currentUrl = location.href;
+
+    // Sửa 'and' thành toán tử '&&'
+    if (oldUrl && oldUrl !== currentUrl) {
+        // Sửa pushState để có đủ 3 tham số (state, title, url)
+        history.pushState(null, '', currentUrl);
+    } 
+    // Sửa 'elif' thành 'else if' và 'oldurl' thành 'oldUrl'
+    else if (!oldUrl) {
+        sessionStorage.setItem('oldurl', currentUrl);
+        // Sửa pushState để có đủ 3 tham số
+        history.pushState(null, '', currentUrl);
+    }
+});
 
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
