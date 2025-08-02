@@ -3,6 +3,10 @@ for (let img of imgAll) {
     img.src = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
     img.style.width = '50px';
     img.style.height = '50px';
+    Object.defineProperty(img, 'src', {
+      writable: false,
+      configurable: false
+  });
 }
 
 var welcomeBottom = document.querySelector('.welcome-bottom')
