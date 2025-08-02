@@ -54,3 +54,34 @@ const callback = (mutationsList, observer) => {
   
   console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
 
+// test page
+const yukiSpan = Array.from(document.querySelectorAll('span')).find(span => span.textContent.trim() === 'Yuki');
+
+// Check if the element was found and then use it
+if (yukiSpan) {
+  // You can now manipulate the element, e.g., change its style
+  yukiSpan.textContent = 'WeManga';
+} else {
+  console.log('No span with the text "Yuki" was found.');
+}
+
+const aChapter = Array.from(document.querySelectorAll('a')).find(span => span.textContent.trim() === 'Chapters');
+
+// Check if the element was found and then use it
+if (aChapter) {
+  // You can now manipulate the element, e.g., change its style
+  aChapter.style.display = 'none';
+} else {
+  console.log('No span with the text "Yuki" was found.');
+}
+
+const buttonLogin = Array.from(document.querySelectorAll('button')).find(span => span.textContent.trim().includes('Google'));
+
+// Check if the element was found and then use it
+if (buttonLogin) {
+  // You can now manipulate the element, e.g., change its style
+  buttonLogin.style.display = 'none';
+} else {
+  console.log('No span with the text "Login" was found.');
+}
+// finish test page
