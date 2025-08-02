@@ -95,7 +95,7 @@ window.addEventListener('touchend', () => {
 });
 
  
-    var imgAll = document.querySelectorAll('img[src*=logo]');
+    var imgAll = document.querySelectorAll('img[src*=xxrz]');
     for (let img of imgAll) {
         img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
         img.style.width = '50px';
