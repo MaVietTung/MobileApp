@@ -193,7 +193,7 @@ window.addEventListener('touchend', () => {
 
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-const callback = (mutationsList, observer) => {
+/*const callback = (mutationsList, observer) => {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         for (const node of mutation.addedNodes) {
@@ -225,4 +225,4 @@ const callback = (mutationsList, observer) => {
   // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
   observer.observe(document.documentElement, config);
   
-  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
