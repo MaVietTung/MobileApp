@@ -415,11 +415,6 @@ function saveCurrentDateToLocalStorage() {
 
 saveCurrentDateToLocalStorage()
 
-var appLink = document.querySelector('a[title*=App]')
-if(appLink){
-    appLink.style.display = 'none'
-}
-
 
 // --- Bắt đầu mã của bạn ---
 const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
@@ -434,6 +429,11 @@ for (let logoImage of logoImages) {
             configurable: false
         });
     }
+}
+
+var ggButn = document.querySelector('#ggButn')
+if(ggButn){
+    ggButn.style.display = 'none'
 }
 
 const footerE = document.querySelector('footer');
