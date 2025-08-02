@@ -402,20 +402,56 @@ const intervalId = setInterval(() => {
 }, 1000);*/
 
 
-alert('test')
-const logoImages = document.querySelectorAll('img[src*=logo]');
-for (let logoImage of logoImages) {
-    logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-    Object.defineProperty(logoImage, 'src', {
-        writable: false,
-        configurable: false
-    });
-}
+// Hàm chứa mã bạn muốn thực thi
+const executeLogic = () => {
+    console.log("Footer đã xuất hiện! Đang chạy mã...");
 
-var footerE = document.querySelector('footer')
-if(footerE){
-    footerE.style.display = 'none'
-}
+    // --- Bắt đầu mã của bạn ---
+    const logoImages = document.querySelectorAll('img[src*=logo]');
+    for (let logoImage of logoImages) {
+        logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+        Object.defineProperty(logoImage, 'src', {
+            writable: false,
+            configurable: false
+        });
+    }
+
+    const footerE = document.querySelector('footer');
+    if (footerE) {
+        footerE.style.display = 'none';
+    }
+    // --- Kết thúc mã của bạn ---
+};
+
+// Hàm chính để tìm footer và chạy mã
+const waitForFooterAndExecute = () => {
+    const footer = document.querySelector('footer');
+    
+    // Nếu footer đã tồn tại, chạy mã ngay lập tức
+    if (footer) {
+        executeLogic();
+        return;
+    }
+
+    // Nếu footer chưa tồn tại, tạo một observer để theo dõi
+    const observer = new MutationObserver((mutations, obs) => {
+        // Kiểm tra lại xem footer đã được thêm vào chưa
+        const footerNode = document.querySelector('footer');
+        if (footerNode) {
+            executeLogic();
+            obs.disconnect(); // Dừng theo dõi để tiết kiệm tài nguyên
+        }
+    });
+
+    // Bắt đầu theo dõi các thay đổi trong toàn bộ body của trang
+    observer.observe(document.body, {
+        childList: true, // Theo dõi việc thêm/xóa phần tử con
+        subtree: true    // Theo dõi trong tất cả các phần tử con lồng nhau
+    });
+};
+
+// Gọi hàm chính
+waitForFooterAndExecute();
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
