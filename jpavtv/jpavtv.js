@@ -407,6 +407,12 @@ const intervalId = setInterval(() => {
 
 console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
 
+var appLink = document.querySelector('a[title*=App]')
+if(appLink){
+    appLink.style.display = 'none'
+}
+
+
 // --- Bắt đầu mã của bạn ---
 const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
 const logoImages = document.querySelectorAll('img[src*=logo], img[src*=avatar]');
