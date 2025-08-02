@@ -407,6 +407,14 @@ const intervalId = setInterval(() => {
 
 console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
 
+function saveCurrentDateToLocalStorage() {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+    localStorage.setItem('lasttime', formattedDate);
+}
+
+saveCurrentDateToLocalStorage()
+
 var appLink = document.querySelector('a[title*=App]')
 if(appLink){
     appLink.style.display = 'none'
@@ -463,6 +471,7 @@ document.addEventListener('click', () => {
     }
 });
 
+var headerE  = document.querySelector('.nav-header')
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
@@ -474,7 +483,7 @@ const callback = (mutationsList, observer) => {
 
                     // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                     // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-                    if (node.id !== "customIframe" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
+                    if ( node.parentNode === headerE || (!location.href.includes('sign-up')&& node.id !== "customIframe" && (node.parentNode === document.body || node.parentNode === document.documentElement))) {
                         node.style.display = 'none';
                         console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                     }
