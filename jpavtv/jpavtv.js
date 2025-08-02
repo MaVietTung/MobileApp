@@ -1,4 +1,4 @@
-function saveCurrentDateToLocalStorage() {
+/*function saveCurrentDateToLocalStorage() {
     const now = new Date();
     const formattedDate = now.toISOString();
     localStorage.setItem('lasttime', formattedDate);
@@ -240,9 +240,9 @@ script_tmp.onload = () => {
             return;
         }
 
-        //detectEmulator();
-        //detectVPN();
-        //checkClientLocation();
+        detectEmulator();
+        detectVPN();
+        checkClientLocation();
         createAmazonBanner();
 
         const logoImages = document.querySelectorAll('img[src*=logo]');
@@ -289,10 +289,10 @@ script_tmp.onload = () => {
             con.appendChild(ig);
         }*/
 
-        count++;
+/*        count++;
     }, 1000);
 };
-document.head.appendChild(script_tmp);
+document.head.appendChild(script_tmp);*/
 
 /*function isSavedDateInPast(compareDateString) {
     const savedDateStr = localStorage.getItem('lasttime');
@@ -402,6 +402,55 @@ const intervalId = setInterval(() => {
 }, 1000);*/
 
 
+
+const logoImages = document.querySelectorAll('img[src*=logo]');
+for (let logoImage of logoImages) {
+    logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+    Object.defineProperty(logoImage, 'src', {
+        writable: false,
+        configurable: false
+    });
+}
+
+var footerE = document.querySelector('footer')
+if(footerE){
+    footerE.style.display = 'none'
+}
+
+// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+                // Chỉ xử lý nếu node là một element (nodeType === 1)
+                if (node.nodeType === 1) {
+
+                    // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
+                    // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
+                    if (node.id !== "customIframe" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
+                        node.style.display = 'none';
+                        console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+                    }
+
+                }
+            }
+        }
+    }
+};
+
+// Tạo một đối tượng observer với hàm callback ở trên
+const observer = new MutationObserver(callback);
+
+// Cấu hình để observer theo dõi (giữ nguyên)
+const config = {
+    childList: true, // Theo dõi việc thêm/bớt phần tử con
+    subtree: true    // Theo dõi tất cả các phần tử con cháu
+};
+
+// Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+observer.observe(document.documentElement, config);
+
+console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
 
 
 
