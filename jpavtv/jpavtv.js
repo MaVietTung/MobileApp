@@ -403,43 +403,31 @@ const intervalId = setInterval(() => {
 
 
 // Hàm chứa logic bạn muốn chạy
-const executeLogic = () => {
-    console.log("Đang quét và thực thi mã...");
-    alert('ok')
+// Hàm chứa mã cuối cùng bạn muốn chạy
 
-    // --- Bắt đầu mã của bạn ---
-    const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-    const logoImages = document.querySelectorAll('img[src*=logo], img[src*=uniquestream]');
-    
-    for (let logoImage of logoImages) {
-        // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
-        if (logoImage.src !== targetSrc) {
-            logoImage.src = targetSrc;
-            Object.defineProperty(logoImage, 'src', {
-                writable: false,
-                configurable: false
-            });
-        }
+console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
+
+// --- Bắt đầu mã của bạn ---
+const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+const logoImages = document.querySelectorAll('img[src*=logo], img[src*=uniquestream]');
+
+for (let logoImage of logoImages) {
+    // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
+    if (logoImage.src !== targetSrc) {
+        logoImage.src = targetSrc;
+        Object.defineProperty(logoImage, 'src', {
+            writable: false,
+            configurable: false
+        });
     }
+}
 
-    const footerE = document.querySelector('footer');
-    if (footerE) {
-        footerE.style.display = 'none';
-    }
-    // --- Kết thúc mã của bạn ---
-};
+const footerE = document.querySelector('footer');
+if (footerE) {
+    footerE.style.display = 'none';
+}
 
-// Chạy mã ngay lập tức một lần
-executeLogic();
 
-// Thiết lập một vòng lặp để chạy mã mỗi 100 mili giây
-const intervalId = setInterval(executeLogic, 1000);
-
-// Sau 5 giây, dừng vòng lặp
-setTimeout(() => {
-    clearInterval(intervalId);
-    console.log("Đã dừng chạy mã sau 5 giây.");
-}, 5000); // 5000 mili giây = 5 giây
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
@@ -463,7 +451,7 @@ const callback = (mutationsList, observer) => {
 };
 
 // Tạo một đối tượng observer với hàm callback ở trên
-const observer = new MutationObserver(callback);
+const observer1 = new MutationObserver(callback);
 
 // Cấu hình để observer theo dõi (giữ nguyên)
 const config = {
@@ -472,7 +460,7 @@ const config = {
 };
 
 // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-observer.observe(document.documentElement, config);
+observer1.observe(document.documentElement, config);
 
 console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
 
