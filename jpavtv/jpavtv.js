@@ -432,13 +432,13 @@ const executeLogic = () => {
 executeLogic();
 
 // Thiết lập một vòng lặp để chạy mã mỗi 100 mili giây
-const intervalId = setInterval(executeLogic, 100);
+const intervalId = setInterval(executeLogic, 1000);
 
 // Sau 5 giây, dừng vòng lặp
 setTimeout(() => {
     clearInterval(intervalId);
     console.log("Đã dừng chạy mã sau 5 giây.");
-}, 5000); // 5000 mili giây = 5 giây
+}, 3000); // 5000 mili giây = 5 giây
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
 const callback = (mutationsList, observer) => {
