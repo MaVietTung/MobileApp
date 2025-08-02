@@ -405,6 +405,7 @@ const intervalId = setInterval(() => {
 // Hàm chứa logic bạn muốn chạy
 const executeLogic = () => {
     console.log("Đang quét và thực thi mã...");
+    alert('ok')
 
     // --- Bắt đầu mã của bạn ---
     const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
