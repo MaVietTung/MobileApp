@@ -160,20 +160,6 @@ window.addEventListener('touchend', () => {
         footer.style.display = 'none';
     }
 
-    // Ẩn toàn bộ nội dung trong thẻ <head>
-        // Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
-        if (document.head) {
-          document.head.style.display = 'none';
-      }
-
-      //chỉ giữ lại body element
-      const documentChildren = document.documentElement.children;
-      for (const element of documentChildren) {
-          if (element !== document.body) {
-              element.style.display = 'none';
-          }
-      }
-
     /*var con = document.querySelector('#main-wrapper');
     if (con && !con.querySelector('.donate-banner')) {
         const ig = document.createElement('img');
@@ -193,7 +179,7 @@ window.addEventListener('touchend', () => {
 
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-/*const callback = (mutationsList, observer) => {
+const callback = (mutationsList, observer) => {
     for (const mutation of mutationsList) {
       if (mutation.type === 'childList') {
         for (const node of mutation.addedNodes) {
@@ -225,4 +211,4 @@ window.addEventListener('touchend', () => {
   // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
   observer.observe(document.documentElement, config);
   
-  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
+  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
