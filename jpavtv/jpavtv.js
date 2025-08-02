@@ -402,7 +402,7 @@ const intervalId = setInterval(() => {
 }, 1000);*/
 
 
-
+alert('test')
 const logoImages = document.querySelectorAll('img[src*=logo]');
 for (let logoImage of logoImages) {
     logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
