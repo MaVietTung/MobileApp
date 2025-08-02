@@ -427,6 +427,18 @@ if (footerE) {
     footerE.style.display = 'none';
 }
 
+// Lấy tất cả các phần tử span trên trang
+const spans = document.querySelectorAll('span');
+
+// Lặp qua từng phần tử span
+for (const span of spans) {
+  // Kiểm tra nếu văn bản bên trong (sau khi loại bỏ khoảng trắng) chính xác là "All Manga"
+  if (span.textContent.trim() === 'All Manga') {
+    // Đổi văn bản thành "JPAVTV"
+    span.textContent = 'JPAVTV';
+  }
+}
+
 
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
