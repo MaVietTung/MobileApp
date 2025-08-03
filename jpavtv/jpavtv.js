@@ -453,7 +453,7 @@ for (const span of spans) {
   }
 }
 
-document.addEventListener('click', () => {
+/*document.addEventListener('click', () => {
     // Sửa 'oldurl' thành 'oldUrl' để nhất quán
     var oldUrl = sessionStorage.getItem('oldurl');
     var currentUrl = location.href;
