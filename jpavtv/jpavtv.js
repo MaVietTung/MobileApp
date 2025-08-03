@@ -481,7 +481,7 @@ const callback = (mutationsList, observer) => {
 
                     // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                     // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-                    if ( node.textContent.includes('App') || (!location.href.includes('sign')&& node.id !== "customIframe" && (node.parentNode === document.body || node.parentNode === document.documentElement))) {
+                    if ( node.textContent.includes('App')) {
                         node.style.display = 'none';
                         console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                     }
