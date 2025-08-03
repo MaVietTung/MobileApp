@@ -472,7 +472,7 @@ document.addEventListener('click', () => {
 });
 
 // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-const callback = (mutationsList, observer) => {
+/*const callback = (mutationsList, observer) => {
     for (const mutation of mutationsList) {
         if (mutation.type === 'childList') {
             for (const node of mutation.addedNodes) {
@@ -504,7 +504,7 @@ const config = {
 // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
 observer1.observe(document.documentElement, config);
 
-console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
 
 
 
