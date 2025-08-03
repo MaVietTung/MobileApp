@@ -436,6 +436,21 @@ if(ggButn){
     ggButn.style.display = 'none'
 }
 
+var mwBody = document.querySelector('.mw-body')
+if(mwBody){
+    mwBody.style.display = 'none'
+}
+
+var introApp = document.querySelector('.intro-app')
+if(introApp){
+    introApp.style.display = 'none'
+}
+
+var footers = document.querySelectorAll('[id*=footer]')
+for(var footer of footers){
+    footer.style.display = 'none'
+}
+
 const footerE = document.querySelector('footer');
 if (footerE) {
     footerE.style.display = 'none';
