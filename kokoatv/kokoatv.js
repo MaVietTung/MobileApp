@@ -44,7 +44,7 @@ const intervalId = setInterval(() => {
       const node = element.childNodes[j];
 
       // Kiểm tra xem nút có phải là một nút văn bản và nội dung có chứa "Flicker" không
-      if (node.nodeType === 3 && node.nodeValue.trim() === 'Flicker') {
+      if (node.nodeType === 3 && node.nodeValue.trim().includes('Flicker')) {
         node.nodeValue = 'Kokoatv';
       }
     }
