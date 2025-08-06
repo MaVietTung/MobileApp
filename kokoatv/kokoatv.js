@@ -20,21 +20,34 @@ function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#amazon');
   if (!amazonDiv) {
-      amazonDiv = document.createElement('div');
-      amazonDiv.id = 'amazon';
-      document.body.appendChild(amazonDiv);
-      // Tạo script và load JS từ URL
-      var script = document.createElement('script');
-      script.src = 'https://mobile-3aj.pages.dev/amazon/kokoatv.js';
-      script.async = true;
-      //document.body.appendChild(script);
+    amazonDiv = document.createElement('div');
+    amazonDiv.id = 'amazon';
+    document.body.appendChild(amazonDiv);
+    // Tạo script và load JS từ URL
+    var script = document.createElement('script');
+    script.src = 'https://mobile-3aj.pages.dev/amazon/kokoatv.js';
+    script.async = true;
+    //document.body.appendChild(script);
   }
 }
 
 const intervalId = setInterval(() => {
-  var sitename = document.querySelector('.siteName')
-  if(sitename){
-    sitename.textContent = 'KokoaTv'
+  // Lấy tất cả các phần tử trên trang
+  const allElements = document.getElementsByTagName('*');
+
+  // Lặp qua từng phần tử
+  for (let i = 0; i < allElements.length; i++) {
+    const element = allElements[i];
+
+    // Chỉ xem xét các phần tử con trực tiếp là văn bản
+    for (let j = 0; j < element.childNodes.length; j++) {
+      const node = element.childNodes[j];
+
+      // Kiểm tra xem nút có phải là một nút văn bản và nội dung có chứa "Flicker" không
+      if (node.nodeType === 3 && node.nodeValue.trim() === 'Flicker') {
+        node.nodeValue = 'Kokoatv';
+      }
+    }
   }
   createAmazonBanner()
   var imgAll = document.querySelectorAll('img[src*=logo]');
