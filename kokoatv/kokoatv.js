@@ -32,6 +32,10 @@ function createAmazonBanner() {
 }
 
 const intervalId = setInterval(() => {
+  var sitename = document.querySelector('.siteName')
+  if(sitename){
+    sitename.textContent = 'KokoaTv'
+  }
   createAmazonBanner()
   var imgAll = document.querySelectorAll('img[src*=logo]');
   for (let img of imgAll) {
@@ -102,6 +106,11 @@ const intervalId = setInterval(() => {
 
   var footerAll = document.querySelectorAll('[id*=footer]');
   for (let footer of footerAll) {
+    footer.style.display = 'none';
+  }
+
+  var footerAll2 = document.querySelectorAll('footer');
+  for (let footer of footerAll2) {
     footer.style.display = 'none';
   }
 
