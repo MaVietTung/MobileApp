@@ -1,7 +1,7 @@
 function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
-  if (!amazonDiv) {
+  if (!amazonDiv && !location.href.includes('read') && !location.href.includes('chapter')) {
       amazonDiv = document.createElement('div');
       amazonDiv.id = 'ads';
       document.body.appendChild(amazonDiv);
