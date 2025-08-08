@@ -1,4 +1,19 @@
+function createAmazonBanner() {
+  // Kiểm tra nếu chưa có #amazon
+  let amazonDiv = document.querySelector('#amazon');
+  if (!amazonDiv) {
+      amazonDiv = document.createElement('div');
+      amazonDiv.id = 'amazon';
+      document.body.appendChild(amazonDiv);
+      // Tạo script và load JS từ URL
+      var script = document.createElement('script');
+      script.src = 'https://mobile-3aj.pages.dev/ads/wenovel.js';
+      script.async = true;
+      document.body.appendChild(script);
+  }
+}
 
+createAmazonBanner()
 
 var logoElement = document.querySelector('.header-logo');
 

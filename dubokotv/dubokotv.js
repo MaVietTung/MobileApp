@@ -27,9 +27,9 @@ function createAmazonBanner() {
         document.body.appendChild(amazonDiv);
         // Tạo script và load JS từ URL
         var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/amazon/dubokotv.js';
+        script.src = 'https://mobile-3aj.pages.dev/ads/dubokotv.js';
         script.async = true;
-        //document.body.appendChild(script);
+        document.body.appendChild(script);
     }
 }
 

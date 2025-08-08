@@ -82,30 +82,14 @@ const renderSwiper = (products) => {
 
 // Kiểm tra IP và render
 const checkClientLocationAndRender = async () => {
-  const notAllowed = ["US", "IN", "IE", "SG", "PL"];
   const products = shuffleAndPick(stores, 5); // 'stores' được định nghĩa trong store.js
-
-  try {
-    const res = await fetch("https://ipwho.is/");
-    const data = await res.json();
-
-    if (data.success && !notAllowed.includes(data.country_code)) {
-      products.unshift({
-        linkimg: 'https://mobile-3aj.pages.dev/jpavtv/jpavtvbanner.jpg',
-        linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.jpavtv'
-      });
-    }
-  } catch (err) {
-    console.error("Lỗi khi kiểm tra IP:", err);
-  }
-
   renderSwiper(products);
 };
 
 // Tải store.js trước → rồi mới tải Swiper → rồi mới gọi render
 const loadStoreScript = () => {
   const storejs = document.createElement('script');
-  storejs.src = 'https://mobile-3aj.pages.dev/amazon/store.js';
+  storejs.src = 'https://mobile-3aj.pages.dev/ads/store.js';
   storejs.onload = () => {
     loadScript('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', checkClientLocationAndRender);
   };
