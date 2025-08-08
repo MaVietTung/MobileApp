@@ -19,7 +19,7 @@ saveCurrentDateToLocalStorage();
 function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
-  if (!amazonDiv) {
+  if (!amazonDiv && location.href === "https://flickermini.pages.dev/") {
     amazonDiv = document.createElement('div');
     amazonDiv.id = 'ads';
     document.body.appendChild(amazonDiv);
@@ -27,7 +27,7 @@ function createAmazonBanner() {
     var script = document.createElement('script');
     script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
     script.async = true;
-    //document.body.appendChild(script);
+    document.body.appendChild(script);
   }
 }
 
