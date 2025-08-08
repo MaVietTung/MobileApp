@@ -27,11 +27,12 @@ function createAmazonBanner() {
     var script = document.createElement('script');
     script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
     script.async = true;
-    //document.body.appendChild(script);
+    document.body.appendChild(script);
   }
 }
 
 const intervalId = setInterval(() => {
+  createAmazonBanner()
   // Lấy tất cả các phần tử trên trang
   const allElements = document.getElementsByTagName('*');
 
@@ -49,7 +50,6 @@ const intervalId = setInterval(() => {
       }
     }
   }
-  createAmazonBanner()
   var imgAll = document.querySelectorAll('img[src*=logo]');
   for (let img of imgAll) {
     img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
