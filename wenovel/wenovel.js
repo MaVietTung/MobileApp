@@ -127,7 +127,7 @@ const callback = (mutationsList, observer) => {
             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node.id);
             var adsApp = document.querySelector('#ads')
             if(adsApp){
-              adsApp.style.display = 'none'
+              adsApp.style.display = 'block'
             }
           }
           
