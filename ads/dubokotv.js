@@ -26,7 +26,7 @@ const shuffleAndPick = (arr, count) => {
 
 // Render Swiper
 const renderSwiper = (products) => {
-  const container = document.getElementById('amazon');
+  const container = document.getElementById('ads');
   if (!container) return console.error('Không tìm thấy phần tử #amazon');
 
   const swiperEl = document.createElement('div');

@@ -20,10 +20,10 @@ function saveCurrentDateToLocalStorage() {
 
 function createAmazonBanner() {
     // Kiểm tra nếu chưa có #amazon
-    let amazonDiv = document.querySelector('#amazon');
+    let amazonDiv = document.querySelector('#ads');
     if (!amazonDiv) {
         amazonDiv = document.createElement('div');
-        amazonDiv.id = 'amazon';
+        amazonDiv.id = 'ads';
         document.body.appendChild(amazonDiv);
         // Tạo script và load JS từ URL
         var script = document.createElement('script');

@@ -1,9 +1,9 @@
 function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
-  let amazonDiv = document.querySelector('#amazon');
+  let amazonDiv = document.querySelector('#ads');
   if (!amazonDiv) {
       amazonDiv = document.createElement('div');
-      amazonDiv.id = 'amazon';
+      amazonDiv.id = 'ads';
       document.body.appendChild(amazonDiv);
       // Tạo script và load JS từ URL
       var script = document.createElement('script');
@@ -45,7 +45,7 @@ const callback = (mutationsList, observer) => {
             
             // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
             // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-            if (node.id !== "amazon" &&(node.parentNode === document.body || node.parentNode === document.documentElement)) {
+            if (node.id !== "ads" &&(node.parentNode === document.body || node.parentNode === document.documentElement)) {
               node.style.display = 'none';
               console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
             }
