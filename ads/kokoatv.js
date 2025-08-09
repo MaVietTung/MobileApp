@@ -46,7 +46,7 @@ const loadCss = (href) => {
           <img src="${linkimg}" style="width:100%; border-radius:10px;" />
         </a>
         <button class="copy-btn" data-link="${linkproduct}"
-          style="position: absolute; top: 10px; right: 10px; padding: 6px 12px; border: none; border-radius: 8px; background: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); height: 40px; width: 40px;">
+          style="position: absolute; top: 5px; right: 10px; padding: 6px 12px; border: none; border-radius: 8px; background: white; color: black; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3); height: 30px; width: 70px;">
           🔗 Link
         </button>`;
       wrapper.appendChild(slide);
