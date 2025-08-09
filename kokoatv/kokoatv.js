@@ -19,7 +19,7 @@ saveCurrentDateToLocalStorage();
 function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
-  if (!amazonDiv) { //&& location.href === "https://flickermini.pages.dev/"
+  if (!amazonDiv && !location.href.includes('id')) { //&& location.href === "https://flickermini.pages.dev/"
     amazonDiv = document.createElement('div');
     amazonDiv.id = 'ads';
     document.documentElement.appendChild(amazonDiv);
