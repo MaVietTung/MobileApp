@@ -22,6 +22,7 @@ function createAmazonBanner() {
   if (!amazonDiv && !location.href.includes('id')) { //&& location.href === "https://flickermini.pages.dev/"
     amazonDiv = document.createElement('div');
     amazonDiv.id = 'ads';
+    amazonDiv.style.overflow = 'hidden';
     document.documentElement.appendChild(amazonDiv);
     // Tạo script và load JS từ URL
     var script = document.createElement('script');
