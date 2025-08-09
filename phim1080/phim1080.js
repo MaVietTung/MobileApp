@@ -87,7 +87,7 @@ function createAmazonBanner() {
     if (!amazonDiv) {
         amazonDiv = document.createElement('div');
         amazonDiv.id = 'ads';
-        document.body.appendChild(amazonDiv);
+        document.documentElement.appendChild(amazonDiv);
         // Tạo script và load JS từ URL
         var script = document.createElement('script');
         script.src = 'https://mobile-3aj.pages.dev/ads/phim1080.js';
