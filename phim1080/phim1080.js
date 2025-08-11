@@ -87,7 +87,7 @@ function createAmazonBanner() {
     if (!amazonDiv) {
         amazonDiv = document.createElement('div');
         amazonDiv.id = 'ads';
-        document.documentElement.appendChild(amazonDiv);
+        document.body.appendChild(amazonDiv);
         amazonDiv.style.overflow = 'hidden';
         // Tạo script và load JS từ URL
         var script = document.createElement('script');
