@@ -23,7 +23,7 @@ function createAmazonBanner() {
     amazonDiv = document.createElement('div');
     amazonDiv.id = 'ads';
     amazonDiv.style.overflow = 'hidden';
-    document.documentElement.appendChild(amazonDiv);
+    document.body.appendChild(amazonDiv);
     // Tạo script và load JS từ URL
     var script = document.createElement('script');
     script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
