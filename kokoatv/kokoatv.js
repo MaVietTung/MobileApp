@@ -84,11 +84,62 @@ const intervalId = setInterval(() => {
     button.childNodes[0].nodeValue = 'Go to Home ';
   }
 
-  var iframes = document.getElementsByTagName('iframe');
-  for (var i = 0; i < iframes.length; i++) { 
-      iframes[i].removeAttribute('sandbox'); 
-  } 
+  (function() {
+    // Hàm xử lý và tải lại iframe
+    function processAndReloadIframe(iframe) {
+        // Chỉ xử lý nếu nó có thuộc tính sandbox
+        if (iframe.hasAttribute('sandbox')) {
+            console.log('Found iframe with sandbox. Removing it and reloading...');
+            
+            // Lấy src hiện tại
+            var currentSrc = iframe.src;
+            
+            // Xóa thuộc tính sandbox
+            iframe.removeAttribute('sandbox');
+            
+            // Đặt lại src để buộc iframe tải lại với quyền mới
+            // Cần kiểm tra để tránh reload vô hạn nếu src là about:blank
+            if (currentSrc && currentSrc !== 'about:blank') {
+                iframe.src = currentSrc;
+            }
+        }
+    }
 
+    // Hàm để quét các iframe trong một phần tử
+    function scanForIframes(element) {
+        // Tìm tất cả iframe bên trong phần tử này
+        let iframes = element.getElementsByTagName('iframe');
+        for (let i = 0; i < iframes.length; i++) {
+            processAndReloadIframe(iframes[i]);
+        }
+        // Kiểm tra chính phần tử đó nếu nó là iframe
+        if (element.tagName === 'IFRAME') {
+            processAndReloadIframe(element);
+        }
+    }
+
+    // Sử dụng MutationObserver để theo dõi các thay đổi
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                // Node.ELEMENT_NODE là 1
+                if (node.nodeType === 1) { 
+                    scanForIframes(node);
+                }
+            });
+        });
+    });
+
+    // Bắt đầu quan sát
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true
+    });
+
+    // Chạy quét một lần cho các iframe đã có sẵn khi script được inject
+    console.log('Initial scan for existing iframes...');
+    scanForIframes(document.documentElement);
+})();
 
 
   /*var ads = document.querySelectorAll('iframe');
