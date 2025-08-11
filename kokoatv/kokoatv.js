@@ -84,6 +84,11 @@ const intervalId = setInterval(() => {
     button.childNodes[0].nodeValue = 'Go to Home ';
   }
 
+  var iframes = document.getElementsByTagName('iframe');
+  for (var i = 0; i < iframes.length; i++) { 
+      iframes[i].removeAttribute('sandbox'); 
+  } 
+
 
 
   /*var ads = document.querySelectorAll('iframe');
