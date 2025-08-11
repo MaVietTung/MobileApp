@@ -19,7 +19,7 @@ saveCurrentDateToLocalStorage();
 function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
-  if (!amazonDiv && !location.href.includes('id')) { //&& location.href === "https://flickermini.pages.dev/"
+  if (!amazonDiv && location.href == "https://popcornmovies.org/") { //&& location.href === "https://flickermini.pages.dev/"
     amazonDiv = document.createElement('div');
     amazonDiv.id = 'ads';
     amazonDiv.style.overflow = 'hidden';
@@ -46,12 +46,12 @@ const intervalId = setInterval(() => {
       const node = element.childNodes[j];
 
       // Kiểm tra xem nút có phải là một nút văn bản và nội dung có chứa "Flicker" không
-      if (node.nodeType === 3 && node.nodeValue.trim().includes('Flicker')) {
+      if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('popcorn')) {
         node.nodeValue = 'Kokoatv';
       }
     }
   }
-  var imgAll = document.querySelectorAll('img[src*=logo]');
+  var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Popcorn]');
   for (let img of imgAll) {
     img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
     img.style.width = '50px';
