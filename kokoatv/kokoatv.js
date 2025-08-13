@@ -61,43 +61,6 @@ function runModificationScript() {
         for (let button of buttonHome3) {
             button.childNodes[0].nodeValue = 'Go to Home ';
         }
-        (function() {
-            function processAndReloadIframe(iframe) {
-                if (iframe.hasAttribute('sandbox')) {
-                    console.log('Found iframe with sandbox. Removing it and reloading...');
-                    var currentSrc = iframe.src;
-                    iframe.removeAttribute('sandbox');
-                    if (currentSrc && currentSrc !== 'about:blank') {
-                        iframe.src = currentSrc;
-                    }
-                }
-            }
-            function scanForIframes(element) {
-                let iframes = element.getElementsByTagName('iframe');
-                for (let i = 0; i < iframes.length; i++) {
-                    processAndReloadIframe(iframes[i]);
-                }
-                if (element.tagName === 'IFRAME') {
-                    processAndReloadIframe(element);
-                }
-            }
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    mutation.addedNodes.forEach(function(node) {
-                        if (node.nodeType === 1) {
-                            scanForIframes(node);
-                        }
-                    });
-                });
-            });
-            observer.observe(document.documentElement, {
-                childList: true,
-                subtree: true
-            });
-            console.log('Initial scan for existing iframes...');
-            scanForIframes(document.documentElement);
-        })();
-
         var apkLink = document.querySelector('a[href*=apk]');
         if (apkLink) {
             apkLink.style.display = 'none';
@@ -119,7 +82,7 @@ function runModificationScript() {
             footer.style.display = 'none';
         }
         runCount++;
-        if (runCount >= 3) {
+        if (runCount >= 2) {
             clearInterval(intervalId);
         }
     }, 1000);
