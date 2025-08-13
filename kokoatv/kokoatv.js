@@ -10,23 +10,21 @@ function runModificationScript() {
         localStorage.setItem('lasttime', formattedDate);
     }
     saveCurrentDateToLocalStorage();
-
     function createAmazonBanner() {
-        let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv && location.href === "https://www.cineby.app/") {
-            amazonDiv = document.createElement('div');
-            amazonDiv.id = 'ads';
-            amazonDiv.style.overflow = 'hidden';
-            document.body.appendChild(amazonDiv);
-            var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
-            script.async = true;
-            document.body.appendChild(script);
-        }
-    }
-
+      let amazonDiv = document.querySelector('#ads');
+      if (!amazonDiv && location.href === "https://www.cineby.app/") {
+          amazonDiv = document.createElement('div');
+          amazonDiv.id = 'ads';
+          amazonDiv.style.overflow = 'hidden';
+          document.body.appendChild(amazonDiv);
+          var script = document.createElement('script');
+          script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
+          script.async = true;
+          document.body.appendChild(script);
+      }
+  }
+  createAmazonBanner();
     const intervalId = setInterval(() => {
-        createAmazonBanner()
         const allElements = document.getElementsByTagName('*');
         for (let i = 0; i < allElements.length; i++) {
             const element = allElements[i];
