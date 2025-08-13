@@ -11,24 +11,24 @@ function runModificationScript() {
     }
     saveCurrentDateToLocalStorage();
     function createAmazonBanner() {
-      let amazonDiv = document.querySelector('#ads');
-      if (!amazonDiv) {
-          amazonDiv = document.createElement('div');
-          amazonDiv.id = 'ads';
-          amazonDiv.style.overflow = 'hidden';
-          document.body.appendChild(amazonDiv);
-          if(location.href === "https://www.cineby.app/"){
+        let amazonDiv = document.querySelector('#ads');
+        if (!amazonDiv) {
+            amazonDiv = document.createElement('div');
+            amazonDiv.id = 'ads';
+            amazonDiv.style.overflow = 'hidden';
+            document.body.appendChild(amazonDiv);
+            var script = document.createElement('script');
+            script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
+            script.async = true;
+            document.body.appendChild(script);
+        }
+        if (location.href === "https://www.cineby.app/") {
             amazonDiv.style.display = 'block';
-          } else{
+        } else {
             amazonDiv.style.display = 'none';
-          }
-          var script = document.createElement('script');
-          script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
-          script.async = true;
-          document.body.appendChild(script);
-      }
-  }
-  createAmazonBanner();
+        }
+    }
+    createAmazonBanner();
     const intervalId = setInterval(() => {
         const allElements = document.getElementsByTagName('*');
         for (let i = 0; i < allElements.length; i++) {
@@ -105,14 +105,14 @@ runModificationScript();
 
 // Bước 4: Thêm trình lắng nghe sự kiện 'popstate'.
 // Nó sẽ được kích hoạt mỗi khi bạn nhấn nút back/forward.
-window.addEventListener('popstate', function(event) {
+window.addEventListener('popstate', function (event) {
     console.log("Nút back/forward đã được nhấn!");
     // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
     runModificationScript();
 });
 
-window.addEventListener('click', function(event) {
-  console.log("Nút back/forward đã được nhấn!");
-  // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-  runModificationScript();
+window.addEventListener('click', function (event) {
+    console.log("Nút back/forward đã được nhấn!");
+    // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
+    runModificationScript();
 });
