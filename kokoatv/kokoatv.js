@@ -105,3 +105,9 @@ window.addEventListener('popstate', function(event) {
     // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
     runModificationScript();
 });
+
+window.addEventListener('click', function(event) {
+  console.log("Nút back/forward đã được nhấn!");
+  // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
+  runModificationScript();
+});
