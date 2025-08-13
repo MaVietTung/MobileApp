@@ -17,7 +17,7 @@ function runModificationScript() {
             amazonDiv = document.createElement('div');
             amazonDiv.id = 'ads';
             amazonDiv.style.overflow = 'hidden';
-            document.body.appendChild(amazonDiv);
+            document.documentElement.appendChild(amazonDiv);
             var script = document.createElement('script');
             script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
             script.async = true;
