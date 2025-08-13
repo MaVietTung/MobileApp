@@ -13,11 +13,11 @@ function runModificationScript() {
 
     function createAmazonBanner() {
         let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv && location.href === "https://www.cineby.app") {
+        if (!amazonDiv && location.href === "https://www.cineby.app/") {
             amazonDiv = document.createElement('div');
             amazonDiv.id = 'ads';
             amazonDiv.style.overflow = 'hidden';
-            document.documentElement.appendChild(amazonDiv);
+            document.body.appendChild(amazonDiv);
             var script = document.createElement('script');
             script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
             script.async = true;
