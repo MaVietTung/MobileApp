@@ -23,9 +23,9 @@ function runModificationScript() {
             document.body.appendChild(script);
         }
         if (location.href === "https://www.cineby.app/") {
-            amazonDiv.style.display = 'block';
+            if(amazonDiv) amazonDiv.style.display = 'block';
         } else {
-            amazonDiv.style.display = 'none';
+            if(amazonDiv) amazonDiv.style.display = 'none';
         }
     }
     createAmazonBanner();
