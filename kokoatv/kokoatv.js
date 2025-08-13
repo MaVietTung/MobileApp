@@ -82,7 +82,7 @@ function runModificationScript() {
             footer.style.display = 'none';
         }
         runCount++;
-        if (runCount >= 2) {
+        if (runCount >= 3) {
             clearInterval(intervalId);
         }
     }, 1000);
