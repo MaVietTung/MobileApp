@@ -12,11 +12,16 @@ function runModificationScript() {
     saveCurrentDateToLocalStorage();
     function createAmazonBanner() {
       let amazonDiv = document.querySelector('#ads');
-      if (!amazonDiv && location.href === "https://www.cineby.app/") {
+      if (!amazonDiv) {
           amazonDiv = document.createElement('div');
           amazonDiv.id = 'ads';
           amazonDiv.style.overflow = 'hidden';
           document.body.appendChild(amazonDiv);
+          if(location.href === "https://www.cineby.app/"){
+            amazonDiv.style.display = 'block';
+          } else{
+            amazonDiv.style.display = 'none';
+          }
           var script = document.createElement('script');
           script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
           script.async = true;
