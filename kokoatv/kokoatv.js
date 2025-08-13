@@ -87,7 +87,7 @@ function runModificationScript() {
             footer.style.display = 'none';
         }
         runCount++;
-        if (runCount >= 3) {
+        if (runCount >= 1) {
             clearInterval(intervalId);
         }
     }, 1000);
@@ -106,6 +106,12 @@ runModificationScript();
 // Bước 4: Thêm trình lắng nghe sự kiện 'popstate'.
 // Nó sẽ được kích hoạt mỗi khi bạn nhấn nút back/forward.
 window.addEventListener('popstate', function (event) {
+    console.log("Nút back/forward đã được nhấn!");
+    // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
+    runModificationScript();
+});
+
+window.addEventListener('pushstate', function (event) {
     console.log("Nút back/forward đã được nhấn!");
     // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
     runModificationScript();
