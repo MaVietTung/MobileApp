@@ -13,7 +13,7 @@ function runModificationScript() {
 
     function createAmazonBanner() {
         let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv) {
+        if (!amazonDiv && location.href === "https://www.cineby.app") {
             amazonDiv = document.createElement('div');
             amazonDiv.id = 'ads';
             amazonDiv.style.overflow = 'hidden';
