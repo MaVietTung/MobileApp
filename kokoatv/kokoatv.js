@@ -95,7 +95,7 @@ runModificationScript();
 
 // Bước 3: Tạo một trạng thái lịch sử giả để bắt sự kiện 'back'.
 // Điều này ngăn trình duyệt rời khỏi trang ngay lập tức.
-history.pushState({ page: "initial" }, document.title, location.href);
+//history.pushState({ page: "initial" }, document.title, location.href);
 
 
 // Bước 4: Thêm trình lắng nghe sự kiện 'popstate'.
