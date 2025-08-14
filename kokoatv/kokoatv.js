@@ -45,6 +45,10 @@ function runModificationScript() {
             img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
             img.style.width = '50px';
             img.style.height = '50px';
+            Object.defineProperty(img, 'src', {
+            writable: false,
+            configurable: false
+        });
         }
         var text = document.querySelector('#mw-home .mw-body');
         if (text) {
