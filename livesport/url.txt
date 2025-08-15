@@ -1,1 +1,1 @@
-https://nbastatsappv1.streamlit.app/
+https://livesportsresults.vercel.app/
