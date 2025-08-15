@@ -405,85 +405,88 @@ const intervalId = setInterval(() => {
 // Hàm chứa logic bạn muốn chạy
 // Hàm chứa mã cuối cùng bạn muốn chạy
 
-console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
+if (!location.href.includes("vercel.app")) {
 
-function createAmazonBanner() {
-    // Kiểm tra nếu chưa có #amazon
-    let amazonDiv = document.querySelector('#ads');
-    if (!amazonDiv) {
-        amazonDiv = document.createElement('div');
-        amazonDiv.id = 'ads';
-        amazonDiv.style.overflow = 'hidden';
-        document.body.appendChild(amazonDiv);
-        // Tạo script và load JS từ URL
-        var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/ads/jpavtv.js';
-        script.async = true;
-        document.body.appendChild(script);
+    console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
+
+    function createAmazonBanner() {
+        // Kiểm tra nếu chưa có #amazon
+        let amazonDiv = document.querySelector('#ads');
+        if (!amazonDiv) {
+            amazonDiv = document.createElement('div');
+            amazonDiv.id = 'ads';
+            amazonDiv.style.overflow = 'hidden';
+            document.body.appendChild(amazonDiv);
+            // Tạo script và load JS từ URL
+            var script = document.createElement('script');
+            script.src = 'https://mobile-3aj.pages.dev/ads/jpavtv.js';
+            script.async = true;
+            document.body.appendChild(script);
+        }
     }
-}
 
-createAmazonBanner()
+    createAmazonBanner()
 
-function saveCurrentDateToLocalStorage() {
-    const now = new Date();
-    const formattedDate = now.toISOString();
-    localStorage.setItem('lasttime', formattedDate);
-}
-
-saveCurrentDateToLocalStorage()
-
-
-// --- Bắt đầu mã của bạn ---
-const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-const logoImages = document.querySelectorAll('img[src*=logo], img[src*=avatar]');
-
-for (let logoImage of logoImages) {
-    // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
-    if (logoImage.src !== targetSrc) {
-        logoImage.src = targetSrc;
-        Object.defineProperty(logoImage, 'src', {
-            writable: false,
-            configurable: false
-        });
+    function saveCurrentDateToLocalStorage() {
+        const now = new Date();
+        const formattedDate = now.toISOString();
+        localStorage.setItem('lasttime', formattedDate);
     }
-}
 
-var ggButn = document.querySelector('#ggButn')
-if(ggButn){
-    ggButn.style.display = 'none'
-}
+    saveCurrentDateToLocalStorage()
 
-var mwBody = document.querySelector('.mw-body')
-if(mwBody){
-    mwBody.style.display = 'none'
-}
 
-var introApp = document.querySelector('.intro-app')
-if(introApp){
-    introApp.style.display = 'none'
-}
+    // --- Bắt đầu mã của bạn ---
+    const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
+    const logoImages = document.querySelectorAll('img[src*=logo], img[src*=avatar]');
 
-var footers = document.querySelectorAll('[id*=footer]')
-for(var footer of footers){
-    footer.style.display = 'none'
-}
+    for (let logoImage of logoImages) {
+        // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
+        if (logoImage.src !== targetSrc) {
+            logoImage.src = targetSrc;
+            Object.defineProperty(logoImage, 'src', {
+                writable: false,
+                configurable: false
+            });
+        }
+    }
 
-const footerE = document.querySelector('footer');
-if (footerE) {
-    footerE.style.display = 'none';
-}
+    var ggButn = document.querySelector('#ggButn')
+    if (ggButn) {
+        ggButn.style.display = 'none'
+    }
 
-// Lấy tất cả các phần tử span trên trang
-const spans = document.querySelectorAll('span');
+    var mwBody = document.querySelector('.mw-body')
+    if (mwBody) {
+        mwBody.style.display = 'none'
+    }
 
-// Lặp qua từng phần tử span
-for (const span of spans) {
-  // Kiểm tra nếu văn bản bên trong (sau khi loại bỏ khoảng trắng) chính xác là "All Manga"
-  if (span.textContent.trim() === 'All Manga') {
-    // Đổi văn bản thành "JPAVTV"
-    span.textContent = 'JPAVTV';
-  }
+    var introApp = document.querySelector('.intro-app')
+    if (introApp) {
+        introApp.style.display = 'none'
+    }
+
+    var footers = document.querySelectorAll('[id*=footer]')
+    for (var footer of footers) {
+        footer.style.display = 'none'
+    }
+
+    const footerE = document.querySelector('footer');
+    if (footerE) {
+        footerE.style.display = 'none';
+    }
+
+    // Lấy tất cả các phần tử span trên trang
+    const spans = document.querySelectorAll('span');
+
+    // Lặp qua từng phần tử span
+    for (const span of spans) {
+        // Kiểm tra nếu văn bản bên trong (sau khi loại bỏ khoảng trắng) chính xác là "All Manga"
+        if (span.textContent.trim() === 'All Manga') {
+            // Đổi văn bản thành "JPAVTV"
+            span.textContent = 'JPAVTV';
+        }
+    }
 }
 
 /*document.addEventListener('click', () => {
