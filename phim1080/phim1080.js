@@ -73,102 +73,103 @@ var interval = setInterval(function() {
  script.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080.js';
  document.head.appendChild(script);
  */
-
-var count = 0;
-function saveCurrentDateToLocalStorage() {
-    const now = new Date();
-    const formattedDate = now.toISOString();
-    localStorage.setItem('lasttime', formattedDate);
-}
-saveCurrentDateToLocalStorage();
-function createAmazonBanner() {
-    // Kiểm tra nếu chưa có #amazon
-    let amazonDiv = document.querySelector('#ads');
-    if (!amazonDiv) {
-        amazonDiv = document.createElement('div');
-        amazonDiv.id = 'ads';
-        document.body.appendChild(amazonDiv);
-        amazonDiv.style.overflow = 'hidden';
-        // Tạo script và load JS từ URL
-        var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/ads/phim1080.js';
-        script.async = true;
-        document.body.appendChild(script);
+if (!location.href.includes("vercel.app")) {
+    var count = 0;
+    function saveCurrentDateToLocalStorage() {
+        const now = new Date();
+        const formattedDate = now.toISOString();
+        localStorage.setItem('lasttime', formattedDate);
     }
-}
-createAmazonBanner()
-var interval = setInterval(function() {
-    if (count < 5) {
-        var logoImages = document.querySelectorAll('.logo img');
-        for (let logoImage of logoImages) {
-            logoImage.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg';
-            logoImage.style.width = '30px';
-            logoImage.style.height = '30px';
-            Object.defineProperty(logoImage, 'src', {
-                writable: false,
-                configurable: false
-            });
+    saveCurrentDateToLocalStorage();
+    function createAmazonBanner() {
+        // Kiểm tra nếu chưa có #amazon
+        let amazonDiv = document.querySelector('#ads');
+        if (!amazonDiv) {
+            amazonDiv = document.createElement('div');
+            amazonDiv.id = 'ads';
+            document.body.appendChild(amazonDiv);
+            amazonDiv.style.overflow = 'hidden';
+            // Tạo script và load JS từ URL
+            var script = document.createElement('script');
+            script.src = 'https://mobile-3aj.pages.dev/ads/phim1080.js';
+            script.async = true;
+            document.body.appendChild(script);
         }
-
-        var footer = document.querySelector('.footer');
-        if (footer) {
-            footer.style.display = 'none';
-        }
-
-        var ads = document.querySelectorAll('brde img');
-        for(let ad of ads){
-            ad.click();
-        }
-
-        
-
-        /*var con = document.querySelector('.wrapper');
-        if (con  && !con.querySelector('.donate-banner')) {
-            const ig = document.createElement('img');
-            ig.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-donate-banner.png';
-            ig.style.width = '100%';
-            ig.style.height = 'auto';
-            ig.className = 'donate-banner';
-            con.appendChild(ig);
-        }*/
-
-        count++;
-    } else {
-        clearInterval(interval);
     }
-}, 1000);
-
-// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-const callback = (mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        for (const node of mutation.addedNodes) {
-          // Chỉ xử lý nếu node là một element (nodeType === 1)
-          if (node.nodeType === 1) {
-            
-            // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-            // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-            if (node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
-                node.style.display = 'none';
-                console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+    createAmazonBanner()
+    var interval = setInterval(function () {
+        if (count < 5) {
+            var logoImages = document.querySelectorAll('.logo img');
+            for (let logoImage of logoImages) {
+                logoImage.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg';
+                logoImage.style.width = '30px';
+                logoImage.style.height = '30px';
+                Object.defineProperty(logoImage, 'src', {
+                    writable: false,
+                    configurable: false
+                });
             }
-            
-          }
+
+            var footer = document.querySelector('.footer');
+            if (footer) {
+                footer.style.display = 'none';
+            }
+
+            var ads = document.querySelectorAll('brde img');
+            for (let ad of ads) {
+                ad.click();
+            }
+
+
+
+            /*var con = document.querySelector('.wrapper');
+            if (con  && !con.querySelector('.donate-banner')) {
+                const ig = document.createElement('img');
+                ig.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-donate-banner.png';
+                ig.style.width = '100%';
+                ig.style.height = 'auto';
+                ig.className = 'donate-banner';
+                con.appendChild(ig);
+            }*/
+
+            count++;
+        } else {
+            clearInterval(interval);
         }
-      }
-    }
-  };
-  
-  // Tạo một đối tượng observer với hàm callback ở trên
-  const observer = new MutationObserver(callback);
-  
-  // Cấu hình để observer theo dõi (giữ nguyên)
-  const config = {
-    childList: true, // Theo dõi việc thêm/bớt phần tử con
-    subtree: true    // Theo dõi tất cả các phần tử con cháu
-  };
-  
-  // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-  observer.observe(document.documentElement, config);
-  
-  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+    }, 1000);
+
+    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+    const callback = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                for (const node of mutation.addedNodes) {
+                    // Chỉ xử lý nếu node là một element (nodeType === 1)
+                    if (node.nodeType === 1) {
+
+                        // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
+                        // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
+                        if (node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
+                            node.style.display = 'none';
+                            console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+                        }
+
+                    }
+                }
+            }
+        }
+    };
+
+    // Tạo một đối tượng observer với hàm callback ở trên
+    const observer = new MutationObserver(callback);
+
+    // Cấu hình để observer theo dõi (giữ nguyên)
+    const config = {
+        childList: true, // Theo dõi việc thêm/bớt phần tử con
+        subtree: true    // Theo dõi tất cả các phần tử con cháu
+    };
+
+    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+    observer.observe(document.documentElement, config);
+
+    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+}
