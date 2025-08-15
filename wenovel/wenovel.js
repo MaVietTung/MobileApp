@@ -1,4 +1,5 @@
-/*function createAmazonBanner() {
+if(!location.href.includes("pages.dev")){
+function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
   if (!amazonDiv) {
@@ -151,4 +152,4 @@ const config = {
 observer.observe(document.documentElement, config);
 
 console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-*/
+}
