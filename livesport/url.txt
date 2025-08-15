@@ -1,1 +1,1 @@
-https://streamed.pk/
+https://nbastatsappv1.streamlit.app/
