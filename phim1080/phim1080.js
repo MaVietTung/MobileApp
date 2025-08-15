@@ -73,7 +73,7 @@ var interval = setInterval(function() {
  script.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080.js';
  document.head.appendChild(script);
  */
-if (!location.href.includes("vercel.app")) {
+if (!location.href.includes("netlify.app")) {
     var count = 0;
     function saveCurrentDateToLocalStorage() {
         const now = new Date();
