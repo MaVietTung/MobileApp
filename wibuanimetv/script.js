@@ -38,6 +38,12 @@
         var imgAll = document.querySelectorAll('img[src*=logo]');
         for (let img of imgAll) {
             img.src = 'https://mobile-3aj.pages.dev/wibuanimetv/wibuanimetv-icon.png';
+            img.style.width = '50px';
+            img.style.height = '50px';
+            Object.defineProperty(img, 'src', {
+                writable: false,
+                configurable: false
+            });
         }
 
         var home = document.querySelector('a#logo');
