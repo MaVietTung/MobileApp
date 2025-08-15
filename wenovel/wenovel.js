@@ -1,4 +1,4 @@
-function createAmazonBanner() {
+/*function createAmazonBanner() {
   // Kiểm tra nếu chưa có #amazon
   let amazonDiv = document.querySelector('#ads');
   if (!amazonDiv) {
@@ -10,7 +10,7 @@ function createAmazonBanner() {
       var script = document.createElement('script');
       script.src = 'https://mobile-3aj.pages.dev/ads/wenovel.js';
       script.async = true;
-      //document.body.appendChild(script);
+      document.body.appendChild(script);
   }
 }
 
@@ -151,3 +151,4 @@ const config = {
 observer.observe(document.documentElement, config);
 
 console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+*/
