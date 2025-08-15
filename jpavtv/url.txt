@@ -1,1 +1,1 @@
-https://anime-station.vercel.app/
+https://nextjs-anime-app.vercel.app/
