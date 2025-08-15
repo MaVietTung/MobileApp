@@ -35,7 +35,7 @@
         }
 
 
-        var imgAll = document.querySelectorAll('img[src*=logo]');
+        var imgAll = document.querySelectorAll('a[href*=home] img');
         for (let img of imgAll) {
             img.src = 'https://mobile-3aj.pages.dev/wibuanimetv/wibuanimetv-icon.png';
             img.style.width = '50px';
@@ -44,6 +44,22 @@
                 writable: false,
                 configurable: false
             });
+        }
+
+        const allElements = document.getElementsByTagName('*');
+            for (let i = 0; i < allElements.length; i++) {
+                const element = allElements[i];
+                for (let j = 0; j < element.childNodes.length; j++) {
+                    const node = element.childNodes[j];
+                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('animekai')) {
+                        node.nodeValue = 'wibuanimetv';
+                    }
+                }
+            }
+
+        var footer = document.querySelector('footer');
+        if (footer) {
+            footer.style.display = 'none';
         }
 
         var home = document.querySelector('a#logo');
