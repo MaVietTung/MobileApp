@@ -78,6 +78,17 @@
             rate.style.display = 'none';
         }
 
+        const allElements = document.getElementsByTagName('*');
+            for (let i = 0; i < allElements.length; i++) {
+                const element = allElements[i];
+                for (let j = 0; j < element.childNodes.length; j++) {
+                    const node = element.childNodes[j];
+                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('duboku') && node.parentElement.nodeName.toLowerCase().includes('font')) {
+                        node.nodeValue = 'DubokoTV';
+                    }
+                }
+            }
+
         /*var comment = document.querySelectorAll('.myui-panel-box')[2];
         if(comment){
             comment.style.display = 'none';
