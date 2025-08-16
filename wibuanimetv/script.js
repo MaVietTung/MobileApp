@@ -35,7 +35,7 @@
         }
 
 
-        var imgAll = document.querySelectorAll('a[href*=home] img');
+        var imgAll = document.querySelectorAll('a[href*=home] img, img[src*=logo]');
         for (let img of imgAll) {
             img.src = 'https://mobile-3aj.pages.dev/wibuanimetv/wibuanimetv-icon.png';
             img.style.width = '50px';
