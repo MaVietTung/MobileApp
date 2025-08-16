@@ -86,7 +86,7 @@ if (!location.href.includes("netlify.app")) {
             for (let footer of footerAll2) {
                 footer.style.display = 'none';
             }
-            var strmlink = document.querySelectorAll('a[href*=strmd')
+            var strmlink = document.querySelector('a[href*="https://strmd.link"')
             if (strmlink) strmlink.style.display = 'none';
 
             runCount++;
