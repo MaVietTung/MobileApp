@@ -419,7 +419,7 @@ if (!location.href.includes("vercel.app")) {
             document.body.appendChild(amazonDiv);
             // Tạo script và load JS từ URL
             var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/jpavtv.js';
+            script.src = 'https://mobile-3aj.pages.dev/ads/wibuanimetv.js';
             script.async = true;
             document.body.appendChild(script);
         }
