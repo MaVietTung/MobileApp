@@ -490,7 +490,7 @@ if (!location.href.includes("vercel.app")) {
         const element = allElements[i];
         for (let j = 0; j < element.childNodes.length; j++) {
             const node = element.childNodes[j];
-            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('kichassanime')) {
+            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('kickassanime')) {
                 node.nodeValue = 'Jpavtv';
             }
         }
