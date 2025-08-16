@@ -479,18 +479,6 @@ if (!location.href.includes("vercel.app")) {
         footerE.style.display = 'none';
     }
 
-    // Lấy tất cả các phần tử span trên trang
-    const spans = document.querySelectorAll('span');
-
-    // Lặp qua từng phần tử span
-    for (const span of spans) {
-        // Kiểm tra nếu văn bản bên trong (sau khi loại bỏ khoảng trắng) chính xác là "All Manga"
-        if (span.textContent.trim() === 'All Manga') {
-            // Đổi văn bản thành "JPAVTV"
-            span.textContent = 'JPAVTV';
-        }
-    }
-
     var kaa = document.body.children
     for(var child of kaa){
         if(!child.id.toLowerCase().includes("kaa"))
@@ -502,7 +490,7 @@ if (!location.href.includes("vercel.app")) {
         const element = allElements[i];
         for (let j = 0; j < element.childNodes.length; j++) {
             const node = element.childNodes[j];
-            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('anime')) {
+            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('kichassanime')) {
                 node.nodeValue = 'Jpavtv';
             }
         }
