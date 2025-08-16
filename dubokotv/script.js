@@ -83,7 +83,7 @@
                 const element = allElements[i];
                 for (let j = 0; j < element.childNodes.length; j++) {
                     const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('duboku') && node.parentElement.nodeName.toLowerCase().includes('font')) {
+                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('dubo') && node.parentElement.nodeName.toLowerCase().includes('font')) {
                         node.nodeValue = 'DubokoTV';
                     }
                 }
