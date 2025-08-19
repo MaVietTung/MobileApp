@@ -189,7 +189,7 @@ function checkAndReload() {
                         }
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                         // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                        runModificationScript();
+                        checkAndReload();
 
                     }
                 }
