@@ -36,12 +36,12 @@ if (!location.href.includes("netlify.app")) {
                 const element = allElements[i];
                 for (let j = 0; j < element.childNodes.length; j++) {
                     const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('cineby')) {
+                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('flic')) {
                         node.nodeValue = 'Kokoatv';
                     }
                 }
             }
-            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Popcorn]');
+            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= flic]');
             for (let img of imgAll) {
                 img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
                 img.style.width = '50px';
