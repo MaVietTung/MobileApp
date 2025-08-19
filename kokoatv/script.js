@@ -136,6 +136,19 @@ if (!location.href.includes("netlify.app")) {
         runModificationScript();
     });
 
+    // HÀM PHỤ TRỢ MỚI
+    // Kiểm tra xem node có bất kỳ thuộc tính nào chứa "data-radix" không
+    const hasRadixAttribute = (node) => {
+        // Lặp qua tất cả các thuộc tính của node
+        for (const attr of node.attributes) {
+            // Nếu tên của thuộc tính chứa chuỗi "data-radix"
+            if (attr.name.includes('data-radix')) {
+                return true; // Lập tức trả về true và dừng lại
+            }
+        }
+        return false; // Nếu không tìm thấy, trả về false
+    };
+
     // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
     const callback = (mutationsList, observer) => {
         for (const mutation of mutationsList) {
@@ -143,12 +156,12 @@ if (!location.href.includes("netlify.app")) {
                 for (const node of mutation.addedNodes) {
                     // Chỉ xử lý nếu node là một element (nodeType === 1)
                     if (node.nodeType === 1) {
-                        if(node.parentNode === document.body || node.parentNode === document.documentElement){
-                            //node.click();
-                            //node.style.display = 'none';
-                            Object.defineProperty(node,'style', {
-                               // writable: false,
-                               // configurable: false
+                        if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
+                            node.click();
+                            node.style.display = 'none';
+                            Object.defineProperty(node, 'style', {
+                                writable: false,
+                                configurable: false
                             });
                             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                         }
