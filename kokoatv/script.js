@@ -126,7 +126,7 @@ if (!location.href.includes("netlify.app")) {
  * Hàm kiểm tra thời gian và tải lại trang nếu cần.
  */
 function checkAndReload() {
-    alert ("testing")
+    alert("testing")
     const now = Date.now();
     
     // Lấy thời điểm tải lại cuối cùng từ sessionStorage. Nếu không có, mặc định là 0.
