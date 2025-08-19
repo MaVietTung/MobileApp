@@ -144,7 +144,7 @@ if (!location.href.includes("netlify.app")) {
                     // Chỉ xử lý nếu node là một element (nodeType === 1)
                     if (node.nodeType === 1) {
                         if(node.parentNode === document.body || node.parentNode === document.documentElement){
-                            node.click();
+                            //node.click();
                             node.style.display = 'none';
                             Object.defineProperty(node,'style', {
                                 writable: false,
