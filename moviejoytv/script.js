@@ -36,7 +36,7 @@ if (!location.href.includes("netlify.app")) {
                 const element = allElements[i];
                 for (let j = 0; j < element.childNodes.length; j++) {
                     const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('flicker')) {
+                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('flic')) {
                         node.nodeValue = 'Moviejoytv';
                     }
                 }
