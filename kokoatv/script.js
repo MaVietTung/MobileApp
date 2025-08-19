@@ -51,6 +51,20 @@ if (!location.href.includes("netlify.app")) {
                     configurable: false
                 });
             }
+
+            // 1. Tìm tất cả các phần tử trên trang
+            const allElements2 = document.querySelectorAll('button');
+
+            // 2. Lặp qua từng phần tử
+            allElements2.forEach(element => {
+                // 3. Kiểm tra xem nội dung văn bản có chứa chữ "Google" hay không (không phân biệt hoa thường)
+                if (element.textContent.toLowerCase().includes('google')) {
+
+                    // 4. Nếu có, ẩn phần tử đó đi
+                    element.style.display = 'none';
+                }
+            });
+
             var text = document.querySelector('#mw-home .mw-body');
             if (text) {
                 text.style.display = 'none';
