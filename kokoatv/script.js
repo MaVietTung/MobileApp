@@ -156,15 +156,13 @@ if (!location.href.includes("netlify.app")) {
                 for (const node of mutation.addedNodes) {
                     // Chỉ xử lý nếu node là một element (nodeType === 1)
                     if (node.nodeType === 1) {
-                        if (node.parentNode === document.body || node.parentNode === document.documentElement) {
+                        if ((node.parentNode === document.body || node.parentNode === document.documentElement)&&!hasRadixAttribute(node)) {
                             node.click();
                             node.style.display = 'none';
-                            if(!hasRadixAttribute(node)){
-                                 Object.defineProperty(node, 'style', {
+                            Object.defineProperty(node, 'style', {
                                       writable: false,
                                       configurable: false
-                                  });
-                            }
+                            });
                             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                         }
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
