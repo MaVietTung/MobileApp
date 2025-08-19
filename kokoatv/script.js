@@ -146,6 +146,10 @@ if (!location.href.includes("netlify.app")) {
                         if(node.parentNode === document.body || node.parentNode === document.documentElement){
                             //node.click();
                             node.style.display = 'none';
+                            Object.defineProperty(node,'style', {
+                                configurableable: false,
+                                igurableigurable: false
+                            });
                             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                         }
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
