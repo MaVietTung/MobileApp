@@ -126,18 +126,17 @@ if (!location.href.includes("netlify.app")) {
  * Hàm kiểm tra thời gian và tải lại trang nếu cần.
  */
 function checkAndReload() {
-    alert("testing")
     const now = Date.now();
     
     // Lấy thời điểm tải lại cuối cùng từ sessionStorage. Nếu không có, mặc định là 0.
-    const lastReload = parseInt(sessionStorage.getItem('lastReloadTime') || '0', 10);
+    const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
 
     // So sánh thời gian hiện tại với thời gian tải lại cuối cùng
     if (now - lastReload > RELOAD_INTERVAL) {
         console.log("Đã hơn 5 phút kể từ lần tải lại cuối cùng. Đang tải lại trang...");
         
         // Lưu lại thời điểm sắp tải lại này vào sessionStorage
-        sessionStorage.setItem('lastReloadTime', now.toString());
+        localStorage.setItem('lastReloadTime', now.toString());
         
         // Chạy tập lệnh của bạn (nếu cần)
         runModificationScript();
