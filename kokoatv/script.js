@@ -122,20 +122,41 @@ if (!location.href.includes("netlify.app")) {
     //history.pushState({ page: "initial" }, document.title, location.href);
 
 
-    // Bước 4: Thêm trình lắng nghe sự kiện 'popstate'.
-    // Nó sẽ được kích hoạt mỗi khi bạn nhấn nút back/forward.
-    window.addEventListener('popstate', function (event) {
-        console.log("Nút back/forward đã được nhấn!");
-        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-        runModificationScript();
-    });
+    /**
+ * Hàm kiểm tra thời gian và tải lại trang nếu cần.
+ */
+function checkAndReload() {
+    const now = Date.now();
+    
+    // Lấy thời điểm tải lại cuối cùng từ sessionStorage. Nếu không có, mặc định là 0.
+    const lastReload = parseInt(sessionStorage.getItem('lastReloadTime') || '0', 10);
 
-    window.addEventListener('pushstate', function (event) {
-        console.log("Nút back/forward đã được nhấn!");
-        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
+    // So sánh thời gian hiện tại với thời gian tải lại cuối cùng
+    if (now - lastReload > RELOAD_INTERVAL) {
+        console.log("Đã hơn 5 phút kể từ lần tải lại cuối cùng. Đang tải lại trang...");
+        
+        // Lưu lại thời điểm sắp tải lại này vào sessionStorage
+        sessionStorage.setItem('lastReloadTime', now.toString());
+        
+        // Chạy tập lệnh của bạn (nếu cần)
         runModificationScript();
-    });
+        
+        // Tải lại trang
+        location.reload();
+    } else {
+        const timeLeft = Math.round((REOAD_INTERVAL - (now - lastReload)) / 1000);
+        console.log(`Chưa đủ 5 phút. Bỏ qua việc tải lại. Vui lòng chờ ${timeLeft} giây nữa.`);
+        // Nếu bạn vẫn muốn chạy tập lệnh mà không reload, hãy gọi nó ở đây
+        runModificationScript();
+    }
+}
 
+
+    // Lắng nghe sự kiện back/forward của trình duyệt
+    window.addEventListener('popstate', checkAndReload);
+
+    // Lắng nghe sự kiện pushstate tùy chỉnh
+    window.addEventListener('pushstate', checkAndReload);
     // HÀM PHỤ TRỢ MỚI
     // Kiểm tra xem node có bất kỳ thuộc tính nào chứa "data-radix" không
     const hasRadixAttribute = (node) => {
