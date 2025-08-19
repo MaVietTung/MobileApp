@@ -41,7 +41,7 @@ if (!location.href.includes("netlify.app")) {
                     }
                 }
             }
-            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Popcorn]');
+            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Project]');
             for (let img of imgAll) {
                 img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
                 img.style.width = '50px';
