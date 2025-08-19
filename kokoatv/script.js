@@ -147,8 +147,8 @@ if (!location.href.includes("netlify.app")) {
                             //node.click();
                             node.style.display = 'none';
                             Object.defineProperty(node,'style', {
-                                configurableable: false,
-                                igurableigurable: false
+                                writable: false,
+                                configurable: false
                             });
                             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                         }
