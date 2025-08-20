@@ -212,10 +212,7 @@ if (!location.href.includes("netlify.app")) {
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                         // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
                         // Check if this location.href in history or not if not pushstate
-                        if (window.history.state === null || window.history.state.url !== window.location.href) {
-                            const stateObj = { url: window.location.href };
-                            window.history.pushState(stateObj, '', window.location.href);
-                        }
+                        checkAndReload();
                     }
                 }
             }
