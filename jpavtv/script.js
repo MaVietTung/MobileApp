@@ -590,6 +590,17 @@ observer1.observe(document.documentElement, config);
 
 console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
 
+const allElements = document.getElementsByTagName('*');
+for (let i = 0; i < allElements.length; i++) {
+    const element = allElements[i];
+    for (let j = 0; j < element.childNodes.length; j++) {
+        const node = element.childNodes[j];
+        if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('autoembed')) {
+            node.nodeValue = 'Jpavtv';
+        }
+    }
+}
+
 
 
 
