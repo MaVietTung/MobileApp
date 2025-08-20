@@ -1,140 +1,150 @@
+// Chỉ thực thi code nếu không phải trên tên miền của Netlify
 if (!location.href.includes("netlify.app")) {
-  function createAmazonBanner() {
-    // Kiểm tra nếu chưa có #amazon
-    let amazonDiv = document.querySelector('#ads');
-    if (!amazonDiv && !location.href.includes('read') && !location.href.includes('chapter')) {
-      amazonDiv = document.createElement('div');
-      amazonDiv.id = 'ads';
-      amazonDiv.style.overflow = 'hidden';
-      document.querySelector('#__next').appendChild(amazonDiv);
-      // Tạo script và load JS từ URL
-      var script = document.createElement('script');
-      script.src = 'https://mobile-3aj.pages.dev/ads/wemanga.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }
-  createAmazonBanner()
+  
+  /**
+   * Cấu hình trung tâm cho các selector, URL và văn bản cần thay thế.
+   * Dễ dàng thay đổi ở một nơi duy nhất.
+   */
+  const CONFIG = {
+    adsContainerId: 'ads',
+    adsScriptUrl: 'https://mobile-3aj.pages.dev/ads/wemanga.js',
+    logoImageUrl: 'https://mobile-3aj.pages.dev/wemanga/wemanga.png',
+    logoImageSize: '50px',
+    logoSelector: 'img[src*="logo"], img[alt*="logo"]',
+    elementsToHide: ['.welcome-bottom', 'footer', 'a[href="/chapters"]', 'button:has(svg[data-icon="google"])'],
+    textReplacements: {
+      'comick': 'WeManga',
+      'yuki': 'WeManga',
+      'movie': 'Kokoa',
+      'zone': 'TV',
+    },
+  };
 
-  var imgAll = document.querySelectorAll('img[src*=logo], img[alt*=logo]');
-  for (let img of imgAll) {
-    img.src = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
-    img.srcset = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
-    img.style.width = '50px';
-    img.style.height = '50px';
-    Object.defineProperty(img, 'src', {
-      writable: false,
-      configurable: false
-    });
-  }
+  /**
+   * Thay thế tất cả logo trong một phạm vi (scope) nhất định.
+   * @param {Node} scope - Element cha để tìm kiếm logo bên trong (mặc định là toàn bộ document).
+   */
+  const replaceLogos = (scope = document) => {
+    const logoImages = scope.querySelectorAll(CONFIG.logoSelector);
+    logoImages.forEach(img => {
+      // Chỉ thay đổi nếu logo chưa được cập nhật
+      if (img.src !== CONFIG.logoImageUrl) {
+        img.src = CONFIG.logoImageUrl;
+        img.srcset = CONFIG.logoImageUrl;
+        img.style.width = CONFIG.logoImageSize;
+        img.style.height = CONFIG.logoImageSize;
 
-  const allElements = document.getElementsByTagName('*');
-  for (let i = 0; i < allElements.length; i++) {
-    const element = allElements[i];
-    for (let j = 0; j < element.childNodes.length; j++) {
-      const node = element.childNodes[j];
-      if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('comick')) {
-        node.nodeValue = 'WeManga';
-      } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'movie') {
-        node.nodeValue = 'Kokoa';
-      } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'zone') {
-        node.nodeValue = 'TV';
+        // Ngăn không cho thuộc tính src bị thay đổi bởi script khác
+        Object.defineProperty(img, 'src', {
+          writable: false,
+          configurable: false,
+        });
       }
-    }
-  }
+    });
+  };
 
-  var welcomeBottom = document.querySelector('.welcome-bottom')
-  if (welcomeBottom) {
-    welcomeBottom.style.display = 'none'
-  }
+  /**
+   * Tìm và thay thế văn bản trong một element và các con của nó.
+   * Sử dụng TreeWalker để duyệt các text node hiệu quả hơn.
+   * @param {Node} scope - Element cha để bắt đầu tìm kiếm.
+   */
+  const replaceTextInNode = (scope = document.body) => {
+    const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+    
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      const originalText = node.nodeValue.trim().toLowerCase();
+      
+      if (!originalText) continue;
 
-  var footer = document.querySelector('footer')
-  if (footer) {
-    footer.style.display = 'none'
-  }
-
-  // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-  const callback = (mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        for (const node of mutation.addedNodes) {
-          // Chỉ xử lý nếu node là một element (nodeType === 1)
-          if (node.nodeType === 1) {
-
-            // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-            // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-            if (node.classList.contains('max-w-5xl') && node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
-              node.style.display = 'none';
-              console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
-            }
-            var imgAll = document.querySelectorAll('img[src*=logo], img[alt*=logo]');
-            for (let img of imgAll) {
-              img.src = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
-              img.srcset = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
-              img.style.width = '50px';
-              img.style.height = '50px';
-              Object.defineProperty(img, 'src', {
-                writable: false,
-                configurable: false
-              });
-            }
-          }
+      for (const [key, value] of Object.entries(CONFIG.textReplacements)) {
+        if (originalText.includes(key)) {
+          // Sử dụng RegExp để thay thế không phân biệt chữ hoa/thường
+          const regex = new RegExp(key, 'gi');
+          node.nodeValue = node.nodeValue.replace(regex, value);
         }
       }
     }
   };
 
-  // Tạo một đối tượng observer với hàm callback ở trên
-  const observer = new MutationObserver(callback);
+  /**
+   * Tiêm banner quảng cáo vào trang nếu các điều kiện thỏa mãn.
+   */
+  const injectAdBanner = () => {
+    const shouldInject = !document.getElementById(CONFIG.adsContainerId) &&
+                         !location.href.includes('read') &&
+                         !location.href.includes('chapter');
 
-  // Cấu hình để observer theo dõi (giữ nguyên)
-  const config = {
-    childList: true, // Theo dõi việc thêm/bớt phần tử con
-    subtree: true    // Theo dõi tất cả các phần tử con cháu
+    if (!shouldInject) return;
+
+    const adsContainer = document.createElement('div');
+    adsContainer.id = CONFIG.adsContainerId;
+    adsContainer.style.overflow = 'hidden';
+    document.querySelector('#__next')?.appendChild(adsContainer);
+
+    const script = document.createElement('script');
+    script.src = CONFIG.adsScriptUrl;
+    script.async = true;
+    document.body.appendChild(script);
+  };
+  
+  /**
+   * Xử lý các thay đổi trên DOM (khi có element mới được thêm vào).
+   * @param {MutationRecord[]} mutationsList - Danh sách các thay đổi.
+   */
+  const handleDomChanges = (mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        for (const node of mutation.addedNodes) {
+          // Chỉ xử lý các Element, bỏ qua các text node hoặc comment node
+          if (node.nodeType !== Node.ELEMENT_NODE) continue;
+          
+          // 1. Ẩn các banner quảng cáo không mong muốn
+          const isUnwantedBanner = node.classList.contains('max-w-5xl') && node.id !== CONFIG.adsContainerId;
+          const isRootChild = node.parentNode === document.body || node.parentNode === document.documentElement;
+          if (isUnwantedBanner && isRootChild) {
+            node.style.display = 'none';
+          }
+          
+          // 2. Áp dụng thay thế logo và văn bản cho các element mới
+          replaceLogos(node);
+          replaceTextInNode(node);
+          
+          // 3. Ẩn các element cụ thể mới xuất hiện
+          CONFIG.elementsToHide.forEach(selector => {
+            // Kiểm tra chính node đó hoặc các con của nó
+            if (node.matches(selector)) {
+              node.style.display = 'none';
+            }
+            node.querySelectorAll(selector).forEach(el => el.style.display = 'none');
+          });
+        }
+      }
+    }
+  };
+  
+  /**
+   * Hàm khởi tạo chính, chạy tất cả các tác vụ ban đầu và cài đặt MutationObserver.
+   */
+  const initialize = () => {
+    // Tác vụ chạy ngay khi tải trang
+    injectAdBanner();
+    replaceLogos();
+    replaceTextInNode();
+    CONFIG.elementsToHide.forEach(selector => {
+      document.querySelectorAll(selector).forEach(el => el.style.display = 'none');
+    });
+
+    // Theo dõi các thay đổi trên DOM để xử lý các nội dung được tải động
+    const observer = new MutationObserver(handleDomChanges);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+
+    console.log('WeManga Script Initialized and Observing DOM changes.');
   };
 
-  // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-  observer.observe(document.documentElement, config);
-
-  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-
-  // test page
-  // This function contains all the logic you want to run repeatedly
-  function modifyPageElements() {
-
-    // Find and replace the "Yuki" span
-    const yukiSpan = Array.from(document.querySelectorAll('span'))
-      .find(span => span.textContent.trim() === 'Yuki');
-
-    if (yukiSpan) {
-      yukiSpan.textContent = 'WeManga';
-    } else {
-      // This message will appear if the span isn't found in a given second
-      // console.log('Span with "Yuki" not found.'); 
-    }
-
-    // Find and hide the "Chapters" link
-    const aChapter = Array.from(document.querySelectorAll('a'))
-      .find(a => a.textContent.trim() === 'Chapters');
-
-    if (aChapter) {
-      aChapter.style.display = 'none';
-    } else {
-      // console.log('Link with "Chapters" not found.');
-    }
-
-    // Find and hide the login button containing "Google"
-    const buttonLogin = Array.from(document.querySelectorAll('button'))
-      .find(button => button.textContent.trim().includes('Google'));
-
-    if (buttonLogin) {
-      buttonLogin.style.display = 'none';
-    } else {
-      // console.log('Button with "Google" not found.');
-    }
-  }
-
-  // Run the function modifyPageElements() every 1000 milliseconds (1 second)
-  setInterval(modifyPageElements, 1000);
-  // finish test page
+  // Chạy hàm khởi tạo
+  initialize();
 }
