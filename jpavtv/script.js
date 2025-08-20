@@ -599,34 +599,13 @@ function runModificationScript() {
             const node = element.childNodes[j];
             if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('moviezone')) {
                 node.nodeValue = 'Jpavtv';
+            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('movie')) {
+                node.nodeValue = 'Jpav';
+            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('zone')) {
+                node.nodeValue = 'tv';
             }
         }
     }
-    // 1. Chọn thẻ <a> mục tiêu
-    const linkElement = document.querySelector('a[href*="/"]'); // <-- Nên thay bằng selector cụ thể, ví dụ: '#logo-link'
-    linkElement.textContent = ''
-    // 2. Kiểm tra xem thẻ <a> có tồn tại không
-    if (linkElement) {
-        // 3. KIỂM TRA: Nếu bên trong thẻ <a> chưa có thẻ <img> nào
-        if (!linkElement.querySelector('img')) {
-            // ...thì mới thực hiện việc tạo và chèn ảnh
-
-            // Tạo một phần tử <img> mới
-            const imgElement = document.createElement('img');
-
-            // Thiết lập các thuộc tính cần thiết
-            imgElement.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-            imgElement.alt = 'Logo Jpavtv';
-
-            // GÁN KÍCH THƯỚC CHO ẢNH
-            imgElement.width = 50;  // Thêm dòng này
-            imgElement.height = 50; // Thêm dòng này
-
-            // Chèn thẻ <img> vào bên trong thẻ <a>
-            linkElement.appendChild(imgElement);
-        }
-    }
-
 }
 
 /**
