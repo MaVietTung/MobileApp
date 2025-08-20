@@ -421,7 +421,7 @@ if (!location.href.includes("vercel.app")) {
             var script = document.createElement('script');
             script.src = 'https://mobile-3aj.pages.dev/ads/jpavtv.js';
             script.async = true;
-            document.body.appendChild(script);
+            //document.body.appendChild(script);
         }
     }
 
