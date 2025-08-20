@@ -37,7 +37,7 @@ if (!location.href.includes("netlify.app")) {
                 for (let j = 0; j < element.childNodes.length; j++) {
                     const node = element.childNodes[j];
                     if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('flic')) {
-                        node.nodeValue = 'Kokoatv';
+                        node.nodeValue = 'JpavTV';
                     }
                 }
             }
