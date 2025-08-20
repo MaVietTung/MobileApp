@@ -606,9 +606,10 @@ function runModificationScript() {
             }
         }
     }
-    var div = document.querySelector('div.absolute.top-5')
-    if(div){
-        div.style.top = 0;
+    var divs = document.querySelector('div.absolute.top-5')
+    if(divs){
+        divs.style.top = 0;
+        divs.style.width = '70px'
     }
 }
 
