@@ -590,16 +590,129 @@ observer1.observe(document.documentElement, config);
 
 console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
 
-const allElements = document.getElementsByTagName('*');
-for (let i = 0; i < allElements.length; i++) {
-    const element = allElements[i];
-    for (let j = 0; j < element.childNodes.length; j++) {
-        const node = element.childNodes[j];
-        if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('autoembed')) {
-            node.nodeValue = 'Jpavtv';
+function runModificationScript() {
+    console.log("Đang chạy tập lệnh sửa đổi trang...");
+    const allElements = document.getElementsByTagName('*');
+    for (let i = 0; i < allElements.length; i++) {
+        const element = allElements[i];
+        for (let j = 0; j < element.childNodes.length; j++) {
+            const node = element.childNodes[j];
+            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('autoembed')) {
+                node.nodeValue = 'Jpavtv';
+            }
         }
     }
 }
+
+/**
+ * Hàm kiểm tra thời gian và sự thay đổi URL, sau đó tải lại trang nếu cần.
+ * PHIÊN BẢN NÀY: Luôn cập nhật href mỗi khi hàm được gọi.
+ */
+function checkAndReload() {
+    const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 phút
+
+    const now = Date.now();
+    const currentHref = location.href;
+
+    // Lấy thông tin từ lần kiểm tra trước
+    const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
+    const lastHref = localStorage.getItem('lastHref') || '';
+
+    // >>> THAY ĐỔI CHÍNH: Cập nhật href ngay lập tức mỗi khi hàm chạy <<<
+    localStorage.setItem('lastHref', currentHref);
+
+    const isTimeExpired = now - lastReload > RELOAD_INTERVAL;
+    // So sánh URL hiện tại với URL của lần kiểm tra TRƯỚC ĐÓ
+    const hasHrefChanged = currentHref !== lastHref;
+
+    if (isTimeExpired && hasHrefChanged) {
+        console.log("Hết thời gian chờ và URL đã thay đổi kể từ lần kiểm tra trước. Đang tải lại...");
+
+        // Lưu lại thời điểm tải lại
+        localStorage.setItem('lastReloadTime', now.toString());
+
+        // Tải lại trang
+        location.reload();
+    } else {
+        // Gỡ lỗi
+        if (!isTimeExpired) {
+            const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
+            console.log(`Chưa đủ thời gian. Vui lòng chờ ${timeLeft} giây nữa.`);
+        } else if (!hasHrefChanged) {
+            console.log("URL không thay đổi kể từ lần kiểm tra trước. Bỏ qua việc tải lại.");
+        }
+        runModificationScript();
+    }
+}
+
+// Gọi hàm để bắt đầu kiểm tra
+// checkAndReload();
+
+
+// Giả sử bạn có hàm này ở đâu đó trong code
+// function runModificationScript() {
+//     console.log("Đang chạy tập lệnh sửa đổi...");
+// }
+
+
+
+// Lắng nghe sự kiện back/forward của trình duyệt
+//window.addEventListener('popstate', checkAndReload);
+
+// Lắng nghe sự kiện pushstate tùy chỉnh
+//window.addEventListener('pushstate', checkAndReload);
+// HÀM PHỤ TRỢ MỚI
+// Kiểm tra xem node có bất kỳ thuộc tính nào chứa "data-radix" không
+const hasRadixAttribute = (node) => {
+    // Lặp qua tất cả các thuộc tính của node
+    for (const attr of node.attributes) {
+        // Nếu tên của thuộc tính chứa chuỗi "data-radix"
+        if (attr.name.includes('data-radix')) {
+            return true; // Lập tức trả về true và dừng lại
+        }
+    }
+    return false; // Nếu không tìm thấy, trả về false
+};
+
+// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+const callback = (mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+                // Chỉ xử lý nếu node là một element (nodeType === 1)
+                if (node.nodeType === 1) {
+                    if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
+                        node.click();
+                        node.style.display = 'none';
+                        Object.defineProperty(node, 'style', {
+                            writable: false,
+                            configurable: false
+                        });
+                        console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+                    }
+                    // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
+                    // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
+                    checkAndReload();
+                }
+            }
+        }
+    }
+};
+
+// Tạo một đối tượng observer với hàm callback ở trên
+const observer1 = new MutationObserver(callback);
+
+// Cấu hình để observer theo dõi (giữ nguyên)
+const config = {
+    childList: true, // Theo dõi việc thêm/bớt phần tử con
+    subtree: true    // Theo dõi tất cả các phần tử con cháu
+};
+
+// Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+observer1.observe(document.documentElement, config);
+
+console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+
 
 
 
