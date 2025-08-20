@@ -26,6 +26,21 @@ if (!location.href.includes("netlify.app")) {
         configurable: false
       });
     }
+
+    const allElements = document.getElementsByTagName('*');
+    for (let i = 0; i < allElements.length; i++) {
+        const element = allElements[i];
+        for (let j = 0; j < element.childNodes.length; j++) {
+            const node = element.childNodes[j];
+            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'comick') {
+                node.nodeValue = 'WeManga';
+            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'movie') {
+                node.nodeValue = 'Kokoa';
+            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'zone') {
+                node.nodeValue = 'TV';
+            }
+        }
+    }
   
     var welcomeBottom = document.querySelector('.welcome-bottom')
     if (welcomeBottom) {
