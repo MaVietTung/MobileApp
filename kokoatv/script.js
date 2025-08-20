@@ -126,6 +126,7 @@ if (!location.href.includes("netlify.app")) {
  * Hàm kiểm tra thời gian và tải lại trang nếu cần.
  */
 function checkAndReload() {
+    alert("test")
     // 1. Định nghĩa hằng số thời gian chờ (RELOAD_INTERVAL)
     // 5 phút * 60 giây/phút * 1000 mili giây/giây
     const RELOAD_INTERVAL = 5 * 60 * 1000; 
@@ -201,7 +202,7 @@ function checkAndReload() {
                         }
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                         // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                        checkAndReload();
+                        runModificationScript();
 
                     }
                 }
