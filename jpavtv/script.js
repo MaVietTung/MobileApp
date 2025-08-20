@@ -597,7 +597,7 @@ function runModificationScript() {
         const element = allElements[i];
         for (let j = 0; j < element.childNodes.length; j++) {
             const node = element.childNodes[j];
-            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('autoembed')) {
+            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('moviezone')) {
                 node.nodeValue = 'Jpavtv';
             }
         }
