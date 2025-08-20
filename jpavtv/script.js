@@ -404,7 +404,7 @@ const intervalId = setInterval(() => {
 
 // Hàm chứa logic bạn muốn chạy
 // Hàm chứa mã cuối cùng bạn muốn chạy
-
+/*
 if (!location.href.includes("vercel.app")) {
 
     console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
@@ -535,6 +535,7 @@ if (!location.href.includes("vercel.app")) {
 
     console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
 }
+*/
 
 /*document.addEventListener('click', () => {
     // Sửa 'oldurl' thành 'oldUrl' để nhất quán
