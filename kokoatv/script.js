@@ -609,7 +609,7 @@ function runModificationScript() {
     var divs = document.querySelector('div.absolute.top-5')
     if(divs){
         divs.style.top = 0;
-        divs.style.right = 1;
+        divs.style.right = "50px";
     }
 }
 
