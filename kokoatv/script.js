@@ -608,6 +608,7 @@ function runModificationScript() {
     }
     const mainContainer = document.querySelector('.relative.h-screen');
     const panelToToggle = document.querySelector('.absolute.top-5');
+    const panelToToggle2 = document.querySelector('.fixed.top-28')
 
 
     if (mainContainer && panelToToggle && !document.querySelector('#open-close-button')) {
@@ -633,10 +634,12 @@ function runModificationScript() {
             const isHidden = panelToToggle.style.display === 'none';
             if (isHidden) {
                 panelToToggle.style.display = 'block';
+                if(panelToToggle2) panelToToggle2.style.display = 'block';
                 toggleButton.innerHTML = iconDown;
                 toggleButton.setAttribute('aria-label', 'Đóng Panel');
             } else {
                 panelToToggle.style.display = 'none';
+                if(panelToToggle2) panelToToggle2.style.display = 'none';
                 toggleButton.innerHTML = iconUp;
                 toggleButton.setAttribute('aria-label', 'Mở Panel');
             }
