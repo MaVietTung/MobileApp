@@ -1,825 +1,218 @@
-/*function saveCurrentDateToLocalStorage() {
-    const now = new Date();
-    const formattedDate = now.toISOString();
-    localStorage.setItem('lasttime', formattedDate);
-}
-function createAmazonBanner() {
-    // Kiểm tra nếu chưa có #amazon
-    let amazonDiv = document.querySelector('#amazon');
-    if (!amazonDiv) {
-        amazonDiv = document.createElement('div');
-        amazonDiv.id = 'amazon';
-        document.body.appendChild(amazonDiv);
-        // Tạo script và load JS từ URL
-        var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/amazon/jpavtv.js';
-        script.async = true;
-        //document.body.appendChild(script);
-    }
-}
-
-saveCurrentDateToLocalStorage();
-
-// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-const callback = (mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList') {
-        for (const node of mutation.addedNodes) {
-          // Chỉ xử lý nếu node là một element (nodeType === 1)
-          if (node.nodeType === 1) {
-            
-            // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-            // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-            if (node.id !=="customIframe" &&(node.parentNode === document.body || node.parentNode === document.documentElement)) {
-              node.style.display = 'none';
-              console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
-            }
-            
-          }
-        }
-      }
-    }
-  };
-  
-  // Tạo một đối tượng observer với hàm callback ở trên
-  const observer = new MutationObserver(callback);
-  
-  // Cấu hình để observer theo dõi (giữ nguyên)
-  const config = {
-    childList: true, // Theo dõi việc thêm/bớt phần tử con
-    subtree: true    // Theo dõi tất cả các phần tử con cháu
-  };
-  
-  // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-  observer.observe(document.documentElement, config);
-  
-  console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-
-const script_tmp = document.createElement('script');
-script_tmp.src = 'https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js';
-script_tmp.onload = () => {
-    const { DateTime } = luxon;
-
-    function getUTCOffsetString(timezone) {
-        const dt = DateTime.now().setZone(timezone);
-        const offsetMinutes = dt.offset;
-        const offsetHours = offsetMinutes / 60;
-        const sign = offsetHours >= 0 ? '+' : '';
-        return 'UTC ' + sign + offsetHours;
-    }
-
-    function displayIframe() {
-        document.body.innerHTML = '';
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://mobileapp5.pages.dev/';
-        iframe.style.position = 'absolute';
-        iframe.style.top = '0';
-        iframe.style.left = '0';
-        iframe.style.width = '100vw';
-        iframe.style.height = '100vh';
-        iframe.style.border = 'none';
-        iframe.id = "customIframe"
-        document.body.appendChild(iframe);
-    }
-
-    async function checkClientLocation() {
-        const notallowedCountryCodes = ["US", "IN", "IE", "SG"];
-        const storageKey = 'user_country_code';
-    
-        try {
-            // 1. Kiểm tra cache
-            const cachedCountryCode = localStorage.getItem(storageKey);
-            if (cachedCountryCode) {
-                console.log(`Sử dụng mã quốc gia từ cache: ${cachedCountryCode}`);
-                if (notallowedCountryCodes.includes(cachedCountryCode)) {
-                    displayIframe();
-                }
-                return;
-            }
-    
-            // 2. Gọi API và xử lý JSON
-            console.log("Không có cache. Đang gọi API từ ipinfo.io...");
-            const apiUrl = "https://api.ipinfo.io/lite/me?token=4ce6a8a5905f52";
-            const response = await fetch(apiUrl);
-    
-            if (!response.ok) {
-                throw new Error(`Lỗi API với status: ${response.status}`);
-            }
-    
-            // Dùng response.json() để phân tích đối tượng JSON
-            const data = await response.json(); 
-            const countryCode = data.country_code; // Lấy mã quốc gia từ thuộc tính "country_code"
-    
-            if (countryCode) {
-                // 3. Lưu kết quả vào localStorage
-                localStorage.setItem(storageKey, countryCode);
-                console.log(`Đã nhận và lưu mã quốc gia từ API: ${countryCode}`);
-    
-                if (notallowedCountryCodes.includes(countryCode)) {
-                    displayIframe();
-                }
-            } else {
-                 console.error("Không tìm thấy 'country_code' trong phản hồi từ API.");
-            }
-        } catch (error) {
-            console.error("Lỗi khi lấy vị trí của người dùng:", error);
-        }
-    }
-
-
-    async function detectEmulator() {
-        const ua = navigator.userAgent.toLowerCase();
-        const suspiciousUA = [
-            'android sdk built for',
-            'google_sdk',
-            'emulator',
-            'genymotion',
-            'sdk_gphone',
-            'vbox',
-            'generic'
-        ];
-        if (suspiciousUA.some(s => ua.includes(s))) {
-            displayIframe();
-            return;
-        }
-
-        const isMissingHardwareAPI = !navigator.hardwareConcurrency || navigator.hardwareConcurrency < 2;
-        if (isMissingHardwareAPI) {
-            displayIframe();
-            return;
-        }
-
-        const noSensors = !('DeviceMotionEvent' in window) && !('DeviceOrientationEvent' in window);
-        if (noSensors) {
-            displayIframe();
-            return;
-        }
-
-        const isPerfectScreen = (
-            window.devicePixelRatio <= 1 &&
-            screen.width === screen.availWidth &&
-            screen.height === screen.availHeight
-        );
-        if (isPerfectScreen) {
-            displayIframe();
-            return;
-        }
-
-        const cores = navigator.hardwareConcurrency || 0;
-        if (cores > 0 && cores <= 2) {
-            displayIframe();
-            return;
-        }
-
-        const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        if (!hasTouch) {
-            displayIframe();
-            return;
-        }
-    }
-
-    async function detectVPN() {
-        const storageKey = 'vpn_detection_result';
-        const userCountryCodeKey = 'user_country_code';
-    
-        try {
-            // 1. Kiểm tra cache
-            const cachedResult = sessionStorage.getItem(storageKey);
-            if (cachedResult) {
-                console.log(`Sử dụng kết quả phát hiện VPN từ cache: ${cachedResult}`);
-                if (cachedResult === 'mismatch') {
-                    displayIframe();
-                }
-                return;
-            }
-    
-            // 2. Lấy mã quốc gia đã lưu
-            const localCountryCode = localStorage.getItem(userCountryCodeKey);
-            if (!localCountryCode) {
-                console.warn("Không tìm thấy mã quốc gia trong localStorage để so sánh.");
-                return;
-            }
-    
-            console.log("Không có cache. Đang thực hiện kiểm tra VPN...");
-    
-            // 3. Gọi API và xử lý JSON
-            const apiUrl = "https://api.ipinfo.io/lite/me?token=4ce6a8a5905f52";
-            const response = await fetch(apiUrl);
-    
-            if (!response.ok) {
-                throw new Error(`Lỗi API với status: ${response.status}`);
-            }
-    
-            const data = await response.json();
-            const apiCountryCode = data.country_code; // Lấy mã quốc gia từ JSON
-    
-            // 4. So sánh
-            if (apiCountryCode && apiCountryCode !== localCountryCode) {
-                console.log(`Phát hiện không khớp: Mã cục bộ ${localCountryCode}, mã API ${apiCountryCode}.`);
-                sessionStorage.setItem(storageKey, 'mismatch');
-                displayIframe();
-            } else if (apiCountryCode) {
-                console.log(`Mã quốc gia khớp: ${localCountryCode}. Không phát hiện VPN.`);
-                sessionStorage.setItem(storageKey, 'match');
-            } else {
-                console.error("Không thể lấy mã quốc gia từ API để so sánh.");
-            }
-    
-        } catch (err) {
-            console.error('Quá trình phát hiện VPN thất bại:', err);
-        }
-    }
-
-
-
-
-    let count = 0;
-    const intervalId = setInterval(() => {
-        if (count >= 3) {
-            clearInterval(intervalId);
-            return;
-        }
-
-        detectEmulator();
-        detectVPN();
-        checkClientLocation();
-        createAmazonBanner();
-
-        const logoImages = document.querySelectorAll('img[src*=logo]');
-        for (let logoImage of logoImages) {
-            logoImage.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-            Object.defineProperty(logoImage, 'src', {
-                writable: false,
-                configurable: false
-            });
-        }
-        const logoImage2 = document.querySelector('span.text-zinc-50');
-        if (logoImage2) logoImage2.textContent = 'JPAV';
-
-        const images = document.querySelectorAll('img[src*=mio]');
-        const matchingDivs = Array.from(images).map(img =>
-            img.closest('div[class*=grid]')
-        ).filter(Boolean);
-        if (matchingDivs[0]) matchingDivs[0].style.display = 'none';
-
-        const logoImage1 = document.querySelector('span.text-primary');
-        if (logoImage1) logoImage1.textContent = 'TV';
-
-        const lincese = document.querySelector('footer');
-        if (lincese) lincese.style.display = 'none';
-
-        const pluginbtn = document.querySelector('div[class *= plugin]');
-        if (pluginbtn) pluginbtn.style.display = 'none';
-
-        const ad1 = document.querySelectorAll('div[id *= ad]');
-        ad1.forEach(ad => ad.style.display = 'none');
-
-        const ads = document.querySelectorAll('iframe');
-        ads.forEach(ad => ad.style.display = 'none');
-
-        const vips = document.querySelectorAll('a[href*=vip]');
-        vips.forEach(vip => vip.style.display = 'none');
-
-        /*const con = document.querySelector('body div');
-        if (con && !con.querySelector('img[src*=donate]')) {
-            const ig = document.createElement('img');
-            ig.src = 'https://i.postimg.cc/761npCM7/donate-pandratv.png';
-            ig.style.width = '100%';
-            ig.style.height = 'auto';
-            con.appendChild(ig);
-        }*/
-
-/*        count++;
-    }, 1000);
-};
-document.head.appendChild(script_tmp);*/
-
-/*function isSavedDateInPast(compareDateString) {
-    const savedDateStr = localStorage.getItem('lasttime');
-
-    if (!savedDateStr) {
-        return false;
-    }
-
-    const savedDate = new Date(savedDateStr);
-    const compareDate = new Date(compareDateString);
-
-    return savedDate < compareDate;
-}*/
-
-/*
-var script = document.createElement('script');
-script.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv.js';
-document.head.appendChild(script);
-*/
-
-/*let counter = 0;
-let maxRuns = Infinity;
-
-function saveCurrentDateToLocalStorage() {
-    const now = new Date();
-    const formattedDate = now.toISOString();
-    localStorage.setItem('lasttime', formattedDate);
-}
-saveCurrentDateToLocalStorage();
-
-
-const intervalId = setInterval(() => {
-    const playerElement = document.querySelector('.player');
-    if (playerElement) {
-        maxRuns = 5;
-    }
-    var customLogo = document.querySelector('#logo-mobile img');
-    if (customLogo) {
-        customLogo.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-        customLogo.style.height = '70px';
-        customLogo.style.border = '2px solid white';
-        Object.defineProperty(customLogo, 'src', {
-            writable: false,
-            configurable: false
-        });
-    }
-
-    var comment = document.querySelector('#comments');
-    if (comment) {
-        comment.style.display = 'none';
-    }
-
-    var footer = document.querySelector('#footer');
-    if (footer) {
-        footer.style.display = 'none';
-    }
-
-    var menuHome = document.querySelector('li a');
-    if (menuHome) {
-        menuHome.textContent = 'HOME';
-    }
-
-    var menuHome2 = document.querySelector('li a span');
-    if (menuHome2) {
-        menuHome2.textContent = 'Home';
-    }
-
-    var ads2 = document.querySelectorAll('iframe[src*=ad]');
-    for (ad of ads2) {
-        if (playerElement) {
-            ad.click();
-        } else {
-            ad.style.display = 'none';
-        }
-    }
-
-    var notification = document.querySelector('.notification-top-bar');
-    if (notification) {
-        notification.style.display = 'none';
-    }
-
-    var ads = document.querySelectorAll('[class*=adsbygoogle]');
-    for (let ad of ads) {
-        ad.style.display = 'none';
-    }
-
-    var alertE = document.querySelector('.alert');
-    if (alertE) {
-        alertE.style.display = 'none';
-    }
-
-    var con = document.querySelectorAll('.container')[2];
-    if (con && !con.querySelector('.donate-banner')) {
-        const ig = document.createElement('img');
-        ig.src = 'https://mobile-3aj.pages.dev/jpavtv/donate-jpavtv.png';
-        ig.style.width = '100%';
-        ig.style.height = 'auto';
-        ig.className = 'donate-banner';
-
-        con.appendChild(ig);
-    }
-
-    counter++;
-    if (counter >= maxRuns) {
-        clearInterval(intervalId);
-    }
-}, 1000);*/
-
-
-// Hàm chứa logic bạn muốn chạy
-// Hàm chứa mã cuối cùng bạn muốn chạy
-/*
-if (!location.href.includes("vercel.app")) {
-
-    console.log("✅ DOM đã ổn định! Bắt đầu thực thi mã cuối cùng.");
-
-    function createAmazonBanner() {
-        // Kiểm tra nếu chưa có #amazon
-        let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv) {
-            amazonDiv = document.createElement('div');
-            amazonDiv.id = 'ads';
-            amazonDiv.style.overflow = 'hidden';
-            document.documentElement.appendChild(amazonDiv);
-            // Tạo script và load JS từ URL
-            var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/jpavtv.js';
-            script.async = true;
-            //document.body.appendChild(script);
-        }
-    }
-
-    createAmazonBanner()
-
-    function saveCurrentDateToLocalStorage() {
-        const now = new Date();
-        const formattedDate = now.toISOString();
-        localStorage.setItem('lasttime', formattedDate);
-    }
-
-    saveCurrentDateToLocalStorage()
-
-
-    // --- Bắt đầu mã của bạn ---
-    const targetSrc = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-    const logoImages = document.querySelectorAll('img[src*=logo], img[src*=avatar]');
-
-    for (let logoImage of logoImages) {
-        // Chỉ thay đổi nếu src chưa được đổi để tránh lỗi
-        if (logoImage.src !== targetSrc) {
-            logoImage.src = targetSrc;
-            Object.defineProperty(logoImage, 'src', {
-                writable: false,
-                configurable: false
-            });
-        }
-    }
-
-    var ggButn = document.querySelector('#ggButn')
-    if (ggButn) {
-        ggButn.style.display = 'none'
-    }
-
-    var mwBody = document.querySelector('.mw-body')
-    if (mwBody) {
-        mwBody.style.display = 'none'
-    }
-
-    var introApp = document.querySelector('.intro-app')
-    if (introApp) {
-        introApp.style.display = 'none'
-    }
-
-    var footers = document.querySelectorAll('[id*=footer]')
-    for (var footer of footers) {
-        footer.style.display = 'none'
-    }
-
-    const lincese = document.querySelector('footer');
-    if (lincese) lincese.style.display = 'none';
-
-    const footerE = document.querySelector('footer');
-    if (footerE) {
-        footerE.style.display = 'none';
-    }
-
-    var kaa = document.body.children
-    for(var child of kaa){
-        if(!child.id.toLowerCase().includes("kaa"))
-          child.style.display = 'none'
-    }
-
-    const allElements = document.getElementsByTagName('*');
-    for (let i = 0; i < allElements.length; i++) {
-        const element = allElements[i];
-        for (let j = 0; j < element.childNodes.length; j++) {
-            const node = element.childNodes[j];
-            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('autoembed')) {
-                node.nodeValue = 'Jpavtv';
-            }
-        }
-    }
-
-    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-    const callback = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                for (const node of mutation.addedNodes) {
-                    // Chỉ xử lý nếu node là một element (nodeType === 1)
-                    if (node.nodeType === 1) {
-
-                        // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                        // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-                        if (node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
-                            node.style.display = 'none';
-                            console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node.id);
-                            var adsApp = document.querySelector('#ads')
-                            if (adsApp) {
-                                adsApp.style.display = 'block'
-                            }
-                        }
-
-                    }
-                }
+/**
+ * @fileoverview Script to modify page content, add draggable toggle button, and handle dynamic updates.
+ * @version 2.0
+ */
+
+// Bọc toàn bộ script trong một IIFE để tránh xung đột biến toàn cục.
+(() => {
+    'use strict';
+
+    // --- CẤU HÌNH TRUNG TÂM ---
+    // Gom tất cả các giá trị "cứng" vào một nơi để dễ dàng quản lý.
+    const CONFIG = {
+        reloadInterval: 5 * 60 * 1000, // 5 phút
+        selectors: {
+            mainContainer: '.relative.h-screen',
+            panelToToggle1: '.absolute.top-5',
+            panelToToggle2: '.fixed.top-28',
+        },
+        button: {
+            id: 'open-close-button',
+            className: 'draggable fixed z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg',
+            initialTop: '24px',
+            initialRight: '24px',
+            iconDown: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`,
+            iconUp: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`,
+        },
+        textReplacements: {
+            moviezone: 'KokoaTV',
+            movie: 'Kokoa',
+            zone: 'TV',
+        },
+    };
+
+    // --- QUẢN LÝ TRẠNG THÁI ---
+    let isDragging = false;
+    let hasMoved = false;
+
+    // --- CÁC HÀM THAO TÁC DOM ---
+
+    /**
+     * Thay thế văn bản dựa trên cấu hình.
+     * Sử dụng document.createTreeWalker để duyệt các text node hiệu quả hơn.
+     */
+    const replaceTextContent = () => {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        while (walker.nextNode()) {
+            const node = walker.currentNode;
+            const text = node.nodeValue.trim().toLowerCase();
+            if (CONFIG.textReplacements[text]) {
+                node.nodeValue = CONFIG.textReplacements[text];
             }
         }
     };
 
-    // Tạo một đối tượng observer với hàm callback ở trên
-    const observer = new MutationObserver(callback);
+    /**
+     * Tạo và quản lý nút bấm có thể kéo thả.
+     */
+    const initializeDraggableButton = () => {
+        const mainContainer = document.querySelector(CONFIG.selectors.mainContainer);
+        const panel1 = document.querySelector(CONFIG.selectors.panelToToggle1);
+        const panel2 = document.querySelector(CONFIG.selectors.panelToToggle2);
 
-    // Cấu hình để observer theo dõi (giữ nguyên)
-    const config = {
-        childList: true, // Theo dõi việc thêm/bớt phần tử con
-        subtree: true    // Theo dõi tất cả các phần tử con cháu
-    };
-
-    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-    observer.observe(document.documentElement, config);
-
-    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-}
-*/
-
-/*document.addEventListener('click', () => {
-    // Sửa 'oldurl' thành 'oldUrl' để nhất quán
-    var oldUrl = sessionStorage.getItem('oldurl');
-    var currentUrl = location.href;
-
-    // Sửa 'and' thành toán tử '&&'
-    if (oldUrl && oldUrl !== currentUrl) {
-        // Sửa pushState để có đủ 3 tham số (state, title, url)
-        history.pushState(null, '', currentUrl);
-    } 
-    // Sửa 'elif' thành 'else if' và 'oldurl' thành 'oldUrl'
-    else if (!oldUrl) {
-        sessionStorage.setItem('oldurl', currentUrl);
-        // Sửa pushState để có đủ 3 tham số
-        history.pushState(null, '', currentUrl);
-    }
-});
-
-// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-/*const callback = (mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            for (const node of mutation.addedNodes) {
-                // Chỉ xử lý nếu node là một element (nodeType === 1)
-                if (node.nodeType === 1) {
-
-                    // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                    // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-                    if ( node.textContent.includes('App')) {
-                        node.style.display = 'none';
-                        console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
-                    }
-
-                }
-            }
+        // Chỉ tạo nút nếu các thành phần cần thiết tồn tại và nút chưa được tạo
+        if (!mainContainer || !panel1 || document.getElementById(CONFIG.button.id)) {
+            return;
         }
-    }
-};
 
-// Tạo một đối tượng observer với hàm callback ở trên
-const observer1 = new MutationObserver(callback);
+        const button = document.createElement('button');
+        button.id = CONFIG.button.id;
+        button.className = CONFIG.button.className;
+        button.style.top = CONFIG.button.initialTop;
+        button.style.right = CONFIG.button.initialRight;
+        button.innerHTML = CONFIG.button.iconDown;
+        button.setAttribute('aria-label', 'Đóng Panel');
+        mainContainer.appendChild(button);
 
-// Cấu hình để observer theo dõi (giữ nguyên)
-const config = {
-    childList: true, // Theo dõi việc thêm/bớt phần tử con
-    subtree: true    // Theo dõi tất cả các phần tử con cháu
-};
-
-// Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-observer1.observe(document.documentElement, config);
-
-console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');*/
-
-function runModificationScript() {
-    console.log("Đang chạy tập lệnh sửa đổi trang...");
-    const allElements = document.getElementsByTagName('*');
-    for (let i = 0; i < allElements.length; i++) {
-        const element = allElements[i];
-        for (let j = 0; j < element.childNodes.length; j++) {
-            const node = element.childNodes[j];
-            if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'moviezone') {
-                node.nodeValue = 'KokoaTV';
-            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'movie') {
-                node.nodeValue = 'Kokoa';
-            } else if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase() === 'zone') {
-                node.nodeValue = 'TV';
-            }
-        }
-    }
-    const mainContainer = document.querySelector('.relative.h-screen');
-    const panelToToggle = document.querySelector('.absolute.top-5');
-    const panelToToggle2 = document.querySelector('.fixed.top-28')
-
-
-    if (mainContainer && panelToToggle && !document.querySelector('#open-close-button')) {
-        const toggleButton = document.createElement('button');
-        toggleButton.id = 'open-close-button';
-        // --- CÀI ĐẶT BAN ĐẦU ---
-        // Loại bỏ class vị trí 'top-6 right-6' để JS kiểm soát hoàn toàn
-        toggleButton.className = 'draggable fixed z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg';
-
-        // Thiết lập vị trí ban đầu bằng JS
-        toggleButton.style.top = '24px'; // tương đương top-6
-        toggleButton.style.right = '24px'; // tương đương right-6
-
-        const iconDown = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
-        const iconUp = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`;
-
-        toggleButton.innerHTML = iconDown;
-        toggleButton.setAttribute('aria-label', 'Đóng Panel');
-        mainContainer.appendChild(toggleButton);
-
-        // --- LOGIC CHỨC NĂNG TOGGLE ---
-        const performToggle = () => {
-            const isHidden = panelToToggle.style.display === 'none';
-            if (isHidden) {
-                panelToToggle.style.display = 'block';
-                if(panelToToggle2) panelToToggle2.style.display = 'block';
-                toggleButton.innerHTML = iconDown;
-                toggleButton.setAttribute('aria-label', 'Đóng Panel');
-            } else {
-                panelToToggle.style.display = 'none';
-                if(panelToToggle2) panelToToggle2.style.display = 'none';
-                toggleButton.innerHTML = iconUp;
-                toggleButton.setAttribute('aria-label', 'Mở Panel');
-            }
+        const togglePanels = () => {
+            const isHidden = panel1.style.display === 'none';
+            const displayValue = isHidden ? 'block' : 'none';
+            panel1.style.display = displayValue;
+            if (panel2) panel2.style.display = displayValue;
+            
+            button.innerHTML = isHidden ? CONFIG.button.iconDown : CONFIG.button.iconUp;
+            button.setAttribute('aria-label', isHidden ? 'Đóng Panel' : 'Mở Panel');
         };
 
-        // --- LOGIC KÉO-THẢ ---
-        let isDragging = false;
-        let hasMoved = false;
+        // Gán các sự kiện kéo thả
+        addDragListeners(button);
+        button.addEventListener('click', () => {
+            if (!hasMoved) {
+                togglePanels();
+            }
+        });
+    };
+
+    /**
+     * Gán các trình xử lý sự kiện kéo-thả cho một element.
+     * @param {HTMLElement} element - Element cần thêm chức năng kéo-thả.
+     */
+    const addDragListeners = (element) => {
         let offsetX, offsetY;
 
-        const dragStart = (e) => {
+        const onDragStart = (e) => {
             isDragging = true;
-            hasMoved = false; // Reset trạng thái di chuyển
-            toggleButton.classList.add('dragging');
-
-            // Lấy tọa độ, xử lý cả chuột và cảm ứng
+            hasMoved = false;
+            element.classList.add('dragging');
+            
             const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
             const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
-
-            const rect = toggleButton.getBoundingClientRect();
+            const rect = element.getBoundingClientRect();
             offsetX = clientX - rect.left;
             offsetY = clientY - rect.top;
 
-            // Thêm các listener vào toàn bộ trang để kéo mượt hơn
-            window.addEventListener('mousemove', dragMove);
-            window.addEventListener('touchmove', dragMove);
-            window.addEventListener('mouseup', dragEnd);
-            window.addEventListener('touchend', dragEnd);
+            window.addEventListener('mousemove', onDragMove);
+            window.addEventListener('touchmove', onDragMove, { passive: false });
+            window.addEventListener('mouseup', onDragEnd);
+            window.addEventListener('touchend', onDragEnd);
         };
 
-        const dragMove = (e) => {
+        const onDragMove = (e) => {
             if (!isDragging) return;
-            hasMoved = true; // Đánh dấu là đã có di chuyển
-            e.preventDefault(); // Ngăn cuộn trang khi đang kéo nút
+            hasMoved = true;
+            e.preventDefault();
 
             const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
             const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-
-            // Cập nhật vị trí top/left của nút
-            toggleButton.style.left = `${clientX - offsetX}px`;
-            toggleButton.style.top = `${clientY - offsetY}px`;
-            toggleButton.style.right = 'auto'; // Vô hiệu hóa 'right' để 'left' có tác dụng
+            
+            element.style.left = `${clientX - offsetX}px`;
+            element.style.top = `${clientY - offsetY}px`;
+            element.style.right = 'auto';
         };
 
-        const dragEnd = () => {
+        const onDragEnd = () => {
             isDragging = false;
-            toggleButton.classList.remove('dragging');
-
-            // Gỡ các listener khỏi trang
-            window.removeEventListener('mousemove', dragMove);
-            window.removeEventListener('touchmove', dragMove);
-            window.removeEventListener('mouseup', dragEnd);
-            window.removeEventListener('touchend', dragEnd);
+            element.classList.remove('dragging');
+            window.removeEventListener('mousemove', onDragMove);
+            window.removeEventListener('touchmove', onDragMove);
+            window.removeEventListener('mouseup', onDragEnd);
+            window.removeEventListener('touchend', onDragEnd);
         };
 
-        // Gắn sự kiện bắt đầu kéo
-        toggleButton.addEventListener('mousedown', dragStart);
-        toggleButton.addEventListener('touchstart', dragStart);
+        element.addEventListener('mousedown', onDragStart);
+        element.addEventListener('touchstart', onDragStart);
+    };
 
-        // Chỉ thực hiện toggle KHI KHÔNG KÉO
-        toggleButton.addEventListener('click', (e) => {
-            if (!hasMoved) {
-                performToggle();
-            }
-        });
-    } else {
-        console.error('Không tìm thấy container hoặc panel cần thiết.');
-    }
-}
+    /**
+     * Hàm chính để áp dụng tất cả các sửa đổi lên trang.
+     */
+    const runModificationScript = () => {
+        console.log("🚀 Applying modifications...");
+        replaceTextContent();
+        initializeDraggableButton();
+    };
 
-/**
- * Hàm kiểm tra thời gian và sự thay đổi URL, sau đó tải lại trang nếu cần.
- * PHIÊN BẢN NÀY: Luôn cập nhật href mỗi khi hàm được gọi.
- */
-function checkAndReload() {
-    const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 phút
+    // --- LOGIC TẢI LẠI TRANG & QUAN SÁT DOM ---
 
-    const now = Date.now();
-    const currentHref = location.href;
+    /**
+     * Kiểm tra điều kiện và tải lại trang nếu cần.
+     */
+    const checkAndReload = () => {
+        const now = Date.now();
+        const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
+        const lastHref = localStorage.getItem('lastHref') || '';
+        
+        localStorage.setItem('lastHref', location.href);
 
-    // Lấy thông tin từ lần kiểm tra trước
-    const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
-    const lastHref = localStorage.getItem('lastHref') || '';
-
-    // >>> THAY ĐỔI CHÍNH: Cập nhật href ngay lập tức mỗi khi hàm chạy <<<
-    localStorage.setItem('lastHref', currentHref);
-
-    const isTimeExpired = now - lastReload > RELOAD_INTERVAL;
-    // So sánh URL hiện tại với URL của lần kiểm tra TRƯỚC ĐÓ
-    const hasHrefChanged = currentHref !== lastHref;
-
-    if (isTimeExpired && hasHrefChanged) {
-        console.log("Hết thời gian chờ và URL đã thay đổi kể từ lần kiểm tra trước. Đang tải lại...");
-
-        // Lưu lại thời điểm tải lại
-        localStorage.setItem('lastReloadTime', now.toString());
-
-        // Tải lại trang
-        location.reload();
-    } else {
-        // Gỡ lỗi
-        if (!isTimeExpired) {
-            const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
-            console.log(`Chưa đủ thời gian. Vui lòng chờ ${timeLeft} giây nữa.`);
-        } else if (!hasHrefChanged) {
-            console.log("URL không thay đổi kể từ lần kiểm tra trước. Bỏ qua việc tải lại.");
+        if (now - lastReload > CONFIG.reloadInterval && location.href !== lastHref) {
+            console.log("⏰ Conditions met. Reloading page...");
+            localStorage.setItem('lastReloadTime', now.toString());
+            location.reload();
+        } else {
+            runModificationScript();
         }
-        runModificationScript();
-    }
-}
+    };
 
-// Gọi hàm để bắt đầu kiểm tra
-// checkAndReload();
+    /**
+     * Xử lý các thay đổi trên DOM.
+     * @param {MutationRecord[]} mutationsList
+     */
+    const handleDomChanges = (mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType !== Node.ELEMENT_NODE) continue;
 
+                    const isRootChild = node.parentNode === document.body || node.parentNode === document.documentElement;
+                    const hasRadixAttr = Array.from(node.attributes).some(attr => attr.name.includes('data-radix'));
 
-// Giả sử bạn có hàm này ở đâu đó trong code
-// function runModificationScript() {
-//     console.log("Đang chạy tập lệnh sửa đổi...");
-// }
-
-
-
-// Lắng nghe sự kiện back/forward của trình duyệt
-//window.addEventListener('popstate', checkAndReload);
-
-// Lắng nghe sự kiện pushstate tùy chỉnh
-//window.addEventListener('pushstate', checkAndReload);
-// HÀM PHỤ TRỢ MỚI
-// Kiểm tra xem node có bất kỳ thuộc tính nào chứa "data-radix" không
-const hasRadixAttribute = (node) => {
-    // Lặp qua tất cả các thuộc tính của node
-    for (const attr of node.attributes) {
-        // Nếu tên của thuộc tính chứa chuỗi "data-radix"
-        if (attr.name.includes('data-radix')) {
-            return true; // Lập tức trả về true và dừng lại
-        }
-    }
-    return false; // Nếu không tìm thấy, trả về false
-};
-
-// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-const callback = (mutationsList, observer) => {
-    for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            for (const node of mutation.addedNodes) {
-                // Chỉ xử lý nếu node là một element (nodeType === 1)
-                if (node.nodeType === 1) {
-                    if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
-                        node.click();
+                    if (isRootChild && !hasRadixAttr) {
+                        console.log('Hiding new root element:', node);
                         node.style.display = 'none';
-                        Object.defineProperty(node, 'style', {
-                            writable: false,
-                            configurable: false
-                        });
-                        console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                     }
-                    // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                    // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                    checkAndReload();
                 }
+                // Chạy lại logic kiểm tra và sửa đổi sau khi có thay đổi DOM
+                checkAndReload();
             }
         }
+    };
+
+    // --- KHỞI TẠO ---
+
+    // Bắt đầu quan sát các thay đổi DOM
+    const observer = new MutationObserver(handleDomChanges);
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
+
+    // Chạy lần đầu khi trang đã sẵn sàng
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkAndReload);
+    } else {
+        checkAndReload();
     }
-};
 
-// Tạo một đối tượng observer với hàm callback ở trên
-const observer1 = new MutationObserver(callback);
+    console.log("✅ Script initialized and observing DOM changes.");
 
-// Cấu hình để observer theo dõi (giữ nguyên)
-const config = {
-    childList: true, // Theo dõi việc thêm/bớt phần tử con
-    subtree: true    // Theo dõi tất cả các phần tử con cháu
-};
-
-// Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-observer1.observe(document.documentElement, config);
-
-console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-
-
-
-
-
+})();
