@@ -606,11 +606,46 @@ function runModificationScript() {
             }
         }
     }
-    var divs = document.querySelector('div.absolute.top-5')
-    if(divs){
-        divs.style.top = "50px";
-        divs.style.right = "50px";
-        divs.style.left = "-10px";
+    const mainContainer = document.querySelector('.relative.h-screen');
+    const panelToToggle = document.querySelector('.absolute.top-5');
+
+    if (mainContainer && panelToToggle) {
+
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'fixed top-6 right-6 z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg';
+
+        // --- Bước 1: Định nghĩa 2 icon mũi tên (dạng SVG) ---
+        const iconDown = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+        const iconUp = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`;
+
+        // --- Bước 2: Thiết lập trạng thái ban đầu ---
+        // Vì panel đang hiện, nút sẽ có icon chỉ xuống
+        toggleButton.innerHTML = iconDown;
+        toggleButton.setAttribute('aria-label', 'Đóng Panel');
+
+        // --- Bước 3: Cập nhật sự kiện click ---
+        toggleButton.addEventListener('click', () => {
+            // Kiểm tra xem panel có đang bị ẩn không (display là 'none')
+            const isHidden = panelToToggle.style.display === 'none';
+
+            if (isHidden) {
+                // Nếu đang ẩn -> thì hiện nó ra
+                panelToToggle.style.display = 'block';
+                // Và đổi icon thành mũi tên chỉ xuống
+                toggleButton.innerHTML = iconDown;
+                toggleButton.setAttribute('aria-label', 'Đóng Panel');
+            } else {
+                // Nếu đang hiện -> thì ẩn nó đi
+                panelToToggle.style.display = 'none';
+                // Và đổi icon thành mũi tên chỉ lên
+                toggleButton.innerHTML = iconUp;
+                toggleButton.setAttribute('aria-label', 'Mở Panel');
+            }
+        });
+
+        mainContainer.appendChild(toggleButton);
+    } else {
+        console.error('Không tìm thấy container hoặc panel cần thiết.');
     }
 }
 
