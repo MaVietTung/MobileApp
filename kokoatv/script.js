@@ -645,7 +645,7 @@ function runModificationScript() {
 
         mainContainer.appendChild(toggleButton);
     } else {
-        console.error('Không tìm thấy container hoặc panel cần thiết.');
+        console.log('Không tìm thấy container hoặc panel cần thiết.');
     }
 }
 
