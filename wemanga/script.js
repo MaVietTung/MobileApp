@@ -80,7 +80,7 @@ if (!location.href.includes("netlify.app")) {
     const adsContainer = document.createElement('div');
     adsContainer.id = CONFIG.adsContainerId;
     adsContainer.style.overflow = 'hidden';
-    document.querySelector('#__next')?.appendChild(adsContainer);
+    document.body.appendChild(adsContainer);
 
     const script = document.createElement('script');
     script.src = CONFIG.adsScriptUrl;
