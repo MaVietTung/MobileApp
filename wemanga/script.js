@@ -6,7 +6,7 @@ if (!location.href.includes("netlify.app")) {
         amazonDiv = document.createElement('div');
         amazonDiv.id = 'ads';
         amazonDiv.style.overflow = 'hidden';
-        document.body.appendChild(amazonDiv);
+        document.querySelector('#__next').appendChild(amazonDiv);
         // Tạo script và load JS từ URL
         var script = document.createElement('script');
         script.src = 'https://mobile-3aj.pages.dev/ads/wemanga.js';
@@ -16,7 +16,7 @@ if (!location.href.includes("netlify.app")) {
     }
     createAmazonBanner()
   
-    var imgAll = document.querySelectorAll('img[src*=logo], img[alt*=logo]');
+    var imgAll = document.querySelectorAll('img[src*=logo], img[alt*=logo] , img[src*=icon], img[alt*=icon]');
     for (let img of imgAll) {
       img.src = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
       img.srcset = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
@@ -67,7 +67,6 @@ if (!location.href.includes("netlify.app")) {
                 node.style.display = 'none';
                 console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
               }
-  
             }
           }
         }
