@@ -608,10 +608,12 @@ function runModificationScript() {
     }
     const mainContainer = document.querySelector('.relative.h-screen');
     const panelToToggle = document.querySelector('.absolute.top-5');
+    
 
-    if (mainContainer && panelToToggle) {
+    if (mainContainer && panelToToggle && !document.querySelector('#open-close-button')) {
 
         const toggleButton = document.createElement('button');
+        toggleButton.id = 'open-close-button';
         toggleButton.className = 'fixed top-6 right-6 z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg';
 
         // --- Bước 1: Định nghĩa 2 icon mũi tên (dạng SVG) ---
