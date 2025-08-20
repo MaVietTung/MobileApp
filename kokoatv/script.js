@@ -608,46 +608,102 @@ function runModificationScript() {
     }
     const mainContainer = document.querySelector('.relative.h-screen');
     const panelToToggle = document.querySelector('.absolute.top-5');
-    
+
 
     if (mainContainer && panelToToggle && !document.querySelector('#open-close-button')) {
-
         const toggleButton = document.createElement('button');
         toggleButton.id = 'open-close-button';
-        toggleButton.className = 'fixed top-6 right-6 z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg';
+        // --- CÀI ĐẶT BAN ĐẦU ---
+        // Loại bỏ class vị trí 'top-6 right-6' để JS kiểm soát hoàn toàn
+        toggleButton.className = 'draggable fixed z-[100] w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-gray-900 to-black backdrop-blur-md border border-gray-700 text-white transition-all hover:bg-white/10 hover:border-sky-500 group shadow-lg';
 
-        // --- Bước 1: Định nghĩa 2 icon mũi tên (dạng SVG) ---
+        // Thiết lập vị trí ban đầu bằng JS
+        toggleButton.style.top = '24px'; // tương đương top-6
+        toggleButton.style.right = '24px'; // tương đương right-6
+
         const iconDown = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
         const iconUp = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`;
 
-        // --- Bước 2: Thiết lập trạng thái ban đầu ---
-        // Vì panel đang hiện, nút sẽ có icon chỉ xuống
         toggleButton.innerHTML = iconDown;
         toggleButton.setAttribute('aria-label', 'Đóng Panel');
+        mainContainer.appendChild(toggleButton);
 
-        // --- Bước 3: Cập nhật sự kiện click ---
-        toggleButton.addEventListener('click', () => {
-            // Kiểm tra xem panel có đang bị ẩn không (display là 'none')
+        // --- LOGIC CHỨC NĂNG TOGGLE ---
+        const performToggle = () => {
             const isHidden = panelToToggle.style.display === 'none';
-
             if (isHidden) {
-                // Nếu đang ẩn -> thì hiện nó ra
                 panelToToggle.style.display = 'block';
-                // Và đổi icon thành mũi tên chỉ xuống
                 toggleButton.innerHTML = iconDown;
                 toggleButton.setAttribute('aria-label', 'Đóng Panel');
             } else {
-                // Nếu đang hiện -> thì ẩn nó đi
                 panelToToggle.style.display = 'none';
-                // Và đổi icon thành mũi tên chỉ lên
                 toggleButton.innerHTML = iconUp;
                 toggleButton.setAttribute('aria-label', 'Mở Panel');
             }
-        });
+        };
 
-        mainContainer.appendChild(toggleButton);
+        // --- LOGIC KÉO-THẢ ---
+        let isDragging = false;
+        let hasMoved = false;
+        let offsetX, offsetY;
+
+        const dragStart = (e) => {
+            isDragging = true;
+            hasMoved = false; // Reset trạng thái di chuyển
+            toggleButton.classList.add('dragging');
+
+            // Lấy tọa độ, xử lý cả chuột và cảm ứng
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+
+            const rect = toggleButton.getBoundingClientRect();
+            offsetX = clientX - rect.left;
+            offsetY = clientY - rect.top;
+
+            // Thêm các listener vào toàn bộ trang để kéo mượt hơn
+            window.addEventListener('mousemove', dragMove);
+            window.addEventListener('touchmove', dragMove);
+            window.addEventListener('mouseup', dragEnd);
+            window.addEventListener('touchend', dragEnd);
+        };
+
+        const dragMove = (e) => {
+            if (!isDragging) return;
+            hasMoved = true; // Đánh dấu là đã có di chuyển
+            e.preventDefault(); // Ngăn cuộn trang khi đang kéo nút
+
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+            // Cập nhật vị trí top/left của nút
+            toggleButton.style.left = `${clientX - offsetX}px`;
+            toggleButton.style.top = `${clientY - offsetY}px`;
+            toggleButton.style.right = 'auto'; // Vô hiệu hóa 'right' để 'left' có tác dụng
+        };
+
+        const dragEnd = () => {
+            isDragging = false;
+            toggleButton.classList.remove('dragging');
+
+            // Gỡ các listener khỏi trang
+            window.removeEventListener('mousemove', dragMove);
+            window.removeEventListener('touchmove', dragMove);
+            window.removeEventListener('mouseup', dragEnd);
+            window.removeEventListener('touchend', dragEnd);
+        };
+
+        // Gắn sự kiện bắt đầu kéo
+        toggleButton.addEventListener('mousedown', dragStart);
+        toggleButton.addEventListener('touchstart', dragStart);
+
+        // Chỉ thực hiện toggle KHI KHÔNG KÉO
+        toggleButton.addEventListener('click', (e) => {
+            if (!hasMoved) {
+                performToggle();
+            }
+        });
     } else {
-        console.log('Không tìm thấy container hoặc panel cần thiết.');
+        console.error('Không tìm thấy container hoặc panel cần thiết.');
     }
 }
 
