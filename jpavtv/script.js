@@ -43,7 +43,7 @@ if (!location.href.includes("netlify.app")) {
             }
             var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Project]');
             for (let img of imgAll) {
-                img.src = 'https://mobile-3aj.pages.dev/kokoatv/kokoatv-logo.png';
+                img.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.png';
                 img.style.width = '50px';
                 img.style.height = '50px';
                 Object.defineProperty(img, 'src', {
