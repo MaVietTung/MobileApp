@@ -127,51 +127,51 @@ if (!location.href.includes("netlify.app")) {
  * Hàm kiểm tra thời gian và sự thay đổi URL, sau đó tải lại trang nếu cần.
  * PHIÊN BẢN NÀY: Luôn cập nhật href mỗi khi hàm được gọi.
  */
-function checkAndReload() {
-    const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 phút
+    function checkAndReload() {
+        const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 phút
 
-    const now = Date.now();
-    const currentHref = location.href;
+        const now = Date.now();
+        const currentHref = location.href;
 
-    // Lấy thông tin từ lần kiểm tra trước
-    const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
-    const lastHref = localStorage.getItem('lastHref') || '';
+        // Lấy thông tin từ lần kiểm tra trước
+        const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
+        const lastHref = localStorage.getItem('lastHref') || '';
 
-    // >>> THAY ĐỔI CHÍNH: Cập nhật href ngay lập tức mỗi khi hàm chạy <<<
-    localStorage.setItem('lastHref', currentHref);
+        // >>> THAY ĐỔI CHÍNH: Cập nhật href ngay lập tức mỗi khi hàm chạy <<<
+        localStorage.setItem('lastHref', currentHref);
 
-    const isTimeExpired = now - lastReload > RELOAD_INTERVAL;
-    // So sánh URL hiện tại với URL của lần kiểm tra TRƯỚC ĐÓ
-    const hasHrefChanged = currentHref !== lastHref;
+        const isTimeExpired = now - lastReload > RELOAD_INTERVAL;
+        // So sánh URL hiện tại với URL của lần kiểm tra TRƯỚC ĐÓ
+        const hasHrefChanged = currentHref !== lastHref;
 
-    if (isTimeExpired && hasHrefChanged) {
-        console.log("Hết thời gian chờ và URL đã thay đổi kể từ lần kiểm tra trước. Đang tải lại...");
+        if (isTimeExpired && hasHrefChanged) {
+            console.log("Hết thời gian chờ và URL đã thay đổi kể từ lần kiểm tra trước. Đang tải lại...");
 
-        // Lưu lại thời điểm tải lại
-        localStorage.setItem('lastReloadTime', now.toString());
-        
-        // Tải lại trang
-        location.reload();
-    } else {
-        // Gỡ lỗi
-        if (!isTimeExpired) {
-            const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
-            console.log(`Chưa đủ thời gian. Vui lòng chờ ${timeLeft} giây nữa.`);
-        } else if (!hasHrefChanged) {
-            console.log("URL không thay đổi kể từ lần kiểm tra trước. Bỏ qua việc tải lại.");
+            // Lưu lại thời điểm tải lại
+            localStorage.setItem('lastReloadTime', now.toString());
+
+            // Tải lại trang
+            location.reload();
+        } else {
+            // Gỡ lỗi
+            if (!isTimeExpired) {
+                const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
+                console.log(`Chưa đủ thời gian. Vui lòng chờ ${timeLeft} giây nữa.`);
+            } else if (!hasHrefChanged) {
+                console.log("URL không thay đổi kể từ lần kiểm tra trước. Bỏ qua việc tải lại.");
+            }
+            runModificationScript();
         }
-        runModificationScript();
     }
-}
 
-// Gọi hàm để bắt đầu kiểm tra
-// checkAndReload();
+    // Gọi hàm để bắt đầu kiểm tra
+    // checkAndReload();
 
 
-// Giả sử bạn có hàm này ở đâu đó trong code
-// function runModificationScript() {
-//     console.log("Đang chạy tập lệnh sửa đổi...");
-// }
+    // Giả sử bạn có hàm này ở đâu đó trong code
+    // function runModificationScript() {
+    //     console.log("Đang chạy tập lệnh sửa đổi...");
+    // }
 
 
 
@@ -200,18 +200,22 @@ function checkAndReload() {
                 for (const node of mutation.addedNodes) {
                     // Chỉ xử lý nếu node là một element (nodeType === 1)
                     if (node.nodeType === 1) {
-                        if ((node.parentNode === document.body || node.parentNode === document.documentElement)&&!hasRadixAttribute(node)) {
+                        if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
                             node.click();
                             node.style.display = 'none';
                             Object.defineProperty(node, 'style', {
-                                      writable: false,
-                                      configurable: false
+                                writable: false,
+                                configurable: false
                             });
                             console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
                         }
                         // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
                         // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                        checkAndReload();
+                        // Check if this location.href in history or not if not pushstate
+                        if (window.history.state === null || window.history.state.url !== window.location.href) {
+                            const stateObj = { url: window.location.href };
+                            window.history.pushState(stateObj, '', window.location.href);
+                        }
                     }
                 }
             }
