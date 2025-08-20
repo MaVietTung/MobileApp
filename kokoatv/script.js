@@ -608,10 +608,9 @@ function runModificationScript() {
     }
     var divs = document.querySelector('div.absolute.top-5')
     if(divs){
-        divs.style.top = 0;
+        divs.style.top = "50px";
         divs.style.right = "50px";
         divs.style.left = "-10px";
-        
     }
 }
 
