@@ -16,7 +16,7 @@ if (!location.href.includes("netlify.app")) {
     }
     createAmazonBanner()
   
-    var imgAll = document.querySelectorAll('img[src*=logo]');
+    var imgAll = document.querySelectorAll('img[src*=logo], img[alt*=logo]');
     for (let img of imgAll) {
       img.src = 'https://mobile-3aj.pages.dev/wemanga/wemanga.png';
       img.style.width = '50px';
