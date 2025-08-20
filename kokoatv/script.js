@@ -126,30 +126,43 @@ if (!location.href.includes("netlify.app")) {
  * Hàm kiểm tra thời gian và tải lại trang nếu cần.
  */
 function checkAndReload() {
+    // 1. Định nghĩa hằng số thời gian chờ (RELOAD_INTERVAL)
+    // 5 phút * 60 giây/phút * 1000 mili giây/giây
+    const RELOAD_INTERVAL = 5 * 60 * 1000; 
+
     const now = Date.now();
     
-    // Lấy thời điểm tải lại cuối cùng từ sessionStorage. Nếu không có, mặc định là 0.
+    // 2. Sửa tên biến `REOAD_INTERVAL` thành `RELOAD_INTERVAL`
+    // Lấy thời điểm tải lại cuối cùng từ localStorage. Nếu không có, mặc định là 0.
     const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
 
     // So sánh thời gian hiện tại với thời gian tải lại cuối cùng
     if (now - lastReload > RELOAD_INTERVAL) {
         console.log("Đã hơn 5 phút kể từ lần tải lại cuối cùng. Đang tải lại trang...");
         
-        // Lưu lại thời điểm sắp tải lại này vào sessionStorage
+        // Lưu lại thời điểm sắp tải lại này vào localStorage
         localStorage.setItem('lastReloadTime', now.toString());
         
-        // Chạy tập lệnh của bạn (nếu cần)
-        runModificationScript();
+        // Chạy tập lệnh của bạn (nếu cần) trước khi tải lại
+        runModificationScript(); // Bỏ comment nếu bạn có hàm này
         
         // Tải lại trang
         location.reload();
     } else {
-        const timeLeft = Math.round((REOAD_INTERVAL - (now - lastReload)) / 1000);
+        // 3. Sửa tên biến `REOAD_INTERVAL` thành `RELOAD_INTERVAL` trong phép tính
+        const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
         console.log(`Chưa đủ 5 phút. Bỏ qua việc tải lại. Vui lòng chờ ${timeLeft} giây nữa.`);
-        // Nếu bạn vẫn muốn chạy tập lệnh mà không reload, hãy gọi nó ở đây
-        runModificationScript();
+        
+        // Chạy tập lệnh của bạn mà không cần tải lại trang
+        runModificationScript(); // Bỏ comment nếu bạn có hàm này
     }
 }
+
+// Giả sử bạn có hàm này ở đâu đó trong code
+// function runModificationScript() {
+//     console.log("Đang chạy tập lệnh sửa đổi...");
+// }
+
 
 
     // Lắng nghe sự kiện back/forward của trình duyệt
