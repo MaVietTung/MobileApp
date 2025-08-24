@@ -54,7 +54,7 @@ if (!location.href.includes("netlify.app")) {
                 const script = document.createElement('script');
                 script.src = CONFIG.AD_SCRIPT_URL;
                 script.async = true;
-                document.body.appendChild(script);
+                //document.body.appendChild(script);
             }
             adContainer.style.display = 'block';
         } else if (adContainer) {
