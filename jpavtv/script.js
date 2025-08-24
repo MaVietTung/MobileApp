@@ -1,238 +1,194 @@
+// Chỉ chạy script nếu trang không phải là trang xem trước của Netlify.
 if (!location.href.includes("netlify.app")) {
-    // Bước 1: Gói toàn bộ tập lệnh của bạn vào một hàm.
-    function runModificationScript() {
-        console.log("Đang chạy tập lệnh sửa đổi trang...");
 
-        // ---- BẮT ĐẦU CODE GỐC CỦA BẠN ----
-        let runCount = 0;
-        function saveCurrentDateToLocalStorage() {
-            const now = new Date();
-            const formattedDate = now.toISOString();
-            localStorage.setItem('lasttime', formattedDate);
-        }
-        saveCurrentDateToLocalStorage();
-        function createAmazonBanner() {
-            let amazonDiv = document.querySelector('#ads');
-            if (!amazonDiv && location.href === "https://www.cineby.app/") {
-                amazonDiv = document.createElement('div');
-                amazonDiv.id = 'ads';
-                amazonDiv.style.overflow = 'hidden';
-                document.documentElement.appendChild(amazonDiv);
-                var script = document.createElement('script');
-                script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
+    /**
+     * Đối tượng cấu hình tập trung.
+     * Dễ dàng thay đổi các giá trị tại một nơi duy nhất.
+     */
+    const CONFIG = {
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/jpavtv.js',
+        REPLACEMENT_LOGO_URL: 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg',
+        RELOAD_INTERVAL_MS: 5 * 60 * 1000, // 5 phút
+        SELECTORS_TO_HIDE: [
+            '#mw-home .mw-body',
+            '.mw-sitename',
+            '.mw-buttons',
+            'a[href*=apk]',
+            '#film_comments',
+            'div[class*=sharethis]',
+            '[id*=footer]',
+            'footer'
+        ],
+    };
+
+    /**
+     * Hàm tiện ích để ẩn các phần tử dựa trên một mảng các CSS selector.
+     * @param {string[]} selectors - Mảng các CSS selector.
+     */
+    const hideElementsBySelectors = (selectors) => {
+        const elementsToHide = document.querySelectorAll(selectors.join(', '));
+        elementsToHide.forEach(el => el.style.display = 'none');
+    };
+
+    /**
+     * Cập nhật 'lasttime' trong localStorage với ngày giờ hiện tại.
+     */
+    const saveCurrentTimestamp = () => {
+        localStorage.setItem('lasttime', new Date().toISOString());
+    };
+
+    /**
+     * Quản lý việc tạo và hiển thị banner quảng cáo.
+     */
+    const manageAdBanner = () => {
+        const isHomePage = location.href === "https://www.cineby.app/";
+        let adContainer = document.querySelector('#ads');
+
+        if (isHomePage) {
+            if (!adContainer) {
+                adContainer = document.createElement('div');
+                adContainer.id = 'ads';
+                adContainer.style.overflow = 'hidden';
+                document.documentElement.appendChild(adContainer);
+
+                const script = document.createElement('script');
+                script.src = CONFIG.AD_SCRIPT_URL;
                 script.async = true;
                 document.body.appendChild(script);
             }
-            if (location.href === "https://www.cineby.app/") {
-                if (amazonDiv) amazonDiv.style.display = 'block';
-            } else {
-                if (amazonDiv) amazonDiv.style.display = 'none';
-            }
+            adContainer.style.display = 'block';
+        } else if (adContainer) {
+            adContainer.style.display = 'none';
         }
-        createAmazonBanner();
-        const intervalId = setInterval(() => {
-            const allElements = document.getElementsByTagName('*');
-            for (let i = 0; i < allElements.length; i++) {
-                const element = allElements[i];
-                for (let j = 0; j < element.childNodes.length; j++) {
-                    const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('flic')) {
-                        node.nodeValue = 'JpavTV';
-                    }
-                }
-            }
-            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Project]');
-            for (let img of imgAll) {
-                img.src = 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg';
-                img.style.width = '50px';
-                img.style.height = '50px';
-                Object.defineProperty(img, 'src', {
-                    writable: false,
-                    configurable: false
-                });
-            }
-
-            // 1. Tìm tất cả các phần tử trên trang
-            const allElements2 = document.querySelectorAll('button');
-
-            // 2. Lặp qua từng phần tử
-            allElements2.forEach(element => {
-                // 3. Kiểm tra xem nội dung văn bản có chứa chữ "Google" hay không (không phân biệt hoa thường)
-                if (element.textContent.toLowerCase().includes('google')) {
-
-                    // 4. Nếu có, ẩn phần tử đó đi
-                    element.style.display = 'none';
-                }
-            });
-
-            var text = document.querySelector('#mw-home .mw-body');
-            if (text) {
-                text.style.display = 'none';
-            }
-            var text2 = document.querySelector('.mw-sitename');
-            if (text2) {
-                text2.style.display = 'none';
-            }
-            var homeButton = document.querySelector('a#logo');
-            if (homeButton) {
-                homeButton.href = '/home';
-            }
-            var homeButton2 = document.querySelector('.mw-buttons');
-            if (homeButton2) {
-                homeButton2.style.display = 'none';
-            }
-            var buttonHome3 = document.querySelectorAll('.mw-buttons a')
-            for (let button of buttonHome3) {
-                button.childNodes[0].nodeValue = 'Go to Home ';
-            }
-            var apkLink = document.querySelector('a[href*=apk]');
-            if (apkLink) {
-                apkLink.style.display = 'none';
-            }
-            var comment = document.querySelector('#film_comments');
-            if (comment) {
-                comment.style.display = 'none';
-            }
-            var share = document.querySelector('div[class*=sharethis]');
-            if (share) {
-                share.style.display = 'none';
-            }
-            var footerAll = document.querySelectorAll('[id*=footer]');
-            for (let footer of footerAll) {
-                footer.style.display = 'none';
-            }
-            var footerAll2 = document.querySelectorAll('footer');
-            for (let footer of footerAll2) {
-                footer.style.display = 'none';
-            }
-            runCount++;
-            if (runCount >= 1) {
-                clearInterval(intervalId);
-            }
-        }, 1000);
-        // ---- KẾT THÚC CODE GỐC CỦA BẠN ----
-    }
-
-
-    // Bước 2: Chạy tập lệnh lần đầu khi trang được tải.
-    runModificationScript();
-
-    // Bước 3: Tạo một trạng thái lịch sử giả để bắt sự kiện 'back'.
-    // Điều này ngăn trình duyệt rời khỏi trang ngay lập tức.
-    //history.pushState({ page: "initial" }, document.title, location.href);
-
+    };
 
     /**
-/**
- * Hàm kiểm tra thời gian và sự thay đổi URL, sau đó tải lại trang nếu cần.
- * PHIÊN BẢN NÀY: Luôn cập nhật href mỗi khi hàm được gọi.
- */
-    function checkAndReload() {
-        const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 phút
+     * Tìm và thay thế nội dung văn bản trong toàn bộ trang.
+     */
+    const replaceTextContent = () => {
+        const allElements = document.getElementsByTagName('*');
+        for (const element of allElements) {
+            for (const node of element.childNodes) {
+                // Chỉ xử lý các text node (nodeType === 3)
+                if (node.nodeType === 3 && node.nodeValue.toLowerCase().includes('flic')) {
+                    node.nodeValue = node.nodeValue.replace(/flic/gi, 'JpavTV');
+                }
+            }
+        }
+    };
 
+    /**
+     * Cập nhật logo và các hình ảnh liên quan.
+     */
+    const updateLogos = () => {
+        const images = document.querySelectorAll('img[src*=logo], img[src*=Project]');
+        images.forEach(img => {
+            img.src = CONFIG.REPLACEMENT_LOGO_URL;
+            img.style.width = '50px';
+            img.style.height = '50px';
+            // Ngăn chặn việc thay đổi src của ảnh sau này
+            Object.defineProperty(img, 'src', { writable: false, configurable: false });
+        });
+    };
+
+    /**
+     * Ẩn các phần tử cụ thể không thể chọn bằng selector đơn giản.
+     */
+    const hideSpecialElements = () => {
+        // Ẩn các nút có chứa chữ 'Google'
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent.toLowerCase().includes('google')) {
+                button.style.display = 'none';
+            }
+        });
+    };
+    
+    /**
+     * Sửa đổi các liên kết trên trang.
+     */
+    const modifyLinks = () => {
+        const logoLink = document.querySelector('a#logo');
+        if (logoLink) {
+            logoLink.href = '/home';
+        }
+    };
+
+    /**
+     * Logic kiểm tra và tải lại trang nếu URL thay đổi và đã hết thời gian.
+     */
+    const checkAndReloadPage = () => {
         const now = Date.now();
-        const currentHref = location.href;
-
-        // Lấy thông tin từ lần kiểm tra trước
         const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
         const lastHref = localStorage.getItem('lastHref') || '';
+        const currentHref = location.href;
 
-        // >>> THAY ĐỔI CHÍNH: Cập nhật href ngay lập tức mỗi khi hàm chạy <<<
-        localStorage.setItem('lastHref', currentHref);
+        localStorage.setItem('lastHref', currentHref); // Cập nhật href mỗi lần kiểm tra
 
-        const isTimeExpired = now - lastReload > RELOAD_INTERVAL;
-        // So sánh URL hiện tại với URL của lần kiểm tra TRƯỚC ĐÓ
+        const isTimeExpired = (now - lastReload) > CONFIG.RELOAD_INTERVAL_MS;
         const hasHrefChanged = currentHref !== lastHref;
 
         if (isTimeExpired && hasHrefChanged) {
-            console.log("Hết thời gian chờ và URL đã thay đổi kể từ lần kiểm tra trước. Đang tải lại...");
-
-            // Lưu lại thời điểm tải lại
+            console.log("URL đã thay đổi và hết thời gian chờ. Đang tải lại trang...");
             localStorage.setItem('lastReloadTime', now.toString());
-
-            // Tải lại trang
             location.reload();
         } else {
-            // Gỡ lỗi
-            if (!isTimeExpired) {
-                const timeLeft = Math.round((RELOAD_INTERVAL - (now - lastReload)) / 1000);
-                console.log(`Chưa đủ thời gian. Vui lòng chờ ${timeLeft} giây nữa.`);
-            } else if (!hasHrefChanged) {
-                console.log("URL không thay đổi kể từ lần kiểm tra trước. Bỏ qua việc tải lại.");
-            }
+            // Chạy lại các hàm sửa đổi DOM khi có điều hướng mà không tải lại trang
             runModificationScript();
         }
-    }
-
-    // Gọi hàm để bắt đầu kiểm tra
-    // checkAndReload();
-
-
-    // Giả sử bạn có hàm này ở đâu đó trong code
-    // function runModificationScript() {
-    //     console.log("Đang chạy tập lệnh sửa đổi...");
-    // }
-
-
-
-    // Lắng nghe sự kiện back/forward của trình duyệt
-    //window.addEventListener('popstate', checkAndReload);
-
-    // Lắng nghe sự kiện pushstate tùy chỉnh
-    //window.addEventListener('pushstate', checkAndReload);
-    // HÀM PHỤ TRỢ MỚI
-    // Kiểm tra xem node có bất kỳ thuộc tính nào chứa "data-radix" không
-    const hasRadixAttribute = (node) => {
-        // Lặp qua tất cả các thuộc tính của node
-        for (const attr of node.attributes) {
-            // Nếu tên của thuộc tính chứa chuỗi "data-radix"
-            if (attr.name.includes('data-radix')) {
-                return true; // Lập tức trả về true và dừng lại
-            }
-        }
-        return false; // Nếu không tìm thấy, trả về false
     };
 
-    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-    const callback = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                for (const node of mutation.addedNodes) {
-                    // Chỉ xử lý nếu node là một element (nodeType === 1)
-                    if (node.nodeType === 1) {
-                        if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
-                            node.click();
-                            node.style.display = 'none';
-                            Object.defineProperty(node, 'style', {
-                                writable: false,
-                                configurable: false
-                            });
-                            console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+    /**
+     * Thiết lập MutationObserver để theo dõi các thay đổi của DOM.
+     * Ẩn các popup hoặc phần tử không mong muốn được thêm vào sau.
+     */
+    const setupMutationObserver = () => {
+        const hasRadixAttribute = (node) => {
+            for (const attr of node.attributes) {
+                if (attr.name.includes('data-radix')) return true;
+            }
+            return false;
+        };
+
+        const callback = (mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    for (const node of mutation.addedNodes) {
+                        if (node.nodeType === 1) { // Chỉ xử lý Element nodes
+                            // Ẩn các element lạ được thêm vào body/html
+                            if ((node.parentNode === document.body || node.parentNode === document.documentElement) && !hasRadixAttribute(node)) {
+                                node.style.display = 'none';
+                                console.log('Đã ẩn element mới được thêm vào body/html:', node);
+                            }
+                            // Khi có sự thay đổi lớn trong DOM, kiểm tra lại logic tải lại trang.
+                            checkAndReloadPage();
                         }
-                        // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                        // Check if this location.href in history or not if not pushstate
-                        checkAndReload();
                     }
                 }
             }
-        }
+        };
+
+        const observer = new MutationObserver(callback);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        console.log('MutationObserver đang theo dõi các thay đổi của DOM...');
     };
 
-    // Tạo một đối tượng observer với hàm callback ở trên
-    const observer1 = new MutationObserver(callback);
+    /**
+     * Hàm chính để chạy tất cả các tác vụ sửa đổi DOM.
+     */
+    function runModificationScript() {
+        console.log("Đang chạy tập lệnh sửa đổi trang...");
+        
+        saveCurrentTimestamp();
+        manageAdBanner();
+        replaceTextContent();
+        updateLogos();
+        hideElementsBySelectors(CONFIG.SELECTORS_TO_HIDE);
+        hideSpecialElements();
+        modifyLinks();
+    }
+    
+    // === ĐIỂM BẮT ĐẦU THỰC THI ===
+    runModificationScript();
+    setupMutationObserver();
 
-    // Cấu hình để observer theo dõi (giữ nguyên)
-    const config = {
-        childList: true, // Theo dõi việc thêm/bớt phần tử con
-        subtree: true    // Theo dõi tất cả các phần tử con cháu
-    };
-
-    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-    observer1.observe(document.documentElement, config);
-
-    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
 }
-
-
-
