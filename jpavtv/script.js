@@ -41,7 +41,7 @@ if (!location.href.includes("netlify.app")) {
      * Quản lý việc tạo và hiển thị banner quảng cáo.
      */
     const manageAdBanner = () => {
-        const isHomePage = location.href === "https://www.cineby.app/";
+        const isHomePage = location.href === "https://movieko.vercel.app/";
         let adContainer = document.querySelector('#ads');
 
         if (isHomePage) {
