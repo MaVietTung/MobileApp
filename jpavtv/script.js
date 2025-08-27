@@ -193,7 +193,16 @@
 
 // }
 
-const allElements = document.getElementsByTagName('*');
+
+
+// Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
+    const callback = (mutationsList, observer) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          for (const node of mutation.addedNodes) {
+            // Chỉ xử lý nếu node là một element (nodeType === 1)
+            if (node.nodeType === 1) {
+              const allElements = document.getElementsByTagName('*');
             for (let i = 0; i < allElements.length; i++) {
                 const element = allElements[i];
                 for (let j = 0; j < element.childNodes.length; j++) {
@@ -203,3 +212,23 @@ const allElements = document.getElementsByTagName('*');
                     }
                 }
             }
+  
+            }
+          }
+        }
+      }
+    };
+  
+    // Tạo một đối tượng observer với hàm callback ở trên
+    const observer = new MutationObserver(callback);
+  
+    // Cấu hình để observer theo dõi (giữ nguyên)
+    const config = {
+      childList: true, // Theo dõi việc thêm/bớt phần tử con
+      subtree: true    // Theo dõi tất cả các phần tử con cháu
+    };
+  
+    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
+    observer.observe(document.documentElement, config);
+  
+    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
