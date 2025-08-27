@@ -14,7 +14,7 @@ function replaceInElement(element) {
   // Replace in this element's direct text nodes
   element.childNodes.forEach(node => {
     if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('movieko')) {
-      node.nodeValue = node.nodeValue.replace(/movieko/gi, 'Jpavtv');
+      node.nodeValue = node.nodeValue = "Jpavtv";
     }
   });
   // Recursively replace in children
