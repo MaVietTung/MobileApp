@@ -128,7 +128,7 @@ if (!location.href.includes("netlify.app")) {
    */
   const initialize = () => {
     // Tác vụ chạy ngay khi tải trang
-    injectAdBanner();
+    //injectAdBanner();
     replaceLogos();
     replaceTextInNode();
     CONFIG.elementsToHide.forEach(selector => {
