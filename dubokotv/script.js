@@ -1,119 +1,122 @@
-
 /**
- var script = document.createElement('script');
- script.src = 'https://mobile-3aj.pages.dev/dubokotv/dubokotv.js';
- document.head.appendChild(script);
+ * @file This script customizes the DubokoTV website by updating branding,
+ * hiding unwanted elements, and injecting an ad banner.
  */
- if (!location.href.includes("pages.dev")) {
-    saveCurrentDateToLocalStorage();
 
-    function hideAds() {
-        document.querySelectorAll('.adsbygoogle').forEach(ad => {
-            ad.style.display = 'none';
+(function () {
+    'use strict';
+
+    // Do not run the script on development/preview domains.
+    if (location.href.includes("pages.dev")) {
+        return;
+    }
+
+    console.log("✅ DubokoTV customization script is active.");
+
+    // --- Configuration ---
+    const CONFIG = {
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/dubokotv.js',
+        AD_CONTAINER_ID: 'ads',
+        IMAGE_UPDATES: [
+            { selector: 'img.img-responsive.visible-xs', newSrc: 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png' },
+            { selector: 'img.img-responsive.hidden-xs', newSrc: 'https://mobile-3aj.pages.dev/dubokotv/big-icon.png' },
+            { selector: '.head img', newSrc: 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png' }
+        ],
+        SELECTORS_TO_HIDE: [
+            '.adsbygoogle',
+            'div.col-pd.text-center', // License info
+            'a.btn.btn-danger',       // Rate button
+        ],
+        TEXT_REPLACEMENTS: {
+            'dubo': 'DubokoTV',
+        },
+    };
+
+    /**
+     * Injects an ad banner script into the page.
+     */
+    function injectAdBanner() {
+        if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
+            return;
+        }
+
+        const adContainer = document.createElement('div');
+        adContainer.id = CONFIG.AD_CONTAINER_ID;
+        adContainer.style.overflow = 'hidden';
+        document.body.appendChild(adContainer);
+
+        const script = document.createElement('script');
+        script.src = CONFIG.AD_SCRIPT_URL;
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    /**
+     * Saves the current date and time to localStorage.
+     */
+    function saveLastVisitTime() {
+        try {
+            localStorage.setItem('lasttime', new Date().toISOString());
+        } catch (error) {
+            console.error('Failed to save last visit time to localStorage:', error);
+        }
+    }
+
+    /**
+     * Hides elements matching a list of CSS selectors.
+     */
+    function hideUnwantedElements() {
+        CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.style.display = 'none';
+            });
         });
     }
 
-    function saveCurrentDateToLocalStorage() {
-        const now = new Date();
-        const formattedDate = now.toISOString();
-        localStorage.setItem('lasttime', formattedDate);
-    }
-
-    function createAmazonBanner() {
-        // Kiểm tra nếu chưa có #amazon
-        let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv) {
-            amazonDiv = document.createElement('div');
-            amazonDiv.id = 'ads';
-            amazonDiv.style.overflow = 'hidden';
-            document.body.appendChild(amazonDiv);
-            // Tạo script và load JS từ URL
-            var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/dubokotv.js';
-            script.async = true;
-            document.body.appendChild(script);
-        }
-    }
-
-    let count = 0;
-    let maxCount = 5;
-
-    let intervalId = setInterval(() => {
-        hideAds();
-        if (document.querySelector('video')) {
-            count++;
-            if (count >= maxCount) {
-                clearInterval(intervalId);
+    /**
+     * Updates branding elements: logos and text content.
+     */
+    function updateBranding() {
+        // Update images
+        CONFIG.IMAGE_UPDATES.forEach(rule => {
+            const img = document.querySelector(rule.selector);
+            if (img && img.src !== rule.newSrc) {
+                img.src = rule.newSrc;
             }
-        }
-    }, 1000);
+        });
 
-
-    let count2 = 0;
-
-    function updateElements() {
-        createAmazonBanner()
-        var img = document.querySelector('img.img-responsive.visible-xs');
-        if (img) {
-            img.src = 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png';
-        }
-
-        var img1 = document.querySelector('img.img-responsive.hidden-xs');
-        if (img1) {
-            img1.src = 'https://mobile-3aj.pages.dev/dubokotv/big-icon.png';
-        }
-
-        var img2 = document.querySelector('.head img');
-        if (img2) {
-            img2.src = 'https://mobile-3aj.pages.dev/dubokotv/small-icon.png';
-        }
-
-        var license = document.querySelector('div.col-pd.text-center');
-        if (license) {
-            license.style.display = 'none';
-        }
-
-        var rate = document.querySelector('a.btn.btn-danger');
-        if (rate) {
-            rate.style.display = 'none';
-        }
-
-        const allElements = document.getElementsByTagName('*');
-            for (let i = 0; i < allElements.length; i++) {
-                const element = allElements[i];
-                for (let j = 0; j < element.childNodes.length; j++) {
-                    const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('dubo') && node.parentElement.nodeName.toLowerCase().includes('font')) {
-                        node.nodeValue = 'DubokoTV';
-                    }
+        // Replace text content
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let currentNode;
+        while ((currentNode = walker.nextNode())) {
+            for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
+                if (currentNode.nodeValue.toLowerCase().includes(searchText)) {
+                    // This regex approach is safer as it only replaces the matching part.
+                    const regex = new RegExp(searchText, 'gi');
+                    currentNode.nodeValue = currentNode.nodeValue.replace(regex, replacementText);
                 }
             }
-
-        /*var comment = document.querySelectorAll('.myui-panel-box')[2];
-        if(comment){
-            comment.style.display = 'none';
-        }*/
-
-        /*var con = document.querySelector('header + .container');
-        const ig = document.createElement('img');
-    
-        ig.src = 'https://mobile-3aj.pages.dev/dubokotv/donate-dakubao-2.png';
-        ig.style.width = '100%';
-        ig.style.height = 'auto';
-        ig.className = 'donate-banner';
-    
-        if(con && !document.querySelector('.donate-banner')){
-            con.appendChild(ig);
-        }*/
-
-        count2++;
-        if (count2 >= 5) {
-            clearInterval(interval);
         }
     }
 
-    const interval = setInterval(updateElements, 1000);
-}
+    /**
+     * Main function to orchestrate all DOM manipulations.
+     */
+    function main() {
+        saveLastVisitTime();
+        injectAdBanner();
+        hideUnwantedElements();
+        updateBranding();
 
+        console.log('All DubokoTV customizations applied.');
+    }
 
+    // Run the main function after the DOM is fully loaded.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main);
+    } else {
+        main();
+    }
+
+})();
 
