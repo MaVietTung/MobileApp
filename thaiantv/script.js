@@ -1,139 +1,111 @@
 /**
- var script = document.createElement('script');
- script.src = 'https://mobile-3aj.pages.dev/thaiantv/thaiantv.js';
- document.head.appendChild(script);
+ * @file This script customizes the ThaiAnTV website by updating branding,
+ * hiding unwanted elements like ads and footers, and injecting a new ad banner.
  */
- if (!location.href.includes("pages.dev")) {
-    function saveCurrentDateToLocalStorage() {
-        const now = new Date();
-        const formattedDate = now.toISOString();
-        localStorage.setItem('lasttime', formattedDate);
+
+(function () {
+    'use strict';
+
+    // Do not run the script on development/preview domains.
+    if (location.href.includes("pages.dev")) {
+        return;
     }
-    saveCurrentDateToLocalStorage();
-    function createAmazonBanner() {
-        // Kiểm tra nếu chưa có #amazon
-        let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv) {
-            amazonDiv = document.createElement('div');
-            amazonDiv.id = 'ads';
-            amazonDiv.style.overflow = 'hidden';
-            document.body.appendChild(amazonDiv);
-            // Tạo script và load JS từ URL
-            var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/thaiantv.js';
-            script.async = true;
-            document.body.appendChild(script);
+
+    console.log("✅ ThaiAnTV customization script is active.");
+
+    // --- Configuration ---
+    const CONFIG = {
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/thaiantv.js',
+        LOGO_URL: 'https://mobile-3aj.pages.dev/thaiantv/thaiantv-icon.jpg',
+        SELECTORS_TO_HIDE: [
+            '#footer',
+            '[class*=rIdV]', // Specific ad class
+            'iframe[title*=fb]', // Facebook comment iframes
+            '.watch-link',
+        ],
+    };
+
+    /**
+     * Injects an ad banner script into the page.
+     * It creates a div with id 'ads' if it doesn't exist.
+     */
+    function injectAdBanner() {
+        if (document.querySelector('#ads')) {
+            return;
+        }
+
+        const adContainer = document.createElement('div');
+        adContainer.id = 'ads';
+        adContainer.style.overflow = 'hidden';
+        document.body.appendChild(adContainer);
+
+        const script = document.createElement('script');
+        script.src = CONFIG.AD_SCRIPT_URL;
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    /**
+     * Saves the current date and time to localStorage under the key 'lasttime'.
+     */
+    function saveLastVisitTime() {
+        try {
+            const now = new Date().toISOString();
+            localStorage.setItem('lasttime', now);
+        } catch (error) {
+            console.error('Failed to save last visit time to localStorage:', error);
         }
     }
-    let count = 0;
-    const intervalId = setInterval(function () {
-        createAmazonBanner()
-        var customLogo = document.querySelector('.logo img');
 
-        if (customLogo) {
-            customLogo.src = 'https://mobile-3aj.pages.dev/thaiantv/thaiantv-icon.jpg';
-            customLogo.style.height = '70px';
-            Object.defineProperty(customLogo, 'src', {
-                writable: false,
-                configurable: false
+    /**
+     * Updates the site logo to a new source URL and makes it read-only.
+     */
+    function updateBranding() {
+        const logoImage = document.querySelector('.logo img');
+        if (logoImage && logoImage.src !== CONFIG.LOGO_URL) {
+            logoImage.src = CONFIG.LOGO_URL;
+            logoImage.style.height = '70px';
+            try {
+                Object.defineProperty(logoImage, 'src', {
+                    writable: false,
+                    configurable: false
+                });
+            } catch (error) {
+                console.warn('Could not make logo src read-only:', logoImage, error);
+            }
+        }
+    }
+
+    /**
+     * Hides elements matching a list of CSS selectors.
+     */
+    function hideUnwantedElements() {
+        CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => {
+                el.style.display = 'none';
             });
-        }
+        });
+    }
 
-        var lincese = document.querySelector('#footer');
-        if (lincese) {
-            lincese.style.display = 'none';
-        }
+    /**
+     * Main function to orchestrate all the DOM manipulations.
+     */
+    function main() {
+        saveLastVisitTime();
+        injectAdBanner();
+        updateBranding();
+        hideUnwantedElements();
 
-        var ads = document.querySelectorAll('[class*=rIdV]');
-        for (let ad of ads) {
-            ad.style.display = 'none';
-        }
+        console.log('All ThaiAnTV customizations applied.');
+    }
 
-        var comments = document.querySelectorAll('iframe[title*=fb]');
-        for (let comment of comments) {
-            comment.style.display = 'none';
-        }
+    // Run the main function after the DOM is fully loaded.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main);
+    } else {
+        main();
+    }
 
-        var con = document.querySelector('.main-content');
+})();
 
-        var watchlink = document.querySelector('.watch-link')
-        if (watchlink) {
-            watchlink.style.display = 'none';
-        }
-
-        /*if (con && !document.querySelector('.donate-banner')) {
-            const ig = document.createElement('img');
-            ig.src = 'https://mobile-3aj.pages.dev/thaiantv/donate-thaiantv.png';
-            ig.style.width = '100%';
-            ig.style.height = 'auto';
-            ig.className = 'donate-banner';
-            con.appendChild(ig);
-        }*/
-
-        count++;
-
-        if (count >= 5) {
-            clearInterval(intervalId);
-        }
-    }, 1000);
-}
-
-/*
-
-var customLogo = document.querySelector('.site-title');
-
-if(customLogo){
-    customLogo.style.backgroundImage = 'URL(https://i.ibb.co/26qvGfH/thaiantv-icon.jpg)';
-    customLogo.style.height = '70px';
-}
-var lincese = document.querySelector('div.footer-credit');
-if(lincese){
-    lincese.style.display = 'none';
-}
-var lincese1 = document.querySelector('div.widget_text.widget.widget_custom_html');
-if(lincese1){
-    lincese1.style.display = 'none';
-}
-var lincese2 = document.querySelector('div.widget.widget_media_image');
-if(lincese2){
-    lincese2.style.display = 'none';
-}
-var bannertop = document.querySelector('#banner_top');
-if(bannertop){
-    bannertop.style.display = 'none';
-}
-var bannermid = document.querySelector('#banner_pmid');
-if(bannermid){
-    bannermid.style.display = 'none';
-}
-var bannerlow = document.querySelector('#banner_plow');
-if(bannerlow){
-    bannerlow.style.display = 'none';
-}
-var errorSection = document.querySelector('.custom-html-widget');
-if(errorSection){
-    errorSection.style.display = 'none';
-}
-var comment = document.querySelector('iframe[class *= fb]');
-if(comment){
-    comment.style.display = 'none';
-}
-var buttonW = document.querySelector('div[class=button-watch]');
-if(buttonW){
-    buttonW.style.display = 'none';
-}
-var titleB = document.querySelector('div[class*=title-block]');
-if(titleB){
-    titleB.style.display = 'none';
-}
-var con = document.querySelector('#wrapper');
-
-const ig = document.createElement('img');
-
-ig.src = 'https://i.ibb.co/VVsxjrL/donate-thaiantv.png';
-
-ig.style.width = '100%';
-ig.style.height = 'auto';
-
-con.appendChild(ig);
-*/
