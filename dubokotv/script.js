@@ -28,7 +28,7 @@
             'a.btn.btn-danger',       // Rate button
         ],
         TEXT_REPLACEMENTS: {
-            'dubo': 'DubokoTV',
+            'duboku': 'DubokoTV',
         },
     };
 
