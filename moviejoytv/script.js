@@ -1,156 +1,195 @@
-if (!location.href.includes("netlify.app")) {
-    // Bước 1: Gói toàn bộ tập lệnh của bạn vào một hàm.
-    function runModificationScript() {
-        console.log("Đang chạy tập lệnh sửa đổi trang...");
+/**
+ * @file This script customizes the MoviejoyTV website by updating branding,
+ * hiding unwanted elements, and injecting ads. It's designed to handle
+ * Single Page Application (SPA) navigation efficiently.
+ */
 
-        // ---- BẮT ĐẦU CODE GỐC CỦA BẠN ----
-        let runCount = 0;
-        function saveCurrentDateToLocalStorage() {
-            const now = new Date();
-            const formattedDate = now.toISOString();
-            localStorage.setItem('lasttime', formattedDate);
-        }
-        saveCurrentDateToLocalStorage();
-        function createAmazonBanner() {
-            let amazonDiv = document.querySelector('#ads');
-            if (!amazonDiv && location.href === "https://www.cineby.app/") {
-                amazonDiv = document.createElement('div');
-                amazonDiv.id = 'ads';
-                amazonDiv.style.overflow = 'hidden';
-                document.body.appendChild(amazonDiv);
-                var script = document.createElement('script');
-                script.src = 'https://mobile-3aj.pages.dev/ads/kokoatv.js';
-                script.async = true;
-                document.body.appendChild(script);
-            }
-            if (location.href === "https://www.cineby.app/") {
-                if (amazonDiv) amazonDiv.style.display = 'block';
-            } else {
-                if (amazonDiv) amazonDiv.style.display = 'none';
-            }
-        }
-        createAmazonBanner();
-        const intervalId = setInterval(() => {
-            const allElements = document.getElementsByTagName('*');
-            for (let i = 0; i < allElements.length; i++) {
-                const element = allElements[i];
-                for (let j = 0; j < element.childNodes.length; j++) {
-                    const node = element.childNodes[j];
-                    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('cine')) {
-                        node.nodeValue = 'Moviejoytv';
-                    }
-                }
-            }
-            var imgAll = document.querySelectorAll('img[src*=logo], img[src*= Project]');
-            for (let img of imgAll) {
-                img.src = 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png';
-                img.style.width = '50px';
-                img.style.height = '50px';
-                Object.defineProperty(img, 'src', {
-                    writable: false,
-                    configurable: false
-                });
-            }
-            var text = document.querySelector('#mw-home .mw-body');
-            if (text) {
-                text.style.display = 'none';
-            }
-            var text2 = document.querySelector('.mw-sitename');
-            if (text2) {
-                text2.style.display = 'none';
-            }
-            var homeButton = document.querySelector('a#logo');
-            if (homeButton) {
-                homeButton.href = '/home';
-            }
-            var homeButton2 = document.querySelector('.mw-buttons');
-            if (homeButton2) {
-                homeButton2.style.display = 'none';
-            }
-            var buttonHome3 = document.querySelectorAll('.mw-buttons a')
-            for (let button of buttonHome3) {
-                button.childNodes[0].nodeValue = 'Go to Home ';
-            }
-            var apkLink = document.querySelector('a[href*=apk]');
-            if (apkLink) {
-                apkLink.style.display = 'none';
-            }
-            var comment = document.querySelector('#film_comments');
-            if (comment) {
-                comment.style.display = 'none';
-            }
-            var share = document.querySelector('div[class*=sharethis]');
-            if (share) {
-                share.style.display = 'none';
-            }
-            var footerAll = document.querySelectorAll('[id*=footer]');
-            for (let footer of footerAll) {
-                footer.style.display = 'none';
-            }
-            var footerAll2 = document.querySelectorAll('footer');
-            for (let footer of footerAll2) {
-                footer.style.display = 'none';
-            }
-            runCount++;
-            if (runCount >= 1) {
-                clearInterval(intervalId);
-            }
-        }, 1000);
-        // ---- KẾT THÚC CODE GỐC CỦA BẠN ----
+(function () {
+    'use strict';
+
+    // Do not run the script on Netlify preview deployments.
+    if (location.href.includes("netlify.app")) {
+        return;
     }
 
+    console.log("✅ MoviejoyTV customization script is active.");
 
-    // Bước 2: Chạy tập lệnh lần đầu khi trang được tải.
-    runModificationScript();
+    // --- Configuration ---
+    const CONFIG = {
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/kokoatv.js',
+        AD_HOST_WHITELIST: 'https://www.cineby.app/',
+        AD_CONTAINER_ID: 'ads',
+        LOGO_URL: 'https://mobile-3aj.pages.dev/moviejoytv/moviejoytv-icon.png',
+        SELECTORS_TO_HIDE: [
+            '#mw-home .mw-body',
+            '.mw-sitename',
+            '.mw-buttons',
+            'a[href*=apk]',
+            '#film_comments',
+            'div[class*=sharethis]',
+            '[id*=footer]',
+            'footer',
+        ],
+        IMAGE_SELECTORS_TO_UPDATE: [
+            'img[src*=logo]',
+            'img[src*=" Project"]' // The space is intentional based on original code
+        ],
+        TEXT_REPLACEMENTS: {
+            'cine': 'Moviejoytv',
+        },
+        LINK_UPDATES: [{
+            selector: 'a#logo',
+            newHref: '/home'
+        }],
+    };
 
-    // Bước 3: Tạo một trạng thái lịch sử giả để bắt sự kiện 'back'.
-    // Điều này ngăn trình duyệt rời khỏi trang ngay lập tức.
-    //history.pushState({ page: "initial" }, document.title, location.href);
+    /**
+     * Injects an ad banner script, but only on a specific host.
+     */
+    function injectAdBanner() {
+        if (location.href !== CONFIG.AD_HOST_WHITELIST) {
+            return;
+        }
+        if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
+            return;
+        }
+        const adContainer = document.createElement('div');
+        adContainer.id = CONFIG.AD_CONTAINER_ID;
+        adContainer.style.overflow = 'hidden';
+        document.body.appendChild(adContainer);
 
+        const script = document.createElement('script');
+        script.src = CONFIG.AD_SCRIPT_URL;
+        script.async = true;
+        document.body.appendChild(script);
+    }
 
-    // Bước 4: Thêm trình lắng nghe sự kiện 'popstate'.
-    // Nó sẽ được kích hoạt mỗi khi bạn nhấn nút back/forward.
-    window.addEventListener('popstate', function (event) {
-        console.log("Nút back/forward đã được nhấn!");
-        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-        runModificationScript();
-    });
+    /**
+     * Saves the current date and time to localStorage.
+     */
+    function saveLastVisitTime() {
+        try {
+            localStorage.setItem('lasttime', new Date().toISOString());
+        } catch (error) {
+            console.error('Failed to save last visit time to localStorage:', error);
+        }
+    }
 
-    window.addEventListener('pushstate', function (event) {
-        console.log("Nút back/forward đã được nhấn!");
-        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-        runModificationScript();
-    });
-
-    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-    const callback = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                for (const node of mutation.addedNodes) {
-                    // Chỉ xử lý nếu node là một element (nodeType === 1)
-                    if (node.nodeType === 1) {
-
-                        // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                        // Chạy lại tập lệnh của bạn để áp dụng các thay đổi.
-                        runModificationScript();
-
-                    }
-                }
+    /**
+     * Traverses the DOM and replaces occurrences of specified text in text nodes.
+     */
+    function replaceTextInAllNodes(searchText, replacementText) {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        const searchRegex = new RegExp(searchText, 'gi');
+        let currentNode;
+        while ((currentNode = walker.nextNode())) {
+            const parent = currentNode.parentElement;
+            if (parent && (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE')) {
+                continue;
+            }
+            if (currentNode.nodeValue.toLowerCase().includes(searchText.toLowerCase())) {
+                currentNode.nodeValue = currentNode.nodeValue.replace(searchRegex, replacementText);
             }
         }
-    };
+    }
 
-    // Tạo một đối tượng observer với hàm callback ở trên
-    const observer1 = new MutationObserver(callback);
+    /**
+     * Updates branding images to a new source URL.
+     */
+    function updateBrandingImages() {
+        const imageSelectors = CONFIG.IMAGE_SELECTORS_TO_UPDATE.join(', ');
+        const images = document.querySelectorAll(imageSelectors);
+        images.forEach(img => {
+            if (img.src !== CONFIG.LOGO_URL) {
+                img.src = CONFIG.LOGO_URL;
+                img.style.width = '50px';
+                img.style.height = '50px';
+                try {
+                    Object.defineProperty(img, 'src', {
+                        writable: false,
+                        configurable: false
+                    });
+                } catch (error) {
+                    console.warn('Could not make image src read-only:', img, error);
+                }
+            }
+        });
+    }
 
-    // Cấu hình để observer theo dõi (giữ nguyên)
-    const config = {
-        childList: true, // Theo dõi việc thêm/bớt phần tử con
-        subtree: true    // Theo dõi tất cả các phần tử con cháu
-    };
+    /**
+     * Hides elements matching a list of CSS selectors.
+     */
+    function hideUnwantedElements() {
+        CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.style.display = 'none';
+            });
+        });
+    }
 
-    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-    observer1.observe(document.documentElement, config);
+    /**
+     * Updates href attributes of specified anchor tags.
+     */
+    function updateLinks() {
+        CONFIG.LINK_UPDATES.forEach(rule => {
+            const link = document.querySelector(rule.selector);
+            if (link) {
+                link.href = rule.newHref;
+            }
+        });
+    }
 
-    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-}
+    /**
+     * A single function to apply all visual and functional changes.
+     */
+    function runCustomizations() {
+        console.log("Applying customizations...");
+        saveLastVisitTime();
+        injectAdBanner();
+        updateBrandingImages();
+        hideUnwantedElements();
+        updateLinks();
+
+        for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
+            replaceTextInAllNodes(searchText, replacementText);
+        }
+    }
+
+    /**
+     * Sets up a MutationObserver that re-applies customizations after DOM changes
+     * have settled. This is an efficient way to handle SPA navigation.
+     */
+    function setupSPAManager() {
+        let debounceTimer;
+
+        const debouncedRun = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(runCustomizations, 250); // Wait 250ms
+        };
+
+        const observer = new MutationObserver(debouncedRun);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        console.log('SPA Manager (MutationObserver) is active.');
+    }
+
+    /**
+     * Main entry point.
+     */
+    function main() {
+        runCustomizations();
+        setupSPAManager();
+        console.log('Initial customizations applied. Watching for page changes.');
+    }
+
+    // Run the main function after the DOM is ready.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main);
+    } else {
+        main();
+    }
+
+})();
+
