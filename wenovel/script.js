@@ -1,155 +1,164 @@
-if (!location.href.includes("pages.dev")) {
-    function createAmazonBanner() {
-      // Kiểm tra nếu chưa có #amazon
-      let amazonDiv = document.querySelector('#ads');
-      if (!amazonDiv) {
-        amazonDiv = document.createElement('div');
-        amazonDiv.id = 'ads';
-        amazonDiv.style.overflow = 'hidden';
-        document.body.appendChild(amazonDiv);
-        // Tạo script và load JS từ URL
-        var script = document.createElement('script');
-        script.src = 'https://mobile-3aj.pages.dev/ads/wenovel.js';
-        script.async = true;
-        document.body.appendChild(script);
-      }
-    }
-  
-    createAmazonBanner()
-  
-    var logoElement = document.querySelector('.header-logo');
-  
-    // Kiểm tra xem phần tử có tồn tại không
-    if (logoElement) {
-      // 2. Lặp qua tất cả các 'con' (nodes) bên trong nó
-      for (const node of logoElement.childNodes) {
-        // 3. Nếu 'con' là một text node (nodeType === 3) VÀ nội dung của nó là 'Novel Bin'
-        if (node.nodeType === 3 && node.nodeValue.trim() === 'Novel Bin') {
-  
-          // 4. Thay đổi nội dung của text node đó thành 'WeNovel'
-          node.nodeValue = ' WeNovel'; // Thêm một khoảng trắng ở đầu để có khoảng cách với logo
-          break; // Dừng vòng lặp sau khi đã thay đổi
-        }
-      }
-    }
-  
-    var logoImages = document.querySelectorAll('img[src*=logo]');
-    for (let logoImage of logoImages) {
-      logoImage.src = 'https://mobile-3aj.pages.dev/wenovel/wenovel.png';
-      Object.defineProperty(logoImage, 'src', {
-        writable: false,
-        configurable: false
-      });
-    }
-  
-    var footerElement = document.querySelector('footer')
-    if (footerElement) {
-      footerElement.style.display = 'none'
-    }
-  
-    var authGoogle = document.querySelector('a[href*=google]')
-    if (authGoogle) {
-      authGoogle.style.display = 'none'
-    }
-  
-    var authFacebook = document.querySelector('a[href*=facebook]')
-    if (authFacebook) {
-      authFacebook.style.display = 'none'
-    }
-  
-    var googleBookHref = document.querySelectorAll('a[href*=google]')
-    for (let book of googleBookHref) {
-      book.removeAttribute('target');
-    }
-  
-    // Ẩn toàn bộ nội dung trong thẻ <head>
-    // Lưu ý: Thao tác này không có tác dụng về mặt hình ảnh vì thẻ <head> không hiển thị ra trang web.
-    if (document.head) {
-      document.head.style.display = 'none';
-    }
-  
-    //chỉ giữ lại body element
-    const documentChildren = document.documentElement.children;
-    for (const element of documentChildren) {
-      if (element !== document.body) {
-        element.style.display = 'none';
-      }
-    }
-  
-    // Lấy tất cả các phần tử con trực tiếp của thẻ <body>
-    const bodyChildren = document.body.children;
-  
-    // Lặp qua tất cả các phần tử con của <body>
-    for (const element of bodyChildren) {
-      // Nếu ID của phần tử không phải là 'wrapper', hãy ẩn nó đi
-      if (element !== bodyChildren[0]) {
-        element.style.display = 'none';
-      }
-    }
-  
-  
-    // Đảm bảo phần tử 'wrapper' và thẻ <body> được hiển thị
-    const wrapperElement = document.getElementById('wrapper');
-    if (wrapperElement) {
-      document.body.style.display = 'block';
-      wrapperElement.style.display = 'block'; // Hoặc 'flex', 'grid', tùy thuộc vào thiết kế gốc
-    }
-  
-    // XPath expression để tìm tất cả các thẻ (*) có chứa (contains) văn bản (text()) là "Novel Bin"
-    let xpath = "//*[contains(text(), 'Novel Bin')]";
-  
-    // Thực thi câu lệnh XPath
-    let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-  
-    // Lấy ra phần tử đầu tiên tìm thấy
-    let firstElement = results.snapshotItem(0);
-  
-    if (firstElement) {
-      firstElement.textContent = "WeNovel"
-    }
-  
-    let ads = document.querySelectorAll('[data-unit]')
-    for (let ad of ads) {
-      ad.style.display = 'none'
-    }
-  
-  
-    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-    const callback = (mutationsList, observer) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          for (const node of mutation.addedNodes) {
-            // Chỉ xử lý nếu node là một element (nodeType === 1)
-            if (node.nodeType === 1) {
-  
-              // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-              // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-              if (node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
-                node.style.display = 'none';
-                console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node.id);
-                var adsApp = document.querySelector('#ads')
-                if (adsApp) {
-                  adsApp.style.display = 'block'
-                }
-              }
-  
-            }
-          }
-        }
-      }
-    };
-  
-    // Tạo một đối tượng observer với hàm callback ở trên
-    const observer = new MutationObserver(callback);
-  
-    // Cấu hình để observer theo dõi (giữ nguyên)
-    const config = {
-      childList: true, // Theo dõi việc thêm/bớt phần tử con
-      subtree: true    // Theo dõi tất cả các phần tử con cháu
-    };
-  
-    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-    observer.observe(document.documentElement, config);
-  
-    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
+/**
+ * @file This script customizes a novel reading website by updating branding,
+ * hiding unwanted elements, injecting ads, and cleaning up the DOM structure.
+ * It is designed to not run on development/preview domains.
+ */
+
+(function () {
+  'use strict';
+
+  // Do not run the script on development domains.
+  if (location.href.includes("pages.dev")) {
+      return;
   }
+
+  console.log("✅ WeNovel customization script is active.");
+
+  // --- Configuration ---
+  const CONFIG = {
+      AD_CONTAINER_ID: 'ads',
+      AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
+      LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
+      MAIN_WRAPPER_ID: 'wrapper',
+      TEXT_REPLACEMENTS: {
+          'Novel Bin': 'WeNovel',
+      },
+      SELECTORS_TO_HIDE: [
+          'footer',
+          'a[href*="google.com/store/apps"]', // Google Play store links
+          'a[href*="facebook.com"]',          // Facebook auth links
+          '[data-unit]',                      // Ad units
+      ],
+  };
+
+  /**
+   * Injects an ad banner script into the page.
+   */
+  function injectAdBanner() {
+      if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
+          return;
+      }
+
+      const adContainer = document.createElement('div');
+      adContainer.id = CONFIG.AD_CONTAINER_ID;
+      adContainer.style.overflow = 'hidden';
+      document.body.appendChild(adContainer);
+
+      const script = document.createElement('script');
+      script.src = CONFIG.AD_SCRIPT_URL;
+      script.async = true;
+      document.body.appendChild(script);
+  }
+
+  /**
+   * Updates branding elements: logos and text.
+   */
+  function updateBranding() {
+      // Update logo images
+      const logoImages = document.querySelectorAll('img[src*=logo]');
+      logoImages.forEach(img => {
+          if (img.src !== CONFIG.LOGO_URL) {
+              img.src = CONFIG.LOGO_URL;
+              try {
+                  Object.defineProperty(img, 'src', { writable: false, configurable: false });
+              } catch (error) {
+                  console.warn('Could not make image src read-only:', img, error);
+              }
+          }
+      });
+
+      // Replace text content across the site
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let currentNode;
+      while ((currentNode = walker.nextNode())) {
+          for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
+              if (currentNode.nodeValue.includes(searchText)) {
+                  const regex = new RegExp(searchText, 'g');
+                  currentNode.nodeValue = currentNode.nodeValue.replace(regex, replacementText);
+              }
+          }
+      }
+  }
+
+  /**
+   * Hides elements matching a list of CSS selectors.
+   */
+  function hideUnwantedElements() {
+      CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
+          document.querySelectorAll(selector).forEach(el => {
+              el.style.display = 'none';
+          });
+      });
+  }
+
+  /**
+   * Cleans up the DOM by hiding all direct children of the body except for the
+   * main content wrapper and the ad container.
+   */
+  function isolateMainContent() {
+      const allowedIds = [CONFIG.MAIN_WRAPPER_ID, CONFIG.AD_CONTAINER_ID];
+      const bodyChildren = Array.from(document.body.children);
+
+      bodyChildren.forEach(element => {
+          if (!allowedIds.includes(element.id)) {
+              element.style.display = 'none';
+          }
+      });
+
+      // Ensure the main wrapper is visible
+      const wrapperElement = document.getElementById(CONFIG.MAIN_WRAPPER_ID);
+      if (wrapperElement) {
+          wrapperElement.style.display = 'block'; // Or 'flex', 'grid', etc.
+      }
+  }
+
+  /**
+   * Sets up a MutationObserver to watch for dynamically added elements
+   * and hide them if they are not the ad container.
+   */
+  function setupMutationObserver() {
+      const observerCallback = (mutationsList) => {
+          for (const mutation of mutationsList) {
+              if (mutation.type !== 'childList') continue;
+
+              for (const node of mutation.addedNodes) {
+                  // Only process element nodes that are direct children of the body
+                  if (node.nodeType === Node.ELEMENT_NODE && node.parentNode === document.body) {
+                      // Hide any new element added to the body unless it's our ad container
+                      if (node.id !== CONFIG.AD_CONTAINER_ID) {
+                          node.style.display = 'none';
+                          console.log('Hid dynamically added element:', node);
+                      }
+                  }
+              }
+          }
+      };
+
+      const observer = new MutationObserver(observerCallback);
+      observer.observe(document.body, { childList: true });
+
+      console.log('MutationObserver is active, watching for new elements in <body>.');
+  }
+
+  /**
+   * Main function to orchestrate all DOM manipulations.
+   */
+  function main() {
+      injectAdBanner();
+      updateBranding();
+      hideUnwantedElements();
+      isolateMainContent();
+      setupMutationObserver();
+
+      console.log('All WeNovel customizations have been applied.');
+  }
+
+  // Run the main function after the DOM is fully loaded.
+  if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', main);
+  } else {
+      main();
+  }
+
+})();
+
