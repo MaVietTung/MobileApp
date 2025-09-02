@@ -1,175 +1,152 @@
-/*var count = 0;
-var interval = setInterval(function() {
-    if (count < 5) {
-        var logoImages = document.querySelectorAll('.logo img');
-        for (let logoImage of logoImages) {
-            logoImage.src = 'https://i.ibb.co/NYn04bY/phim1080-logo.jpg';
-            logoImage.style.width = '50px';
-            logoImage.style.height = '50px';
-            Object.defineProperty(logoImage, 'src', {
-                writable: false,
-                configurable: false
-            });
-        }
-
-        var textHome = document.querySelector('a[href*=motchill] span');
-        if(textHome){
-            textHome.textContent = 'Home';
-        }
-
-        var textHome2 = document.querySelector('#main_header.resp li[class*=menu] a[href*=motchil]');
-        if(textHome2){
-            textHome2.textContent = 'Home';
-        }
-
-        var notification = document.querySelector('.notification');
-        if (notification) {
-            notification.style.display = 'none';
-        }
-
-        var rophim = document.querySelector('img[src*=rophim]');
-        if (rophim) {
-            rophim.style.display = 'none';
-        }
-
-        var rophim2 = document.querySelector('.buttons a[href*=rophim]');
-        if (rophim2) {
-            rophim2.style.display = 'none';
-        }
-
-        var footer = document.querySelector('#footer');
-        if (footer) {
-            footer.style.display = 'none';
-        }
-
-        var comment = document.querySelector('#comment-tab');
-        if (comment) {
-            comment.style.display = 'none';
-        }
-
-        var ccWarnings = document.querySelectorAll('.cc-warning');
-        for (let ccWarning of ccWarnings) {
-            ccWarning.style.display = 'none';
-        }
-
-        var con = document.querySelector('#content');
-        if (con  && !con.querySelector('.donate-banner')) {
-            const ig = document.createElement('img');
-            ig.src = 'https://i.ibb.co/YBGqpQP/donate-phim1080.png';
-            ig.style.width = '100%';
-            ig.style.height = 'auto';
-            ig.className = 'donate-banner';
-            con.appendChild(ig);
-        }
-
-        count++;
-    } else {
-        clearInterval(interval);
-    }
-}, 1000);*/
-
 /**
- var script = document.createElement('script');
- script.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080.js';
- document.head.appendChild(script);
+ * @file This script customizes the Phim1080 website by updating branding,
+ * hiding unwanted elements, and managing dynamically added content.
  */
- if (!location.href.includes("netlify.app")) {
-    var count = 0;
-    function saveCurrentDateToLocalStorage() {
-        const now = new Date();
-        const formattedDate = now.toISOString();
-        localStorage.setItem('lasttime', formattedDate);
+
+(function () {
+    'use strict';
+
+    // Do not run the script on Netlify preview deployments.
+    if (location.href.includes("netlify.app")) {
+        return;
     }
-    saveCurrentDateToLocalStorage();
-    function createAmazonBanner() {
-        // Kiểm tra nếu chưa có #amazon
-        let amazonDiv = document.querySelector('#ads');
-        if (!amazonDiv) {
-            amazonDiv = document.createElement('div');
-            amazonDiv.id = 'ads';
-            document.body.appendChild(amazonDiv);
-            amazonDiv.style.overflow = 'hidden';
-            // Tạo script và load JS từ URL
-            var script = document.createElement('script');
-            script.src = 'https://mobile-3aj.pages.dev/ads/phim1080.js';
-            script.async = true;
-            document.body.appendChild(script);
+
+    console.log("✅ Phim1080 customization script is active.");
+
+    // --- Configuration ---
+    const CONFIG = {
+        AD_CONTAINER_ID: 'ads',
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/phim1080.js',
+        LOGO_URL: 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg',
+        SELECTORS_TO_HIDE: [
+            '.footer',
+        ],
+        AD_SELECTORS_TO_CLICK: [
+            'brde img',
+        ],
+    };
+
+    /**
+     * Injects an ad banner script into the page.
+     */
+    function injectAdBanner() {
+        if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
+            return;
+        }
+
+        const adContainer = document.createElement('div');
+        adContainer.id = CONFIG.AD_CONTAINER_ID;
+        adContainer.style.overflow = 'hidden';
+        document.body.appendChild(adContainer);
+
+        const script = document.createElement('script');
+        script.src = CONFIG.AD_SCRIPT_URL;
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    /**
+     * Saves the current date and time to localStorage.
+     */
+    function saveLastVisitTime() {
+        try {
+            localStorage.setItem('lasttime', new Date().toISOString());
+        } catch (error) {
+            console.error('Failed to save last visit time to localStorage:', error);
         }
     }
-    createAmazonBanner()
-    var interval = setInterval(function () {
-        if (count < 5) {
-            var logoImages = document.querySelectorAll('.logo img');
-            for (let logoImage of logoImages) {
-                logoImage.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-logo.jpg';
-                logoImage.style.width = '30px';
-                logoImage.style.height = '30px';
-                Object.defineProperty(logoImage, 'src', {
-                    writable: false,
-                    configurable: false
-                });
-            }
 
-            var footer = document.querySelector('.footer');
-            if (footer) {
-                footer.style.display = 'none';
+    /**
+     * Updates the site logo.
+     */
+    function updateBranding() {
+        const logoImages = document.querySelectorAll('.logo img');
+        logoImages.forEach(img => {
+            if (img.src !== CONFIG.LOGO_URL) {
+                img.src = CONFIG.LOGO_URL;
+                img.style.width = '30px';
+                img.style.height = '30px';
+                try {
+                    Object.defineProperty(img, 'src', {
+                        writable: false,
+                        configurable: false
+                    });
+                } catch (error) {
+                    console.warn('Could not make logo src read-only:', img, error);
+                }
             }
+        });
+    }
 
-            var ads = document.querySelectorAll('brde img');
-            for (let ad of ads) {
+    /**
+     * Hides elements matching a list of CSS selectors.
+     */
+    function hideUnwantedElements() {
+        CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.style.display = 'none';
+            });
+        });
+    }
+
+    /**
+     * Programmatically clicks on specific ad elements.
+     * Note: This is an aggressive action and may be blocked by browsers.
+     */
+    function triggerAdInteractions() {
+        CONFIG.AD_SELECTORS_TO_CLICK.forEach(selector => {
+            document.querySelectorAll(selector).forEach(ad => {
+                console.warn('Attempting to programmatically click ad:', ad);
                 ad.click();
-            }
+            });
+        });
+    }
 
+    /**
+     * Sets up a MutationObserver to hide dynamically added elements that are not the ad container.
+     */
+    function setupMutationObserver() {
+        const observerCallback = (mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type !== 'childList') continue;
 
-
-            /*var con = document.querySelector('.wrapper');
-            if (con  && !con.querySelector('.donate-banner')) {
-                const ig = document.createElement('img');
-                ig.src = 'https://mobile-3aj.pages.dev/phim1080/phim1080-donate-banner.png';
-                ig.style.width = '100%';
-                ig.style.height = 'auto';
-                ig.className = 'donate-banner';
-                con.appendChild(ig);
-            }*/
-
-            count++;
-        } else {
-            clearInterval(interval);
-        }
-    }, 1000);
-
-    // Hàm này sẽ được gọi mỗi khi có sự thay đổi trong DOM
-    const callback = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
                 for (const node of mutation.addedNodes) {
-                    // Chỉ xử lý nếu node là một element (nodeType === 1)
-                    if (node.nodeType === 1) {
-
-                        // >>> THÊM ĐIỀU KIỆN KIỂM TRA TẠI ĐÂY <<<
-                        // Chỉ ẩn element nếu cha trực tiếp của nó là <body> hoặc <html>
-                        if (node.id !== "ads" && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
+                    if (node.nodeType === Node.ELEMENT_NODE && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
+                        if (node.id !== CONFIG.AD_CONTAINER_ID) {
                             node.style.display = 'none';
-                            console.log('Element mới có cha là <body> hoặc <html> đã bị ẩn:', node);
+                            console.log('Hid dynamically added element:', node);
                         }
-
                     }
                 }
             }
-        }
-    };
+        };
 
-    // Tạo một đối tượng observer với hàm callback ở trên
-    const observer = new MutationObserver(callback);
+        const observer = new MutationObserver(observerCallback);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
 
-    // Cấu hình để observer theo dõi (giữ nguyên)
-    const config = {
-        childList: true, // Theo dõi việc thêm/bớt phần tử con
-        subtree: true    // Theo dõi tất cả các phần tử con cháu
-    };
+        console.log('MutationObserver is active, watching for new elements.');
+    }
 
-    // Bắt đầu theo dõi toàn bộ tài liệu (thẻ <html>) với cấu hình đã chọn
-    observer.observe(document.documentElement, config);
+    /**
+     * Main function to orchestrate all DOM manipulations.
+     */
+    function main() {
+        saveLastVisitTime();
+        injectAdBanner();
+        updateBranding();
+        hideUnwantedElements();
+        triggerAdInteractions();
+        setupMutationObserver();
 
-    console.log('Đang theo dõi... Mọi element mới có cha là <body> hoặc <html> sẽ bị ẩn.');
-}
+        console.log('All Phim1080 customizations applied.');
+    }
+
+    // Run the main function after the DOM is fully loaded.
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main);
+    } else {
+        main();
+    }
+
+})();
+
