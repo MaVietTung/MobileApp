@@ -98,10 +98,11 @@
    */
   function isolateMainContent() {
       const allowedIds = [CONFIG.MAIN_WRAPPER_ID, CONFIG.AD_CONTAINER_ID];
+      const allowedClass = [CONFIG.LOGIN_CONTAINER_CLASS];
       const bodyChildren = Array.from(document.body.children);
 
       bodyChildren.forEach(element => {
-          if (!allowedIds.includes(element.id)) {
+          if (!allowedIds.includes(element.id) && !allowedClass.includes(element.classList)) {
               element.style.display = 'none';
           }
       });
