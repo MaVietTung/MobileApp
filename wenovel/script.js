@@ -102,7 +102,7 @@
       const bodyChildren = Array.from(document.body.children);
 
       bodyChildren.forEach(element => {
-          if (!allowedIds.includes(element.id) && !allowedClass.includes(element.classList)) {
+          if (!allowedIds.includes(element.id) && !allowedClass.includes(element.className)) {
               element.style.display = 'none';
           }
       });
