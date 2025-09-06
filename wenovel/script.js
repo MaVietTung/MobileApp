@@ -25,8 +25,8 @@
       },
       SELECTORS_TO_HIDE: [
           'footer',
-          'a[href*="google"]', // Google Play store links
-          'a[href*="facebook.com"]',          // Facebook auth links
+          //'a[href*="google"]', // Google Play store links
+          //'a[href*="facebook"]',          // Facebook auth links
           '[data-unit]',                      // Ad units
       ],
   };
