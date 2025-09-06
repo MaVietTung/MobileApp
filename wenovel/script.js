@@ -1,4 +1,4 @@
-/**
+'a*
  * @file This script customizes a novel reading website by updating branding,
  * hiding unwanted elements, injecting ads, and cleaning up the DOM structure.
  * It is designed to not run on development/preview domains.
@@ -25,8 +25,8 @@
       },
       SELECTORS_TO_HIDE: [
           'footer',
-          //'a[href*="google"]', // Google Play store links
-          //'a[href*="facebook"]',          // Facebook auth links
+          'a[href*="google"]', // Google Play store links
+          'a[href*="facebook"]',          // Facebook auth links
           '[data-unit]',                      // Ad units
       ],
   };
