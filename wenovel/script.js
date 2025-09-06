@@ -1,4 +1,4 @@
-'a*
+/**
  * @file This script customizes a novel reading website by updating branding,
  * hiding unwanted elements, injecting ads, and cleaning up the DOM structure.
  * It is designed to not run on development/preview domains.
@@ -17,6 +17,7 @@
   // --- Configuration ---
   const CONFIG = {
       AD_CONTAINER_ID: 'ads',
+      LOGIN_CONTAINER_CLASS: 'login-container', 
       AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
       MAIN_WRAPPER_ID: 'wrapper',
@@ -125,7 +126,7 @@
                   // Only process element nodes that are direct children of the body
                   if (node.nodeType === Node.ELEMENT_NODE && node.parentNode === document.body) {
                       // Hide any new element added to the body unless it's our ad container
-                      if (node.id !== CONFIG.AD_CONTAINER_ID) {
+                      if (node.id !== CONFIG.AD_CONTAINER_ID && node.class !== CONFIG.LOGIN_CONTAINER_CLASS) {
                           node.style.display = 'none';
                           console.log('Hid dynamically added element:', node);
                       }
