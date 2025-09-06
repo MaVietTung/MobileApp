@@ -25,7 +25,7 @@
       },
       SELECTORS_TO_HIDE: [
           'footer',
-          'a[href*="google.com/store/apps"]', // Google Play store links
+          'a[href*="google"]', // Google Play store links
           'a[href*="facebook.com"]',          // Facebook auth links
           '[data-unit]',                      // Ad units
       ],
@@ -144,7 +144,7 @@
    * Main function to orchestrate all DOM manipulations.
    */
   function main() {
-      //injectAdBanner();
+      injectAdBanner();
       updateBranding();
       hideUnwantedElements();
       isolateMainContent();
