@@ -18,6 +18,7 @@
   const CONFIG = {
       AD_CONTAINER_ID: 'ads',
       LOGIN_CONTAINER_CLASS: 'login-container', 
+      SIGNUP_CONTAINER_CLASS: 'signup-container',
       AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
       MAIN_WRAPPER_ID: 'wrapper',
@@ -98,7 +99,7 @@
    */
   function isolateMainContent() {
       const allowedIds = [CONFIG.MAIN_WRAPPER_ID, CONFIG.AD_CONTAINER_ID];
-      const allowedClass = [CONFIG.LOGIN_CONTAINER_CLASS];
+      const allowedClass = [CONFIG.LOGIN_CONTAINER_CLASS, CONFIG.SIGNUP_CONTAINER_CLASS];
       const bodyChildren = Array.from(document.body.children);
 
       bodyChildren.forEach(element => {
