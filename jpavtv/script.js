@@ -61,12 +61,8 @@
                       if (node.nodeType === Node.ELEMENT_NODE) {
                           // 1. Apply text replacements to the new content.
                           replaceTextInElement(node);
-
-                          // 2. Hide new elements added directly to the <body>,
-                          // unless they are explicitly allowed. This is a safer approach.
                           if (node.parentNode === document.body && !CONFIG.ALLOWED_IDS.includes(node.id)) {
-                              node.style.display = 'none';
-                              console.log('Hid dynamically added body child:', node);
+                              node.click();
                           }
                       }
                   });
