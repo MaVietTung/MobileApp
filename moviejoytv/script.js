@@ -47,16 +47,25 @@
      * Injects an ad banner script, but only on a specific host.
      */
     function injectAdBanner() {
+        const adContainer = document.getElementById(CONFIG.AD_CONTAINER_ID);
+
+        // If not on the correct host, ensure the ad container is removed.
         if (location.href !== CONFIG.AD_HOST_WHITELIST) {
+            if (adContainer) {
+                adContainer.remove();
+            }
             return;
         }
-        if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
+
+        // If on the correct host, but the ad is already there, do nothing.
+        if (adContainer) {
             return;
         }
-        const adContainer = document.createElement('div');
-        adContainer.id = CONFIG.AD_CONTAINER_ID;
-        adContainer.style.overflow = 'hidden';
-        document.body.appendChild(adContainer);
+
+        const newAdContainer = document.createElement('div');
+        newAdContainer.id = CONFIG.AD_CONTAINER_ID;
+        newAdContainer.style.overflow = 'hidden';
+        document.body.appendChild(newAdContainer);
 
         const script = document.createElement('script');
         script.src = CONFIG.AD_SCRIPT_URL;
@@ -76,20 +85,29 @@
     }
 
     /**
-     * Traverses the DOM and replaces occurrences of specified text in text nodes.
+     * Traverses the DOM once and applies all configured text replacements.
+     * This is more efficient than walking the DOM for each replacement rule.
      */
-    function replaceTextInAllNodes(searchText, replacementText) {
+    function applyAllTextReplacements() {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-        const searchRegex = new RegExp(searchText, 'gi');
         let currentNode;
         while ((currentNode = walker.nextNode())) {
+            // Skip script and style tags
             const parent = currentNode.parentElement;
             if (parent && (parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE')) {
                 continue;
             }
-            if (currentNode.nodeValue.toLowerCase().includes(searchText.toLowerCase())) {
-                currentNode.nodeValue = currentNode.nodeValue.replace(searchRegex, replacementText);
+
+            let nodeValue = currentNode.nodeValue;
+            let hasChanged = false;
+            for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
+                const searchRegex = new RegExp(searchText, 'gi');
+                if (searchRegex.test(nodeValue)) {
+                    nodeValue = nodeValue.replace(searchRegex, replacementText);
+                    hasChanged = true;
+                }
             }
+            if (hasChanged) currentNode.nodeValue = nodeValue;
         }
     }
 
@@ -149,10 +167,7 @@
         updateBrandingImages();
         hideUnwantedElements();
         updateLinks();
-
-        for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
-            replaceTextInAllNodes(searchText, replacementText);
-        }
+        applyAllTextReplacements();
     }
 
     /**
@@ -192,4 +207,3 @@
     }
 
 })();
-
