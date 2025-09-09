@@ -7,7 +7,7 @@
     // Centralize all settings for easy management and updates.
     const CONFIG = {
         TEXT_REPLACEMENTS: {
-            'cinezo': 'Jpavtv',
+            'cinemaos': 'Jpavtv',
         },
         // The ID of any element that should NOT be hidden by the MutationObserver.
         ALLOWED_IDS: ['ads'],
