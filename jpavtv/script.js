@@ -1,7 +1,7 @@
 function replaceInElement(element) {
   // Replace in this element's direct text nodes
   element.childNodes.forEach(node => {
-    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('movieko')) {
+    if (node.nodeType === 3 && node.nodeValue.trim().toLowerCase().includes('cinezo')) {
       node.nodeValue = "Jpavtv";
     }
   });
