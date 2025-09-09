@@ -35,7 +35,7 @@
             'img[src*=" Project"]' // The space is intentional based on original code
         ],
         TEXT_REPLACEMENTS: {
-            'cinemaos': 'Moviejoytv',
+            'cineby': 'Moviejoytv',
         },
         LINK_UPDATES: [{
             selector: 'a#logo',
