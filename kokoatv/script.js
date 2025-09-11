@@ -192,7 +192,7 @@
                     }
                 }
                 // Chạy lại logic kiểm tra và sửa đổi sau khi có thay đổi DOM
-                checkAndReload();
+                // checkAndReload();
             }
         }
     };
