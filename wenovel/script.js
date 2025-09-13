@@ -12,35 +12,58 @@
       return;
   }
 
-  console.log("✅ WeNovel customization script is active.");
+  console.log("✅ WeNovel customization script is starting...");
 
   // --- Configuration ---
   const CONFIG = {
       AD_CONTAINER_ID: 'ads',
-      LOGIN_CONTAINER_CLASS: 'login-container', 
-      SIGNUP_CONTAINER_CLASS: 'signup-container',
       AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
-      MAIN_WRAPPER_TAG: 'main',
-      HEADER_TAG: 'header',
-      FOOTER_TAG: 'footer',
+
+      // Selectors for top-level elements to KEEP.
+      // Other direct children of <body> will be hidden.
+      ALLOWED_BODY_CHILDREN_SELECTORS: [
+          'header',
+          'main',
+          '#ads', // Our ad container
+          '.login-container',
+          '.signup-container',
+      ],
+
       TEXT_REPLACEMENTS: {
           'Novel Fire': 'WeNovel',
       },
+
+      // Selectors for elements to hide ANYWHERE on the page.
+      // Using a stylesheet is more performant than manual DOM manipulation.
       SELECTORS_TO_HIDE: [
           'footer',
           'a[href*="google"]', // Google Play store links
-          'a[href*="facebook"]',          // Facebook auth links
-          '[data-unit]',                      // Ad units
+          'a[href*="facebook"]', // Facebook auth links
+          '[data-unit]', // Ad units
       ],
   };
+
+  /**
+   * Checks if a given element should be visible as a direct child of the <body>.
+   * @param {Element} element The element to check.
+   * @returns {boolean} True if the element is allowed, false otherwise.
+   */
+  function isAllowedBodyChild(element) {
+      // Don't hide scripts or styles
+      if (element.tagName === 'SCRIPT' || element.tagName === 'STYLE' || element.tagName === 'LINK') {
+          return true;
+      }
+      // Check against the list of allowed selectors
+      return CONFIG.ALLOWED_BODY_CHILDREN_SELECTORS.some(selector => element.matches(selector));
+  }
 
   /**
    * Injects an ad banner script into the page.
    */
   function injectAdBanner() {
       if (document.getElementById(CONFIG.AD_CONTAINER_ID)) {
-          return;
+          return; // Already injected
       }
 
       const adContainer = document.createElement('div');
@@ -51,7 +74,7 @@
       const script = document.createElement('script');
       script.src = CONFIG.AD_SCRIPT_URL;
       script.async = true;
-      document.body.appendChild(script);
+      document.head.appendChild(script); // Append to head is preferred
   }
 
   /**
@@ -59,70 +82,70 @@
    */
   function updateBranding() {
       // Update logo images
-      const logoImages = document.querySelectorAll('img[src*=logo]');
-      logoImages.forEach(img => {
-          if (img.src !== CONFIG.LOGO_URL) {
-              img.style.width = "50px";
-              img.style.height = "50px";
-              img.src = CONFIG.LOGO_URL;
-              try {
-                  Object.defineProperty(img, 'src', { writable: false, configurable: false });
-              } catch (error) {
-                  console.warn('Could not make image src read-only:', img, error);
-              }
+      document.querySelectorAll('img[src*=logo]').forEach(img => {
+          if (img.src === CONFIG.LOGO_URL) return;
+
+          img.style.width = "50px";
+          img.style.height = "50px";
+          img.src = CONFIG.LOGO_URL;
+
+          // Attempt to make the src attribute read-only to prevent other scripts from changing it back.
+          try {
+              Object.defineProperty(img, 'src', { writable: false, configurable: false });
+          } catch (error) {
+              console.warn('Could not make image src read-only:', img, error);
           }
       });
 
       // Replace text content across the site
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const replacements = Object.entries(CONFIG.TEXT_REPLACEMENTS);
       let currentNode;
+
       while ((currentNode = walker.nextNode())) {
-          for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
+          for (const [searchText, replacementText] of replacements) {
               if (currentNode.nodeValue.includes(searchText)) {
-                  const regex = new RegExp(searchText, 'g');
-                  currentNode.nodeValue = currentNode.nodeValue.replace(regex, replacementText);
+                  currentNode.nodeValue = currentNode.nodeValue.replace(new RegExp(searchText, 'g'), replacementText);
               }
           }
       }
   }
 
   /**
-   * Hides elements matching a list of CSS selectors.
+   * Hides unwanted elements by injecting a stylesheet into the document head.
+   * This is more performant than querying and styling each element individually.
    */
   function hideUnwantedElements() {
-      CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
-          document.querySelectorAll(selector).forEach(el => {
-              el.style.display = 'none';
-          });
-      });
+      if (!CONFIG.SELECTORS_TO_HIDE.length) return;
+
+      const styleId = 'wenovel-hide-styles';
+      if (document.getElementById(styleId)) return; // Already injected
+
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+          ${CONFIG.SELECTORS_TO_HIDE.join(',\n')} {
+              display: none !important;
+          }
+      `;
+      document.head.appendChild(style);
   }
 
   /**
-   * Cleans up the DOM by hiding all direct children of the body except for the
-   * main content wrapper and the ad container.
+   * Cleans up the DOM by hiding all direct children of <body> that are not on the allow list.
    */
   function isolateMainContent() {
-      const allowedTags = [CONFIG.MAIN_WRAPPER_TAG, CONFIG.HEADER_TAG, CONFIG.FOOTER_TAG];
-      const allowedClass = [CONFIG.LOGIN_CONTAINER_CLASS, CONFIG.SIGNUP_CONTAINER_CLASS];
-      const bodyChildren = Array.from(document.body.children);
-
-      bodyChildren.forEach(element => {
-          if (!allowedTags.includes(element.tagName.toLowerCase()) && !allowedClass.includes(element.className)) {
+      Array.from(document.body.children).forEach(element => {
+          if (!isAllowedBodyChild(element)) {
               element.style.display = 'none';
-              console.log('Hid unwanted element:', element);
+              console.log('Hid unwanted top-level element:', element);
           }
       });
-
-      // Ensure the main wrapper is visible
-      const wrapperElement = document.getElementById(CONFIG.MAIN_WRAPPER_ID);
-      if (wrapperElement) {
-          wrapperElement.style.display = 'block'; // Or 'flex', 'grid', etc.
-      }
   }
 
   /**
-   * Sets up a MutationObserver to watch for dynamically added elements
-   * and hide them if they are not the ad container.
+   * Sets up a MutationObserver to watch for dynamically added elements to the <body>
+   * and hide them if they are not on the allow list.
    */
   function setupMutationObserver() {
       const observerCallback = (mutationsList) => {
@@ -132,10 +155,9 @@
               for (const node of mutation.addedNodes) {
                   // Only process element nodes that are direct children of the body
                   if (node.nodeType === Node.ELEMENT_NODE && node.parentNode === document.body) {
-                      // Hide any new element added to the body unless it's our ad container
-                      if (node.id !== CONFIG.AD_CONTAINER_ID) {
+                      if (!isAllowedBodyChild(node)) {
                           node.style.display = 'none';
-                          console.log('Hid dynamically added element:', node);
+                          console.log('Hid dynamically added top-level element:', node);
                       }
                   }
               }
@@ -152,16 +174,22 @@
    * Main function to orchestrate all DOM manipulations.
    */
   function main() {
+      // The order of operations is important.
+      // 1. Inject ads first so our cleanup logic knows about the ad container.
       injectAdBanner();
-      updateBranding();
+      // 2. Inject styles to hide unwanted elements globally.
       hideUnwantedElements();
+      // 3. Update branding text and logos.
+      updateBranding();
+      // 4. Hide unwanted top-level elements that are present on load.
       isolateMainContent();
+      // 5. Set up an observer to hide unwanted top-level elements added dynamically.
       setupMutationObserver();
 
       console.log('All WeNovel customizations have been applied.');
   }
 
-  // Run the main function after the DOM is fully loaded.
+  // Run the main function when the DOM is interactive or complete.
   if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', main);
   } else {
@@ -169,4 +197,3 @@
   }
 
 })();
-
