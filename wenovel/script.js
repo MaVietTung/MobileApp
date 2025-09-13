@@ -23,7 +23,7 @@
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
       MAIN_WRAPPER_ID: 'wrapper',
       TEXT_REPLACEMENTS: {
-          'Novel Bin': 'WeNovel',
+          'Novel Fire': 'WeNovel',
       },
       SELECTORS_TO_HIDE: [
           'footer',
