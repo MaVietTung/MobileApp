@@ -129,7 +129,7 @@
                   if (node.nodeType === Node.ELEMENT_NODE && node.parentNode === document.body) {
                       // Hide any new element added to the body unless it's our ad container
                       if (node.id !== CONFIG.AD_CONTAINER_ID) {
-                          node.style.display = 'none';
+                          //node.style.display = 'none';
                           console.log('Hid dynamically added element:', node);
                       }
                   }
