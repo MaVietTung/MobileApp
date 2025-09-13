@@ -21,7 +21,9 @@
       SIGNUP_CONTAINER_CLASS: 'signup-container',
       AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
-      MAIN_WRAPPER_ID: 'wrapper',
+      MAIN_WRAPPER_TAG: 'main',
+      HEADER_TAG: 'header',
+      FOOTER_TAG: 'footer',
       TEXT_REPLACEMENTS: {
           'Novel Fire': 'WeNovel',
       },
@@ -60,6 +62,8 @@
       const logoImages = document.querySelectorAll('img[src*=logo]');
       logoImages.forEach(img => {
           if (img.src !== CONFIG.LOGO_URL) {
+              img.style.width = "50px";
+              img.style.height = "50px";
               img.src = CONFIG.LOGO_URL;
               try {
                   Object.defineProperty(img, 'src', { writable: false, configurable: false });
@@ -98,13 +102,14 @@
    * main content wrapper and the ad container.
    */
   function isolateMainContent() {
-      const allowedIds = [CONFIG.MAIN_WRAPPER_ID, CONFIG.AD_CONTAINER_ID];
+      const allowedTags = [CONFIG.MAIN_WRAPPER_TAG, CONFIG.HEADER_TAG, CONFIG.FOOTER_TAG];
       const allowedClass = [CONFIG.LOGIN_CONTAINER_CLASS, CONFIG.SIGNUP_CONTAINER_CLASS];
       const bodyChildren = Array.from(document.body.children);
 
       bodyChildren.forEach(element => {
-          if (!allowedIds.includes(element.id) && !allowedClass.includes(element.className)) {
+          if (!allowedTags.includes(element.tagName.toLowerCase()) && !allowedClass.includes(element.className)) {
               element.style.display = 'none';
+              console.log('Hid unwanted element:', element);
           }
       });
 
@@ -129,7 +134,7 @@
                   if (node.nodeType === Node.ELEMENT_NODE && node.parentNode === document.body) {
                       // Hide any new element added to the body unless it's our ad container
                       if (node.id !== CONFIG.AD_CONTAINER_ID) {
-                          //node.style.display = 'none';
+                          node.style.display = 'none';
                           console.log('Hid dynamically added element:', node);
                       }
                   }
@@ -147,7 +152,7 @@
    * Main function to orchestrate all DOM manipulations.
    */
   function main() {
-      //injectAdBanner();
+      injectAdBanner();
       updateBranding();
       hideUnwantedElements();
       isolateMainContent();
