@@ -147,7 +147,7 @@
    * Main function to orchestrate all DOM manipulations.
    */
   function main() {
-      injectAdBanner();
+      //injectAdBanner();
       updateBranding();
       hideUnwantedElements();
       isolateMainContent();
