@@ -25,6 +25,7 @@
           'header',
           'main',
           '#ads', // Our ad container
+          '#wrapper',
           '.login-container',
           '.signup-container',
       ],
