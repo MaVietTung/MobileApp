@@ -31,7 +31,7 @@
       ],
 
       TEXT_REPLACEMENTS: {
-          'READ NOVEL FULL': 'WeNovel',
+          'Read Novel Full': 'WeNovel',
       },
 
       // Selectors for elements to hide ANYWHERE on the page.
