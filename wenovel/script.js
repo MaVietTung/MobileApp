@@ -15,8 +15,7 @@
   console.log("✅ WeNovel customization script is starting...");
 
   // --- Configuration ---
-  const CONFIG = {
-      AD_CONTAINER_ID: 'ads',
+  const CONFIG = {   AD_CONTAINER_ID: 'ads',
       AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/wenovel.js',
       LOGO_URL: 'https://mobile-3aj.pages.dev/wenovel/wenovel.png',
 
@@ -31,7 +30,7 @@
       ],
 
       TEXT_REPLACEMENTS: {
-          'Novel Fire': 'WeNovel',
+          'READ NOVEL FULL': 'WeNovel',
       },
 
       // Selectors for elements to hide ANYWHERE on the page.
