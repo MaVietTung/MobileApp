@@ -11,7 +11,7 @@ if (!location.href.includes("netlify.app")) {
       logoImageUrl: 'https://mobile-3aj.pages.dev/wemusic/wemusic.png',
       logoImageSize: '50px',
       logoSelector: 'img[src*="logo"], img[alt*="logo"], img[src*=branding_media]',
-      elementsToHide: ['.welcome-bottom', 'footer', 'a[href="/chapters"]', 'button:has(svg[data-icon="google"])', 'div[class*=footer]'],
+      elementsToHide: ['.welcome-bottom', 'footer', 'a[href="/chapters"]', 'button:has(svg[data-icon="google"])', 'div[class*=footer]', '.play-button'],
       textReplacements: {
         'nonoki': 'WeMusic'
       },
