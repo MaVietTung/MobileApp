@@ -13,8 +13,8 @@
         reloadInterval: 5 * 60 * 1000, // 5 phút
         selectors: {
             mainContainer: '.relative.h-screen',
-            panelToToggle1: '.absolute.top-5',
-            panelToToggle2: '.fixed.top-28',
+            panelToToggle1: '.absolute.z-50',
+            panelToToggle2: '.fixed.z-50',
         },
         button: {
             id: 'open-close-button',
