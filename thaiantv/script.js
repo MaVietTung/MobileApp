@@ -22,6 +22,8 @@
             '[class*=rIdV]', // Specific ad class
             'iframe[title*=fb]', // Facebook comment iframes
             '.watch-link',
+            '[id*=banner]',
+            '[class *= html]'
         ],
         textReplacements: {
             "123-hd.com": 'ThaianTV',
