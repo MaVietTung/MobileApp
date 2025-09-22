@@ -78,10 +78,10 @@
         }
 
         // Update the logo if it's a background image on an <a> tag
-        const logoLink = document.querySelector('a.logo');
+        const logoLink = document.querySelector('.site-title');
         if (logoLink) {
             // Correctly set the background image style property
-            logoLink.style.backgroundImage = `url('${CONFIG.LOGO_URL}')`;
+            logoLink.style.backgroundImage = `url(${CONFIG.LOGO_URL})`;
         }
     }
 
