@@ -61,31 +61,43 @@
      * Updates the site logo to a new source URL and makes it read-only.
      */
     function updateBranding() {
+        // Update the logo if it's an <img> tag
         const logoImage = document.querySelector('.logo img');
         if (logoImage && logoImage.src !== CONFIG.LOGO_URL) {
             logoImage.src = CONFIG.LOGO_URL;
             logoImage.style.height = '70px';
+            // Attempt to prevent other scripts from changing the logo back
             try {
                 Object.defineProperty(logoImage, 'src', {
                     writable: false,
                     configurable: false
                 });
             } catch (error) {
-                console.warn('Could not make logo src read-only:', logoImage, error);
+                console.warn('Could not make logo src read-only:', error);
             }
+        }
+
+        // Update the logo if it's a background image on an <a> tag
+        const logoLink = document.querySelector('a.logo');
+        if (logoLink) {
+            // Correctly set the background image style property
+            logoLink.style.backgroundImage = `url('${CONFIG.LOGO_URL}')`;
         }
     }
 
     /**
-     * Hides elements matching a list of CSS selectors.
+     * Hides elements by injecting a style tag into the document head.
+     * This is more performant than iterating and setting style on each element.
      */
     function hideUnwantedElements() {
-        CONFIG.SELECTORS_TO_HIDE.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(el => {
-                el.style.display = 'none';
-            });
-        });
+        if (CONFIG.SELECTORS_TO_HIDE.length === 0) {
+            return;
+        }
+        const style = document.createElement('style');
+        // Use !important to ensure our styles take precedence
+        const cssRule = `${CONFIG.SELECTORS_TO_HIDE.join(', ')} { display: none !important; }`;
+        style.textContent = cssRule;
+        document.head.appendChild(style);
     }
 
     /**
@@ -108,4 +120,3 @@
     }
 
 })();
-
