@@ -25,9 +25,10 @@
             iconUp: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>`,
         },
         textReplacements: {
-            moviezone: 'KokoaTV',
-            movie: 'Kokoa',
-            zone: 'TV',
+            "moviezone": 'KokoaTV',
+            "movie": 'Kokoa',
+            "zone": 'TV',
+            "m-zone": "KokoaTV"
         },
     };
 
@@ -38,16 +39,53 @@
     // --- CÁC HÀM THAO TÁC DOM ---
 
     /**
-     * Thay thế văn bản dựa trên cấu hình.
-     * Sử dụng document.createTreeWalker để duyệt các text node hiệu quả hơn.
+     * Replaces text content throughout the document body based on the configuration.
+     * It uses the efficient TreeWalker API to iterate over text nodes and
+     * regular expressions for flexible, case-insensitive matching.
      */
     const replaceTextContent = () => {
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        // Helper function to escape special characters for use in a regular expression.
+        const escapeRegExp = (string) => {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        };
+
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: (node) => {
+                // Skip nodes inside <script> and <style> tags
+                const parentName = node.parentElement.nodeName.toLowerCase();
+                if (parentName === 'script' || parentName === 'style') {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+
+        const replacements = Object.entries(CONFIG.textReplacements);
+        if (replacements.length === 0) {
+            return;
+        }
+
+        // Create an array of [RegExp, replacementString] pairs for efficiency
+        const regexReplacements = replacements.map(([find, replaceWith]) => {
+            return [new RegExp(escapeRegExp(find), 'gi'), replaceWith];
+        });
+
         while (walker.nextNode()) {
             const node = walker.currentNode;
-            const text = node.nodeValue.trim().toLowerCase();
-            if (CONFIG.textReplacements[text]) {
-                node.nodeValue = CONFIG.textReplacements[text];
+            let value = node.nodeValue;
+            let hasChanged = false;
+
+            for (const [regex, replaceWith] of regexReplacements) {
+                if (regex.test(value)) {
+                    // Reset lastIndex for global regexes before using replace
+                    regex.lastIndex = 0;
+                    value = value.replace(regex, replaceWith);
+                    hasChanged = true;
+                }
+            }
+
+            if (hasChanged) {
+                node.nodeValue = value;
             }
         }
     };

@@ -23,6 +23,9 @@
             'iframe[title*=fb]', // Facebook comment iframes
             '.watch-link',
         ],
+        textReplacements: {
+            "123-hd.com": 'ThaianTV',
+        },
     };
 
     /**
@@ -77,11 +80,11 @@
             }
         }
 
-        // Update the logo if it's a background image on an <a> tag
-        const logoLink = document.querySelector('.site-title');
-        if (logoLink) {
-            // Correctly set the background image style property
-            logoLink.style.backgroundImage = `url(${CONFIG.LOGO_URL})`;
+        // Update the logo if it's a background image on an element like .site-title
+        const logoContainer = document.querySelector('.site-title');
+        if (logoContainer) {
+            // Set the background image, ensuring the URL is quoted
+            logoContainer.style.backgroundImage = `url('${CONFIG.LOGO_URL}')`;
         }
     }
 
@@ -101,6 +104,58 @@
     }
 
     /**
+     * Replaces text content throughout the document body based on the configuration.
+     * It uses the efficient TreeWalker API to iterate over text nodes and
+     * regular expressions for flexible, case-insensitive matching.
+     */
+    const replaceTextContent = () => {
+        // Helper function to escape special characters for use in a regular expression.
+        const escapeRegExp = (string) => {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        };
+
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: (node) => {
+                // Skip nodes inside <script> and <style> tags
+                const parentName = node.parentElement.nodeName.toLowerCase();
+                if (parentName === 'script' || parentName === 'style') {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+
+        const replacements = Object.entries(CONFIG.textReplacements);
+        if (replacements.length === 0) {
+            return;
+        }
+
+        // Create an array of [RegExp, replacementString] pairs for efficiency
+        const regexReplacements = replacements.map(([find, replaceWith]) => {
+            return [new RegExp(escapeRegExp(find), 'gi'), replaceWith];
+        });
+
+        while (walker.nextNode()) {
+            const node = walker.currentNode;
+            let value = node.nodeValue;
+            let hasChanged = false;
+
+            for (const [regex, replaceWith] of regexReplacements) {
+                if (regex.test(value)) {
+                    // Reset lastIndex for global regexes before using replace
+                    regex.lastIndex = 0;
+                    value = value.replace(regex, replaceWith);
+                    hasChanged = true;
+                }
+            }
+
+            if (hasChanged) {
+                node.nodeValue = value;
+            }
+        }
+    };
+
+    /**
      * Main function to orchestrate all the DOM manipulations.
      */
     function main() {
@@ -108,6 +163,7 @@
         injectAdBanner();
         updateBranding();
         hideUnwantedElements();
+        replaceTextContent();
 
         console.log('All ThaiAnTV customizations applied.');
     }
