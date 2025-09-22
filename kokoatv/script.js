@@ -28,7 +28,7 @@
             "moviezone": 'KokoaTV',
             "movie": 'Kokoa',
             "zone": 'TV',
-            "m-zone": "KokoaTV"
+            "M-ZONE": "KokoaTV"
         },
     };
 
