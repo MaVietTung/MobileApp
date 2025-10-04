@@ -44,9 +44,7 @@
         ALLOWED_BODY_CHILDREN: [
             '#ads', // Container quảng cáo mà script này tự tạo
             'script', // Cho phép các thẻ script
-            'iframe[name*="google_ads"]', // Cho phép iframe quảng cáo của Google
-            'div[id*="modal"]', // Ví dụ: Cho phép các modal
-            '.notifications-container' // Ví dụ: Cho phép khu vực thông báo
+            'div[id*="wrapper"]', // Ví dụ: Cho phép các modal
         ]
     };
 
