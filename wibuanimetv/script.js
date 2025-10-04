@@ -26,6 +26,7 @@
         ],
         TEXT_REPLACEMENTS: {
             'aniwatch': 'Wibuanimetv',
+            '9anime':'WibuanimeTv'
         },
         EXACT_TEXT_REPLACEMENTS: [{
             selector: 'span',
