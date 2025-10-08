@@ -52,6 +52,31 @@
     }
 
     /**
+ * Sets up a MutationObserver to watch for dynamically added elements to the <body>
+ * and hide them if they are not on the allow list.
+ */
+    function setupMutationObserver() {
+        const observerCallback = (mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type !== 'childList') continue;
+
+                for (const node of mutation.addedNodes) {
+                    // Only process element nodes that are direct children of the body
+                    if (node.nodeType === Node.ELEMENT_NODE && (node.parentNode === document.body || node.parentNode == document.documentElement)) {
+                        node.style.display = 'none';
+                        console.log('Hid dynamically added top-level element:', node);
+                    }
+                }
+            }
+        };
+
+        const observer = new MutationObserver(observerCallback);
+        observer.observe(document.body, { childList: true });
+
+        console.log('MutationObserver is active, watching for new elements in <body>.');
+    }
+
+    /**
      * Saves the current date and time to localStorage.
      */
     function saveLastVisitTime() {
@@ -107,7 +132,7 @@
         injectAdBanner();
         hideUnwantedElements();
         updateBranding();
-
+        setupMutationObserver();
         console.log('All DubokoTV customizations applied.');
     }
 
