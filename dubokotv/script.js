@@ -30,6 +30,14 @@
         TEXT_REPLACEMENTS: {
             'duboku': 'DubokoTV',
         },
+        // [SỬA LỖI] Danh sách các bộ chọn cho các phần tử được phép thêm vào body.
+        // Bất kỳ phần tử nào được thêm vào gốc của trang mà không khớp với các bộ chọn này sẽ bị ẩn.
+        ALLOWED_BODY_CHILDREN: [
+            '#ads', // Container quảng cáo mà script này tự tạo
+            'script', // Cho phép các thẻ script
+            'div[class*="container"]', // Ví dụ: Cho phép các modal,
+            'header'
+        ]
     };
 
     /**
@@ -52,29 +60,51 @@
     }
 
     /**
- * Sets up a MutationObserver to watch for dynamically added elements to the <body>
- * and hide them if they are not on the allow list.
- */
+     * [SỬA LỖI] Kiểm tra xem một phần tử có được phép là con trực tiếp của body/html hay không.
+     * @param {Element} element - Phần tử cần kiểm tra.
+     * @returns {boolean} - Trả về true nếu phần tử được phép.
+     */
+    function isAllowedBodyChild(element) {
+        // Sử dụng `some` để dừng ngay khi tìm thấy một bộ chọn khớp.
+        return CONFIG.ALLOWED_BODY_CHILDREN.some(selector => {
+            try {
+                return element.matches(selector);
+            } catch (e) {
+                console.warn(`Bộ chọn không hợp lệ trong ALLOWED_BODY_CHILDREN: "${selector}"`);
+                return false;
+            }
+        });
+    }
+
+    /**
+       * Thiết lập MutationObserver để ẩn các phần tử được thêm vào DOM sau này.
+       */
     function setupMutationObserver() {
         const observerCallback = (mutationsList) => {
             for (const mutation of mutationsList) {
                 if (mutation.type !== 'childList') continue;
 
                 for (const node of mutation.addedNodes) {
-                    // Only process element nodes that are direct children of the body
-                    if (node.nodeType === Node.ELEMENT_NODE && (node.parentNode === document.body || node.parentNode == document.documentElement)) {
-                        node.style.display = 'none';
-                        console.log('Hid dynamically added top-level element:', node);
+                    // Chỉ xử lý các node là Element và là con trực tiếp của body hoặc html
+                    if (node.nodeType === Node.ELEMENT_NODE && (node.parentElement === document.body || node.parentElement === document.documentElement)) {
+                        if (!isAllowedBodyChild(node)) {
+                            // Cách mới: Đơn giản, đúng chuẩn và hiệu quả hơn
+                            node.style.setProperty('display', 'none', 'important');
+                            console.log('Đã ẩn phần tử được thêm tự động:', node);
+                        }
                     }
                 }
             }
         };
 
         const observer = new MutationObserver(observerCallback);
-        observer.observe(document.body, { childList: true });
-
-        console.log('MutationObserver is active, watching for new elements in <body>.');
+        // Theo dõi cả body và html để bắt tất cả các phần tử được thêm vào gốc
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true // Cần subtree để theo dõi các node được thêm vào body
+        });
     }
+
 
     /**
      * Saves the current date and time to localStorage.

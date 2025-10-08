@@ -179,7 +179,8 @@
                     // Chỉ xử lý các node là Element và là con trực tiếp của body hoặc html
                     if (node.nodeType === Node.ELEMENT_NODE && (node.parentElement === document.body || node.parentElement === document.documentElement)) {
                         if (!isAllowedBodyChild(node)) {
-                            node.style.display = 'none';
+                            // Cách mới: Đơn giản, đúng chuẩn và hiệu quả hơn
+                            node.style.setProperty('display', 'none', 'important');
                             console.log('Đã ẩn phần tử được thêm tự động:', node);
                         }
                     }
@@ -201,7 +202,7 @@
     function main() {
         saveLastVisitTime();
         createAdBanner();
-        
+
         // Thực hiện các thay đổi DOM
         updateBrandingImages();
         hideUnwantedElements();

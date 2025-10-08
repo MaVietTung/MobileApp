@@ -29,7 +29,7 @@
             "movie": 'Kokoa',
             "zone": 'TV',
             "M-ZONE": "KokoaTV",
-            "M-":"Kokoa"
+            "M-": "Kokoa"
         },
     };
 
@@ -118,7 +118,7 @@
             const displayValue = isHidden ? 'block' : 'none';
             panel1.style.display = displayValue;
             if (panel2) panel2.style.display = displayValue;
-            
+
             button.innerHTML = isHidden ? CONFIG.button.iconDown : CONFIG.button.iconUp;
             button.setAttribute('aria-label', isHidden ? 'Đóng Panel' : 'Mở Panel');
         };
@@ -143,7 +143,7 @@
             isDragging = true;
             hasMoved = false;
             element.classList.add('dragging');
-            
+
             const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
             const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
             const rect = element.getBoundingClientRect();
@@ -163,7 +163,7 @@
 
             const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
             const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
-            
+
             element.style.left = `${clientX - offsetX}px`;
             element.style.top = `${clientY - offsetY}px`;
             element.style.right = 'auto';
@@ -200,7 +200,7 @@
         const now = Date.now();
         const lastReload = parseInt(localStorage.getItem('lastReloadTime') || '0', 10);
         const lastHref = localStorage.getItem('lastHref') || '';
-        
+
         localStorage.setItem('lastHref', location.href);
 
         if (now - lastReload > CONFIG.reloadInterval && location.href !== lastHref) {
@@ -227,7 +227,8 @@
 
                     if (isRootChild && !hasRadixAttr) {
                         console.log('Hiding new root element:', node);
-                        node.style.display = 'none';
+                        // Cách mới: Đơn giản, đúng chuẩn và hiệu quả hơn
+                        node.style.setProperty('display', 'none', 'important');
                     }
                 }
                 // Chạy lại logic kiểm tra và sửa đổi sau khi có thay đổi DOM

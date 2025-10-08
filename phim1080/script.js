@@ -113,7 +113,8 @@
                 for (const node of mutation.addedNodes) {
                     if (node.nodeType === Node.ELEMENT_NODE && (node.parentNode === document.body || node.parentNode === document.documentElement)) {
                         if (node.id !== CONFIG.AD_CONTAINER_ID) {
-                            node.style.display = 'none';
+                            // Cách mới: Đơn giản, đúng chuẩn và hiệu quả hơn
+                            node.style.setProperty('display', 'none', 'important'); 
                             console.log('Hid dynamically added element:', node);
                         }
                     }
