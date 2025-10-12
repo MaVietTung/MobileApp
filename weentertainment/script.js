@@ -74,6 +74,7 @@
             'iframe[src*="doubleclick.net"]',
             'a[href*="/ads/"]',
             'a[href*="?ad="]',
+            '[target*="_blank"]'
         ],
     };
 
