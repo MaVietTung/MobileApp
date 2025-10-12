@@ -115,37 +115,45 @@
         /* --- Kiểu cho danh sách lịch sử --- */
         .history-container {
             width: 100%;
-            margin-top: 8px; /* Khoảng cách với thanh tìm kiếm */
+            margin-top: 8px;
+            /* Khoảng cách với thanh tìm kiếm */
             margin-bottom: 20px;
         }
 
         #history-list {
-            list-style-type: none; /* Bỏ dấu chấm đầu dòng */
+            list-style-type: none;
+            /* Bỏ dấu chấm đầu dòng */
             padding: 5px 0;
             margin: 0;
-            background-color: rgba(0, 0, 0, 0.2); /* Nền mờ */
+            background-color: rgba(0, 0, 0, 0.2);
+            /* Nền mờ */
             border-radius: 20px;
-            max-height: 240px; /* Chiều cao tối đa trước khi cuộn */
-            overflow-y: auto; /* Tự động thêm thanh cuộn nếu cần */
+            max-height: 240px;
+            /* Chiều cao tối đa trước khi cuộn */
+            overflow-y: auto;
+            /* Tự động thêm thanh cuộn nếu cần */
         }
 
         #history-list li {
             padding: 12px 25px;
             cursor: pointer;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: left; /* Căn lề trái URL cho dễ đọc */
-            word-break: break-all; /* Tự động xuống dòng nếu URL quá dài */
+            text-align: left;
+            /* Căn lề trái URL cho dễ đọc */
+            word-break: break-all;
+            /* Tự động xuống dòng nếu URL quá dài */
             transition: background-color 0.2s;
         }
-        
+
         #history-list li:last-child {
-            border-bottom: none; /* Bỏ gạch chân cho mục cuối cùng */
+            border-bottom: none;
+            /* Bỏ gạch chân cho mục cuối cùng */
         }
 
         #history-list li:hover {
-            background-color: rgba(78, 255, 181, 0.2); /* Hiệu ứng khi di chuột vào */
+            background-color: rgba(78, 255, 181, 0.2);
+            /* Hiệu ứng khi di chuột vào */
         }
-        
     </style>
 </head>
 
@@ -174,7 +182,7 @@
                 </svg>
             </button>
         </div>
-        
+
         <div class="history-container">
             <ul id="history-list"></ul>
         </div>
@@ -194,7 +202,7 @@
         function renderHistory() {
             const history = getHistory();
             historyList.innerHTML = '';
-            
+
             if (history.length === 0) {
                 historyList.style.display = 'none';
             } else {
@@ -215,9 +223,9 @@
             const newHistory = history.slice(0, 10);
             localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
         }
-        
+
         searchButton.addEventListener('click', () => {
-            const urlValue = searchInput.value.trim();
+            const urlValue = searchInput.value.trim().toLowerCase();
             if (urlValue !== '') {
                 saveUrlToHistory(urlValue);
                 renderHistory();
@@ -239,9 +247,9 @@
             // Kiểm tra xem phím được nhấn có phải là 'Enter' không
             if (event.key === 'Enter') {
                 // Ngăn hành vi mặc định của phím Enter (như submit form)
-                event.preventDefault(); 
+                event.preventDefault();
                 // Giả lập hành động nhấn nút search
-                searchButton.click(); 
+                searchButton.click();
             }
         });
 
@@ -250,4 +258,5 @@
     </script>
 
 </body>
+
 </html>
