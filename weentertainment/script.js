@@ -114,22 +114,6 @@
      * Updates branding elements: logos and text.
      */
     function updateBranding() {
-        // Update logo images
-        document.querySelectorAll('img[src*=logo]').forEach(img => {
-            if (img.src === CONFIG.LOGO_URL) return;
-
-            img.style.width = "50px";
-            img.style.height = "50px";
-            img.src = CONFIG.LOGO_URL;
-
-            // Attempt to make the src attribute read-only to prevent other scripts from changing it back.
-            try {
-                Object.defineProperty(img, 'src', { writable: false, configurable: false });
-            } catch (error) {
-                console.warn('Could not make image src read-only:', img, error);
-            }
-        });
-
         // Replace text content across the site
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         const replacements = Object.entries(CONFIG.TEXT_REPLACEMENTS);
