@@ -50,10 +50,10 @@
             // --- General Ad Selectors ---
             // Classes
             '.ad', '.ads', '.advert', '.advertisement', '.ad-container', '.ad-wrapper', '.ad-banner', '.ad-box', '.ad-slot',
-            '[class*=" ad-"]', '[class*="-ad "]', '[class*=" ad "]',
+            '[class*=" ad-"]', '[class*="-ad "]', '[class*=" ad "]', '[class*="banner"]',
 
             // IDs
-            '[id*="ad-"]', '[id*="-ad-"]', '[id*="adsbox"]', '[id*="adblock"]', '#ad_unit', '#ads_div', '#ad-container', '#advertising',
+            '[id*="ad-"]', '[id*="-ad-"]', '[id*="adsbox"]', '[id*="adblock"]', '[id*="banner"]', '#ad_unit', '#ads_div', '#ad-container', '#advertising',
 
             // Attributes
             '[data-ad-client]', '[data-ad-slot]', '[data-ad-format]', 'div[role="advertisement"]', 'aside[aria-label*="advertisement"]',
@@ -74,7 +74,7 @@
             'iframe[src*="doubleclick.net"]',
             'a[href*="/ads/"]',
             'a[href*="?ad="]',
-            '[target*="_blank"]'
+            '[target*="_blank"]',
         ],
     };
 
