@@ -163,6 +163,27 @@
         </div>
     </div>
 
+    <script>
+        // Lấy đối tượng nút search và ô input
+        const searchButton = document.querySelector('.search-button');
+        const searchInput = document.querySelector('.search-input');
+
+        // Thêm sự kiện click cho nút search
+        searchButton.addEventListener('click', () => {
+            const urlValue = searchInput.value;
+
+            // Kiểm tra xem người dùng có nhập gì không
+            if (urlValue && urlValue.trim() !== '') {
+                // Tạo một URL giả để gửi dữ liệu về cho C#
+                // encodeURIComponent dùng để mã hóa các ký tự đặc biệt trong URL
+                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlValue)}`;
+                
+                // Yêu cầu WebView điều hướng đến URL giả này
+                window.location.href = fakeUrl;
+            }
+        });
+    </script>
+
 </body>
 
 </html>
