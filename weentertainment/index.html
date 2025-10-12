@@ -112,7 +112,7 @@
             stroke: #0c0c0c;
         }
 
-        /* --- PHẦN MỚI: Kiểu cho danh sách lịch sử --- */
+        /* --- Kiểu cho danh sách lịch sử --- */
         .history-container {
             width: 100%;
             margin-top: 8px; /* Khoảng cách với thanh tìm kiếm */
@@ -166,7 +166,7 @@
 
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Type your url source here">
-            <button class="search-button" aria-label="Search">
+            <button type="button" class="search-button" aria-label="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
@@ -181,33 +181,24 @@
     </div>
 
     <script>
-        // --- PHẦN MỚI: Toàn bộ logic cho lịch sử tìm kiếm ---
-
         const HISTORY_KEY = 'we_entertainment_url_history';
         const searchButton = document.querySelector('.search-button');
         const searchInput = document.querySelector('.search-input');
         const historyList = document.getElementById('history-list');
 
-        /**
-         * Lấy danh sách lịch sử từ localStorage
-         * @returns {string[]} Một mảng các URL
-         */
         function getHistory() {
             const history = localStorage.getItem(HISTORY_KEY);
             return history ? JSON.parse(history) : [];
         }
 
-        /**
-         * Hiển thị danh sách lịch sử ra giao diện
-         */
         function renderHistory() {
             const history = getHistory();
-            historyList.innerHTML = ''; // Xóa danh sách cũ trước khi vẽ lại
+            historyList.innerHTML = '';
             
             if (history.length === 0) {
-                historyList.style.display = 'none'; // Ẩn nếu không có lịch sử
+                historyList.style.display = 'none';
             } else {
-                historyList.style.display = 'block'; // Hiện nếu có
+                historyList.style.display = 'block';
             }
 
             history.forEach(url => {
@@ -217,60 +208,46 @@
             });
         }
 
-        /**
-         * Lưu một URL mới vào lịch sử
-         * @param {string} url - URL cần lưu
-         */
         function saveUrlToHistory(url) {
             let history = getHistory();
-            
-            // Xóa URL nếu đã tồn tại để đưa nó lên đầu danh sách
             history = history.filter(item => item !== url);
-
-            // Thêm URL mới vào đầu mảng
             history.unshift(url);
-
-            // Chỉ giữ lại 10 mục gần nhất
             const newHistory = history.slice(0, 10);
-
-            // Lưu lại vào localStorage
             localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
         }
         
-        // --- Cập nhật logic cũ ---
-
-        // Thêm sự kiện click cho nút search
         searchButton.addEventListener('click', () => {
             const urlValue = searchInput.value.trim();
-
             if (urlValue !== '') {
-                // 1. Lưu URL vào lịch sử
                 saveUrlToHistory(urlValue);
-                
-                // 2. Hiển thị lại danh sách lịch sử đã cập nhật
                 renderHistory();
-
-                // 3. Gửi tín hiệu đến C# (logic cũ)
                 const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlValue)}`;
                 window.location.href = fakeUrl;
             }
         });
 
-        // Thêm sự kiện click cho các mục trong danh sách lịch sử
         historyList.addEventListener('click', (event) => {
-            // Kiểm tra xem phần tử được click có phải là một thẻ <li> không
             if (event.target && event.target.nodeName === 'LI') {
                 const url = event.target.textContent;
-                searchInput.value = url; // Điền URL vào ô input
-                searchButton.click(); // Giả lập hành động nhấn nút search
+                searchInput.value = url;
+                searchButton.click();
+            }
+        });
+
+        // --- PHẦN MỚI: Bắt sự kiện nhấn phím Enter ---
+        searchInput.addEventListener('keydown', (event) => {
+            // Kiểm tra xem phím được nhấn có phải là 'Enter' không
+            if (event.key === 'Enter') {
+                // Ngăn hành vi mặc định của phím Enter (như submit form)
+                event.preventDefault(); 
+                // Giả lập hành động nhấn nút search
+                searchButton.click(); 
             }
         });
 
         // Hiển thị lịch sử ngay khi trang được tải
         document.addEventListener('DOMContentLoaded', renderHistory);
-
     </script>
 
 </body>
-
 </html>
