@@ -1,153 +1,224 @@
+/**
+ * @file This script applies various customizations to the webpage, such as updating branding,
+ * hiding unwanted elements, and injecting ads. It is designed to run only on specific domains.
+ * @version 2.0 - Refactored for performance and correctness.
+ */
+
 (function () {
     'use strict';
 
-    console.log("✅ Jpavtv customization script is active.");
+    // Không chạy script trên các trang preview của Vercel.
+    if (location.href.includes("vercel.app")) {
+        return;
+    }
 
-    // --- Configuration ---
-    // Centralize all settings for easy management and updates.
+    console.log("✅ Customization script v2.0 is active.");
+
+    // --- Cấu hình trung tâm ---
     const CONFIG = {
+        AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/jpavtv.js',
+        LOGO_URL: 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.png',
+        // Danh sách các bộ chọn CSS cho các phần tử cần ẩn.
+        SELECTORS_TO_HIDE: [
+            '#ggButn',
+            '.mw-body',
+            '.intro-app',
+            '[id*=footer]',
+            'footer',
+        ],
+        // Các cặp từ khóa tìm kiếm và thay thế (không phân biệt hoa thường).
         TEXT_REPLACEMENTS: {
-            'cinemaos': 'Jpavtv',
+            'aniwatch': 'Wibuanimetv',
+            '9anime': 'WibuanimeTv',
+            '9anime.to': 'WibuanimeTv',
+            '9 anime': 'WibuanimeTv'
         },
-        // The ID of any element that should NOT be hidden by the MutationObserver.
-        ALLOWED_IDS: ['ads'],
-        SPINNER_ID: 'global-click-spinner',
-        SPINNER_DURATION: 1000, // ms
+        // Các quy tắc thay thế văn bản chính xác cho các phần tử cụ thể.
+        EXACT_TEXT_REPLACEMENTS: [{
+            selector: 'span',
+            from: 'All Manga',
+            to: 'JPAVTV'
+        }],
+        // [SỬA LỖI] Danh sách các bộ chọn cho các phần tử được phép thêm vào body.
+        // Bất kỳ phần tử nào được thêm vào gốc của trang mà không khớp với các bộ chọn này sẽ bị ẩn.
+        ALLOWED_BODY_CHILDREN: [
+            '#ads', // Container quảng cáo mà script này tự tạo
+            'script', // Cho phép các thẻ script
+            'div[id*="wrapper"]', // Ví dụ: Cho phép các modal
+        ]
     };
 
     /**
-     * Recursively replaces text within an element and its children based on CONFIG.
-     * This version uses a regex to replace only the matching text, not the entire node content.
-     * @param {Element} element The DOM element to process.
+     * Tiêm một script quảng cáo vào trang.
+     * Tạo một div với id 'ads' nếu nó chưa tồn tại.
      */
-    function replaceTextInElement(element) {
-        // Guard against non-element nodes
-        if (!element || typeof element.childNodes === 'undefined') {
+    function createAdBanner() {
+        if (document.getElementById('ads')) {
             return;
         }
+        const adContainer = document.createElement('div');
+        adContainer.id = 'ads';
+        adContainer.style.overflow = 'hidden';
+        document.body.appendChild(adContainer);
 
-        element.childNodes.forEach(node => {
-            if (node.nodeType === Node.TEXT_NODE) {
-                let nodeValue = node.nodeValue;
-                let hasChanged = false;
+        const script = document.createElement('script');
+        script.src = CONFIG.AD_SCRIPT_URL;
+        script.async = true;
+        document.body.appendChild(script);
+    }
 
-                for (const [searchText, replacementText] of Object.entries(CONFIG.TEXT_REPLACEMENTS)) {
-                    // Use a global, case-insensitive regex for robust replacement.
-                    const regex = new RegExp(searchText, 'gi');
-                    if (regex.test(nodeValue)) {
-                        nodeValue = nodeValue.replace(regex, replacementText);
-                        hasChanged = true;
-                    }
+    /**
+     * Lưu thời gian truy cập hiện tại vào localStorage.
+     */
+    function saveLastVisitTime() {
+        try {
+            localStorage.setItem('lasttime', new Date().toISOString());
+        } catch (error) {
+            console.error('Lỗi khi lưu thời gian truy cập vào localStorage:', error);
+        }
+    }
+
+    /**
+     * [TỐI ƯU HÓA] Duyệt cây DOM một lần và thực hiện tất cả các thay thế văn bản.
+     */
+    function performTextReplacements() {
+        const replacements = Object.entries(CONFIG.TEXT_REPLACEMENTS);
+        if (replacements.length === 0) return;
+
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let currentNode;
+        while ((currentNode = walker.nextNode())) {
+            let originalValue = currentNode.nodeValue;
+            let newValue = originalValue;
+
+            for (const [searchText, replacementText] of replacements) {
+                // Sử dụng regex để thay thế không phân biệt hoa thường
+                const searchRegex = new RegExp(searchText, 'gi');
+                newValue = newValue.replace(searchRegex, replacementText);
+            }
+
+            if (originalValue !== newValue) {
+                currentNode.nodeValue = newValue;
+            }
+        }
+    }
+
+    /**
+     * Thay thế văn bản chính xác trong các phần tử khớp với bộ chọn.
+     */
+    function performExactTextReplacements() {
+        CONFIG.EXACT_TEXT_REPLACEMENTS.forEach(({ selector, from, to }) => {
+            document.querySelectorAll(selector).forEach(el => {
+                if (el.textContent.trim() === from) {
+                    el.textContent = to;
                 }
+            });
+        });
+    }
 
-                if (hasChanged) {
-                    node.nodeValue = nodeValue;
+    /**
+     * Cập nhật logo, avatar và cố gắng ngăn các script khác thay đổi lại.
+     */
+    function updateBrandingImages() {
+        document.querySelectorAll('img[src*="logo"], img[src*="avatar"]').forEach(img => {
+            if (img.src !== CONFIG.LOGO_URL) {
+                img.src = CONFIG.LOGO_URL;
+                // Cố gắng khóa thuộc tính 'src' để tránh bị ghi đè.
+                try {
+                    Object.defineProperty(img, 'src', {
+                        writable: false,
+                        configurable: false
+                    });
+                } catch (error) {
+                    console.warn('Không thể khóa thuộc tính src của ảnh:', img, error);
                 }
-            } else if (node.nodeType === Node.ELEMENT_NODE) {
-                // Recurse into child elements.
-                replaceTextInElement(node);
             }
         });
     }
 
     /**
-     * Sets up a MutationObserver to handle dynamically added elements.
-     * It will apply text replacements and hide unwanted new elements.
+     * Ẩn các phần tử không mong muốn dựa trên danh sách bộ chọn.
+     */
+    function hideUnwantedElements() {
+        try {
+            const elementsToHide = document.querySelectorAll(CONFIG.SELECTORS_TO_HIDE.join(', '));
+            elementsToHide.forEach(el => {
+                el.style.display = 'none';
+            });
+        } catch (error) {
+            console.error("Lỗi khi ẩn phần tử. Vui lòng kiểm tra lại các bộ chọn CSS:", error);
+        }
+    }
+
+    /**
+     * [SỬA LỖI] Kiểm tra xem một phần tử có được phép là con trực tiếp của body/html hay không.
+     * @param {Element} element - Phần tử cần kiểm tra.
+     * @returns {boolean} - Trả về true nếu phần tử được phép.
+     */
+    function isAllowedBodyChild(element) {
+        // Sử dụng `some` để dừng ngay khi tìm thấy một bộ chọn khớp.
+        return CONFIG.ALLOWED_BODY_CHILDREN.some(selector => {
+            try {
+                return element.matches(selector);
+            } catch (e) {
+                console.warn(`Bộ chọn không hợp lệ trong ALLOWED_BODY_CHILDREN: "${selector}"`);
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Thiết lập MutationObserver để ẩn các phần tử được thêm vào DOM sau này.
      */
     function setupMutationObserver() {
-        const observer = new MutationObserver((mutationsList) => {
+        const observerCallback = (mutationsList) => {
             for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    mutation.addedNodes.forEach(node => {
-                        // Only process element nodes.
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            // 1. Apply text replacements to the new content.
-                            replaceTextInElement(node);
+                if (mutation.type !== 'childList') continue;
+
+                for (const node of mutation.addedNodes) {
+                    // Chỉ xử lý các node là Element và là con trực tiếp của body hoặc html
+                    if (node.nodeType === Node.ELEMENT_NODE && (node.parentElement === document.body || node.parentElement === document.documentElement)) {
+                        if (!isAllowedBodyChild(node)) {
+                            // Cách mới: Đơn giản, đúng chuẩn và hiệu quả hơn
+                            node.style.setProperty('display', 'none', 'important');
+                            console.log('Đã ẩn phần tử được thêm tự động:', node);
                         }
-                    });
+                    }
                 }
             }
+        };
+
+        const observer = new MutationObserver(observerCallback);
+        // Theo dõi cả body và html để bắt tất cả các phần tử được thêm vào gốc
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true // Cần subtree để theo dõi các node được thêm vào body
         });
-
-        // Start observing the body and its entire subtree for changes.
-        observer.observe(document.body, { childList: true, subtree: true });
-        console.log('MutationObserver is active, watching for new elements.');
     }
 
     /**
-     * Injects CSS for a loading spinner into the document's head.
-     */
-    function injectSpinnerStyles() {
-        if (document.getElementById('spinner-styles')) return;
-        const style = document.createElement('style');
-        style.id = 'spinner-styles';
-        style.innerHTML = `
-            .${CONFIG.SPINNER_ID} {
-                position: fixed;
-                left: 50%;
-                top: 50%;
-                z-index: 9999;
-                width: 50px;
-                height: 50px;
-                margin: -25px 0 0 -25px; /* Offset by half of width/height */
-                border: 8px solid #f3f3f3; /* Light grey */
-                border-radius: 50%;
-                border-top: 8px solid #3498db; /* Blue */
-                animation: spin 1s linear infinite;
-                display: none; /* Hidden by default */
-            }
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Creates a spinner element and adds a global click listener to show it.
-     */
-    function setupGlobalSpinner() {
-        injectSpinnerStyles();
-
-        const spinner = document.createElement('div');
-        spinner.id = CONFIG.SPINNER_ID;
-        spinner.className = CONFIG.SPINNER_ID;
-        document.body.appendChild(spinner);
-
-        document.addEventListener('click', () => {
-            spinner.style.display = 'block';
-            setTimeout(() => {
-                spinner.style.display = 'none';
-            }, CONFIG.SPINNER_DURATION);
-        });
-
-        console.log('Global click spinner has been initialized.');
-    }
-
-    /**
-     * Main function to orchestrate all DOM manipulations.
+     * Hàm chính điều phối tất cả các tác vụ.
      */
     function main() {
-        // Apply replacements to the initial DOM content.
-        replaceTextInElement(document.body);
+        saveLastVisitTime();
+        createAdBanner();
 
-        // Watch for future DOM changes.
+        // Thực hiện các thay đổi DOM
+        updateBrandingImages();
+        hideUnwantedElements();
+        performTextReplacements(); // Tối ưu hóa
+        performExactTextReplacements();
+
+        // Thiết lập observer để theo dõi các thay đổi trong tương lai
         setupMutationObserver();
 
-        // Set up the global click spinner.
-        setupGlobalSpinner();
-
-        console.log('All Jpavtv customizations have been applied.');
+        console.log('Tất cả các tùy chỉnh đã được áp dụng.');
     }
 
-    // --- Execution ---
-    // Ensure the script runs only after the DOM is ready.
+    // Chạy hàm main sau khi DOM đã tải xong hoặc chạy ngay lập tức nếu đã tải xong.
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', main);
     } else {
-        // DOM is already ready.
         main();
     }
-
 })();
