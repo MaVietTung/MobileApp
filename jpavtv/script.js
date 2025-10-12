@@ -17,7 +17,7 @@
     // --- Cấu hình trung tâm ---
     const CONFIG = {
         AD_SCRIPT_URL: 'https://mobile-3aj.pages.dev/ads/jpavtv.js',
-        LOGO_URL: 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.png',
+        LOGO_URL: 'https://mobile-3aj.pages.dev/jpavtv/jpavtv-logo.jpg',
         // Danh sách các bộ chọn CSS cho các phần tử cần ẩn.
         SELECTORS_TO_HIDE: [
             '#ggButn',
@@ -28,10 +28,10 @@
         ],
         // Các cặp từ khóa tìm kiếm và thay thế (không phân biệt hoa thường).
         TEXT_REPLACEMENTS: {
-            'aniwatch': 'Wibuanimetv',
-            '9anime': 'WibuanimeTv',
-            '9anime.to': 'WibuanimeTv',
-            '9 anime': 'WibuanimeTv'
+            'aniwatch': 'Jpavtv',
+            '9anime': 'Jpavtv',
+            '9anime.to': 'Jpavtv',
+            '9 anime': 'Jpavtv'
         },
         // Các quy tắc thay thế văn bản chính xác cho các phần tử cụ thể.
         EXACT_TEXT_REPLACEMENTS: [{
