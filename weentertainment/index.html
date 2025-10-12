@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nonoki Clone</title>
+    <title>WeEntertainment</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
@@ -22,44 +22,11 @@
 
         .container {
             width: 100%;
-            max-width: 480px; /* Chiều rộng tối đa cho màn hình di động */
+            max-width: 480px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
         }
-
-        /* --- Header --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 80px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: -1px;
-        }
-
-        .hamburger-menu {
-            width: 28px;
-            height: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .hamburger-menu span {
-            display: block;
-            width: 100%;
-            height: 4px;
-            background-color: white;
-            border-radius: 2px;
-        }
-
 
         /* --- Main Content --- */
         main {
@@ -76,7 +43,7 @@
             font-size: 48px;
             font-weight: 900;
             line-height: 1.1;
-            margin: 0 0 40px 0;
+            margin: 80px 0 40px 0;
         }
 
         .main-heading .highlight {
@@ -102,15 +69,20 @@
 
         .sub-heading {
             font-size: 16px;
-            margin-bottom: 40px;
+            margin: 0 0 15px 0;
+            padding: 0 20px; /* Thêm padding để không bị sát lề */
         }
         
+        .sub-heading:last-of-type {
+            margin-bottom: 40px;
+        }
+
         /* --- Search Bar --- */
         .search-container {
             width: 100%;
             position: relative;
             margin-top: auto; /* Đẩy thanh tìm kiếm xuống dưới */
-            padding-bottom: 20px;
+            margin-bottom: 20px; /* ĐÃ SỬA: Dùng margin thay vì padding */
         }
 
         .search-input {
@@ -122,6 +94,7 @@
             font-size: 16px;
             box-sizing: border-box;
             outline: none;
+            color: #333;
         }
 
         .search-input::placeholder {
@@ -147,6 +120,7 @@
         .search-button svg {
             width: 24px;
             height: 24px;
+            stroke: #0c0c0c;
         }
 
     </style>
@@ -154,23 +128,19 @@
 <body>
 
     <div class="container">
-        <header>
-            <div class="logo">WeEntertainment</div>
-        </header>
-
         <main>
             <h1 class="main-heading">
                 The <span class="highlight">best</span> tool for acess <span class="highlight">entertainment source</span>
             </h1>
             <button class="cta-button">Try for free</button>
             <p class="sub-heading">Entertainment for free, reduce annoying ads, spam ads and more</p>
-            <p class="sub-heading">Try with VPN or 1.1.1.1 to acess your url </p>
+            <p class="sub-heading">Try with VPN or 1.1.1 to acess your url</p>
         </main>
 
         <div class="search-container">
             <input type="text" class="search-input" placeholder="Type your url source here">
             <button class="search-button" aria-label="Search">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
