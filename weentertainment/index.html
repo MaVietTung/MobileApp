@@ -25,7 +25,6 @@
             font-size: 24px;
             font-weight: 900;
             letter-spacing: -1px;
-
         }
 
         .container {
@@ -58,28 +57,10 @@
             color: #4EFFB5;
         }
 
-        .cta-button {
-            background-color: #4EFFB5;
-            color: #0c0c0c;
-            border: none;
-            border-radius: 50px;
-            padding: 18px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: background-color 0.3s;
-        }
-
-        .cta-button:hover {
-            background-color: #3eeab0;
-        }
-
         .sub-heading {
             font-size: 16px;
             margin: 0 0 15px 0;
             padding: 0 20px;
-            /* Thêm padding để không bị sát lề */
         }
 
         .sub-heading:last-of-type {
@@ -91,9 +72,6 @@
             width: 100%;
             position: relative;
             margin-top: auto;
-            /* Đẩy thanh tìm kiếm xuống dưới */
-            margin-bottom: 20px;
-            /* ĐÃ SỬA: Dùng margin thay vì padding */
         }
 
         .search-input {
@@ -133,6 +111,41 @@
             height: 24px;
             stroke: #0c0c0c;
         }
+
+        /* --- PHẦN MỚI: Kiểu cho danh sách lịch sử --- */
+        .history-container {
+            width: 100%;
+            margin-top: 8px; /* Khoảng cách với thanh tìm kiếm */
+            margin-bottom: 20px;
+        }
+
+        #history-list {
+            list-style-type: none; /* Bỏ dấu chấm đầu dòng */
+            padding: 5px 0;
+            margin: 0;
+            background-color: rgba(0, 0, 0, 0.2); /* Nền mờ */
+            border-radius: 20px;
+            max-height: 240px; /* Chiều cao tối đa trước khi cuộn */
+            overflow-y: auto; /* Tự động thêm thanh cuộn nếu cần */
+        }
+
+        #history-list li {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left; /* Căn lề trái URL cho dễ đọc */
+            word-break: break-all; /* Tự động xuống dòng nếu URL quá dài */
+            transition: background-color 0.2s;
+        }
+        
+        #history-list li:last-child {
+            border-bottom: none; /* Bỏ gạch chân cho mục cuối cùng */
+        }
+
+        #history-list li:hover {
+            background-color: rgba(78, 255, 181, 0.2); /* Hiệu ứng khi di chuột vào */
+        }
+        
     </style>
 </head>
 
@@ -161,27 +174,101 @@
                 </svg>
             </button>
         </div>
+        
+        <div class="history-container">
+            <ul id="history-list"></ul>
+        </div>
     </div>
 
     <script>
-        // Lấy đối tượng nút search và ô input
+        // --- PHẦN MỚI: Toàn bộ logic cho lịch sử tìm kiếm ---
+
+        const HISTORY_KEY = 'we_entertainment_url_history';
         const searchButton = document.querySelector('.search-button');
         const searchInput = document.querySelector('.search-input');
+        const historyList = document.getElementById('history-list');
+
+        /**
+         * Lấy danh sách lịch sử từ localStorage
+         * @returns {string[]} Một mảng các URL
+         */
+        function getHistory() {
+            const history = localStorage.getItem(HISTORY_KEY);
+            return history ? JSON.parse(history) : [];
+        }
+
+        /**
+         * Hiển thị danh sách lịch sử ra giao diện
+         */
+        function renderHistory() {
+            const history = getHistory();
+            historyList.innerHTML = ''; // Xóa danh sách cũ trước khi vẽ lại
+            
+            if (history.length === 0) {
+                historyList.style.display = 'none'; // Ẩn nếu không có lịch sử
+            } else {
+                historyList.style.display = 'block'; // Hiện nếu có
+            }
+
+            history.forEach(url => {
+                const li = document.createElement('li');
+                li.textContent = url;
+                historyList.appendChild(li);
+            });
+        }
+
+        /**
+         * Lưu một URL mới vào lịch sử
+         * @param {string} url - URL cần lưu
+         */
+        function saveUrlToHistory(url) {
+            let history = getHistory();
+            
+            // Xóa URL nếu đã tồn tại để đưa nó lên đầu danh sách
+            history = history.filter(item => item !== url);
+
+            // Thêm URL mới vào đầu mảng
+            history.unshift(url);
+
+            // Chỉ giữ lại 10 mục gần nhất
+            const newHistory = history.slice(0, 10);
+
+            // Lưu lại vào localStorage
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
+        }
+        
+        // --- Cập nhật logic cũ ---
 
         // Thêm sự kiện click cho nút search
         searchButton.addEventListener('click', () => {
-            const urlValue = searchInput.value;
+            const urlValue = searchInput.value.trim();
 
-            // Kiểm tra xem người dùng có nhập gì không
-            if (urlValue && urlValue.trim() !== '') {
-                // Tạo một URL giả để gửi dữ liệu về cho C#
-                // encodeURIComponent dùng để mã hóa các ký tự đặc biệt trong URL
-                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlValue)}`;
+            if (urlValue !== '') {
+                // 1. Lưu URL vào lịch sử
+                saveUrlToHistory(urlValue);
                 
-                // Yêu cầu WebView điều hướng đến URL giả này
+                // 2. Hiển thị lại danh sách lịch sử đã cập nhật
+                renderHistory();
+
+                // 3. Gửi tín hiệu đến C# (logic cũ)
+                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlValue)}`;
                 window.location.href = fakeUrl;
             }
         });
+
+        // Thêm sự kiện click cho các mục trong danh sách lịch sử
+        historyList.addEventListener('click', (event) => {
+            // Kiểm tra xem phần tử được click có phải là một thẻ <li> không
+            if (event.target && event.target.nodeName === 'LI') {
+                const url = event.target.textContent;
+                searchInput.value = url; // Điền URL vào ô input
+                searchButton.click(); // Giả lập hành động nhấn nút search
+            }
+        });
+
+        // Hiển thị lịch sử ngay khi trang được tải
+        document.addEventListener('DOMContentLoaded', renderHistory);
+
     </script>
 
 </body>
