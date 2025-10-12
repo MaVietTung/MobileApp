@@ -74,7 +74,8 @@
             'iframe[src*="doubleclick.net"]',
             'a[href*="/ads/"]',
             'a[href*="?ad="]',
-            '[target*="_blank"]',
+            // Ẩn tất cả các liên kết mở tab mới, NGOẠI TRỪ những liên kết bên trong container quảng cáo #ads của chúng ta.
+            '[target*="_blank"]:not(#ads *)',
         ],
     };
 
