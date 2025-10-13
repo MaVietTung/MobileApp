@@ -8,6 +8,6 @@ const stores = [
     { linkimg: 'https://mobile-3aj.pages.dev/wemanga/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.companyname.animeio' },
     { linkimg: 'https://mobile-3aj.pages.dev/wenovel/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.webnovel' },
     { linkimg: 'https://mobile-3aj.pages.dev/wibuanimetv/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.animehay' },
-    { linkimg: 'https://mobile-3aj.pages.dev/livesport/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.x_400mv' }
-
+    { linkimg: 'https://mobile-3aj.pages.dev/livesport/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.x_400mv' },
+    { linkimg: 'https://mobile-3aj.pages.dev/weentertainment/banner.png', linkproduct: 'https://play.google.com/store/apps/details?id=com.mvtsoftware.pandratv' }
   ];
