@@ -195,7 +195,7 @@
      *  Go to url if goUrl = localStorage.getItem('goUrl') not null
      */
     function goToUrlPopUp() { 
-        const goUrl = caches.getItem('goUrl');
+        const goUrl = localStorage.getItem('goUrl');
         if (!goUrl) {
             return;
         }
