@@ -249,11 +249,13 @@
         searchButton.addEventListener('click', () => {
             const urlValue = searchInput.value.trim().toLowerCase();
             const urlOrigin = getUrlOrigin(urlValue);
-            localStorage.setItem("goUrl", urlValue);
             if (urlValue !== '' && urlOrigin) {
                 saveUrlToHistory(urlValue);
                 renderHistory();
-                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlOrigin)}`;
+                // Truyền URL đầy đủ (urlValue) qua hash của URL gốc (urlOrigin)
+                // để script được tiêm vào trang đích có thể đọc được.
+                const urlToLoad = `${urlOrigin}#goUrl=${encodeURIComponent(urlValue)}`;
+                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlToLoad)}`;
                 window.location.href = fakeUrl;
             }
         });
