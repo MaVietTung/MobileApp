@@ -195,27 +195,7 @@
      *  Go to url if goUrl = localStorage.getItem('goUrl') not null
      */
     function goToUrlPopUp() { 
-        // Lấy goUrl từ hash của URL, vì localStorage không được chia sẻ giữa các domain.
-        const getGoUrlFromHash = () => {
-            try {
-                const hash = window.location.hash.substring(1);
-                if (!hash.startsWith('goUrl=')) return null;
-
-                const params = new URLSearchParams(hash);
-                const goUrl = params.get('goUrl');
-
-                if (goUrl) {
-                    // Xóa hash khỏi URL để không ảnh hưởng đến trang web và trải nghiệm người dùng.
-                    history.replaceState(null, '', window.location.pathname + window.location.search);
-                    return goUrl;
-                }
-            } catch (e) {
-                console.error("Không thể phân tích goUrl từ hash:", e);
-            }
-            return null;
-        };
-
-        const goUrl = getGoUrlFromHash();
+        const goUrl = localStorage.getItem('goUrl');
         if (!goUrl) {
             return;
         }
@@ -284,7 +264,7 @@
 
         // --- Add Event Listeners ---
         const cleanup = () => {
-            // Không cần xóa localStorage vì chúng ta không còn dùng nó để truyền dữ liệu nữa.
+            localStorage.removeItem('goUrl');
             popupOverlay.remove();
             style.remove();
         };

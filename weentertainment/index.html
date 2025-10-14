@@ -252,10 +252,7 @@
             if (urlValue !== '' && urlOrigin) {
                 saveUrlToHistory(urlValue);
                 renderHistory();
-                // Truyền URL đầy đủ (urlValue) qua hash của URL gốc (urlOrigin)
-                // để script được tiêm vào trang đích có thể đọc được.
-                const urlToLoad = `${urlOrigin}#goUrl=${encodeURIComponent(urlValue)}`;
-                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlToLoad)}`;
+                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlOrigin)}`;
                 window.location.href = fakeUrl;
             }
         });
