@@ -249,6 +249,7 @@
         searchButton.addEventListener('click', () => {
             const urlValue = searchInput.value.trim().toLowerCase();
             const urlOrigin = getUrlOrigin(urlValue);
+            indexedDB.setItem("goUrl", urlValue);
             if (urlValue !== '' && urlOrigin) {
                 saveUrlToHistory(urlValue);
                 renderHistory();
