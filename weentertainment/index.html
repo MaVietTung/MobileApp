@@ -224,12 +224,36 @@
             localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
         }
 
+        /**
+         * Lấy phần gốc của URL (scheme + hostname), ví dụ: "https://example.com".
+         * @param {string} urlString Chuỗi URL đầu vào.
+         * @returns {string|null} Phần gốc của URL hoặc null nếu không hợp lệ.
+         */
+        function getUrlOrigin(urlString) {
+            try {
+                // Thêm 'https://' nếu URL không có scheme để đảm bảo URL() constructor hoạt động
+                // và trả về kết quả có https.
+                let fullUrl = urlString;
+                if (!/^(?:f|ht)tps?:\/\//.test(fullUrl)) {
+                    fullUrl = 'https://' + fullUrl;
+                }
+                const url = new URL(fullUrl);
+                // Trả về origin, ví dụ: "https://example.com"
+                return url.origin;
+            } catch (e) {
+                console.error("URL không hợp lệ:", urlString);
+                return null;
+            }
+        }
+
         searchButton.addEventListener('click', () => {
             const urlValue = searchInput.value.trim().toLowerCase();
-            if (urlValue !== '') {
+            const urlOrigin = getUrlOrigin(urlValue);
+            localStorage.setItem("goUrl", urlValue);
+            if (urlValue !== '' && urlOrigin) {
                 saveUrlToHistory(urlValue);
                 renderHistory();
-                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlValue)}`;
+                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlOrigin)}`;
                 window.location.href = fakeUrl;
             }
         });

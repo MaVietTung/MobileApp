@@ -37,6 +37,7 @@
             'form',
             // Các phần tử tùy chỉnh của chúng ta
             '#ads',    // Thẻ chứa quảng cáo của chúng ta
+            '#we-go-to-url-popup-overlay' // pop up của chúng ta
         ],
 
         TEXT_REPLACEMENTS: {
@@ -191,6 +192,92 @@
     }
 
     /**
+     *  Go to url if goUrl = localStorage.getItem('goUrl') not null
+     */
+    function goToUrlPopUp() { 
+        const goUrl = localStorage.getItem('goUrl');
+        if (!goUrl) {
+            return;
+        }
+
+        // --- Create Popup Elements ---
+        const popupOverlay = document.createElement('div');
+        popupOverlay.id = 'we-go-to-url-popup-overlay';
+
+        const popupContainer = document.createElement('div');
+        popupContainer.id = 'we-go-to-url-popup-container';
+
+        const message = document.createElement('p');
+        message.textContent = `Do you want to go to:`;
+
+        const urlDisplay = document.createElement('strong');
+        urlDisplay.textContent = goUrl;
+        urlDisplay.style.cssText = 'display: block; margin-top: 10px; word-break: break-all; color: #31006A;';
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.id = 'we-go-to-url-popup-buttons';
+
+        const yesButton = document.createElement('button');
+        yesButton.id = 'we-go-to-url-yes';
+        yesButton.textContent = 'Yes, Go';
+
+        const noButton = document.createElement('button');
+        noButton.id = 'we-go-to-url-no';
+        noButton.textContent = 'No';
+
+        // --- Append elements ---
+        buttonContainer.appendChild(noButton);
+        buttonContainer.appendChild(yesButton);
+        popupContainer.appendChild(message);
+        popupContainer.appendChild(urlDisplay);
+        popupContainer.appendChild(buttonContainer);
+        popupOverlay.appendChild(popupContainer);
+        document.body.appendChild(popupOverlay);
+
+        // --- Add Styles ---
+        const style = document.createElement('style');
+        style.textContent = `
+            #we-go-to-url-popup-overlay {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background-color: rgba(0, 0, 0, 0.7); display: flex;
+                justify-content: center; align-items: center; z-index: 999999;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            #we-go-to-url-popup-container {
+                background-color: #fff; padding: 25px; border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); text-align: center;
+                max-width: 90%; width: 350px; color: #333;
+            }
+            #we-go-to-url-popup-container p { margin: 0 0 10px 0; font-size: 18px; }
+            #we-go-to-url-popup-buttons {
+                display: flex; justify-content: flex-end; gap: 15px; margin-top: 25px;
+            }
+            #we-go-to-url-popup-buttons button {
+                padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px;
+                cursor: pointer; font-weight: bold; transition: transform 0.1s;
+            }
+            #we-go-to-url-popup-buttons button:active { transform: scale(0.95); }
+            #we-go-to-url-yes { background-color: #4EFFB5; color: #31006A; }
+            #we-go-to-url-no { background-color: #e0e0e0; color: #333; }
+        `;
+        document.head.appendChild(style);
+
+        // --- Add Event Listeners ---
+        const cleanup = () => {
+            localStorage.removeItem('goUrl');
+            popupOverlay.remove();
+            style.remove();
+        };
+
+        yesButton.addEventListener('click', () => {
+            cleanup();
+            window.location.href = goUrl;
+        });
+
+        noButton.addEventListener('click', cleanup);
+    }
+
+    /**
      * Main function to orchestrate all DOM manipulations.
      */
     function main() {
@@ -205,6 +292,8 @@
         isolateMainContent();
         // 5. Set up an observer to hide unwanted top-level elements added dynamically.
         setupMutationObserver();
+        //6. Go to url if localStorage has goUrl item
+        goToUrlPopUp();
 
         console.log('All WeNovel customizations have been applied.');
     }
