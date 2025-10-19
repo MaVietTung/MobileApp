@@ -168,8 +168,8 @@
                 The <span class="highlight">best</span> tool for acess <span class="highlight">entertainment
                     source</span>
             </h1>
-            <p class="sub-heading">Entertainment for free, reduce annoying ads, spam ads and more</p>
-            <p class="sub-heading">Try with VPN or 1.1.1.1 to acess your url</p>
+            <p class="sub-heading">Access private site URLs for free, reduce annoying ads, spam, and more.</p>
+            <p class="sub-heading">Try with a VPN or 1.1.1.1 to access your private URL.</p>
         </main>
 
         <div class="search-container">
@@ -189,96 +189,101 @@
     </div>
 
     <script>
-        const HISTORY_KEY = 'we_entertainment_url_history';
-        const searchButton = document.querySelector('.search-button');
-        const searchInput = document.querySelector('.search-input');
-        const historyList = document.getElementById('history-list');
+        (function() {
+            'use strict';
 
-        function getHistory() {
-            const history = localStorage.getItem(HISTORY_KEY);
-            return history ? JSON.parse(history) : [];
-        }
+            const HISTORY_KEY = 'we_entertainment_url_history';
+            const MAX_HISTORY_ITEMS = 10;
+            const searchButton = document.querySelector('.search-button');
+            const searchInput = document.querySelector('.search-input');
+            const historyList = document.getElementById('history-list');
 
-        function renderHistory() {
-            const history = getHistory();
-            historyList.innerHTML = '';
-
-            if (history.length === 0) {
-                historyList.style.display = 'none';
-            } else {
-                historyList.style.display = 'block';
-            }
-
-            history.forEach(url => {
-                const li = document.createElement('li');
-                li.textContent = url;
-                historyList.appendChild(li);
-            });
-        }
-
-        function saveUrlToHistory(url) {
-            let history = getHistory();
-            history = history.filter(item => item !== url);
-            history.unshift(url);
-            const newHistory = history.slice(0, 10);
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
-        }
-
-        /**
-         * Lấy phần gốc của URL (scheme + hostname), ví dụ: "https://example.com".
-         * @param {string} urlString Chuỗi URL đầu vào.
-         * @returns {string|null} Phần gốc của URL hoặc null nếu không hợp lệ.
-         */
-        function getUrlOrigin(urlString) {
-            try {
-                // Thêm 'https://' nếu URL không có scheme để đảm bảo URL() constructor hoạt động
-                // và trả về kết quả có https.
-                let fullUrl = urlString;
-                if (!/^(?:f|ht)tps?:\/\//.test(fullUrl)) {
-                    fullUrl = 'https://' + fullUrl;
+            function getHistory() {
+                const history = localStorage.getItem(HISTORY_KEY);
+                try {
+                    return history ? JSON.parse(history) : [];
+                } catch (e) {
+                    console.error("Failed to parse history from localStorage:", e);
+                    return [];
                 }
-                const url = new URL(fullUrl);
-                // Trả về origin, ví dụ: "https://example.com"
-                return url.origin;
-            } catch (e) {
-                console.error("URL không hợp lệ:", urlString);
-                return null;
             }
-        }
 
-        searchButton.addEventListener('click', () => {
-            const urlValue = searchInput.value.trim().toLowerCase();
-            const urlOrigin = getUrlOrigin(urlValue);
-            //localStorage.setItem("goUrl", urlValue);
-            if (urlValue !== '' && urlOrigin) {
-                saveUrlToHistory(urlValue);
-                renderHistory();
-                const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlOrigin)}`;
-                window.location.href = fakeUrl;
+            function renderHistory() {
+                const history = getHistory();
+                historyList.innerHTML = ''; // Clear previous items
+
+                if (history.length === 0) {
+                    historyList.style.display = 'none';
+                    return;
+                }
+
+                historyList.style.display = 'block';
+                const fragment = document.createDocumentFragment();
+                history.forEach(url => {
+                    const li = document.createElement('li');
+                    li.textContent = url;
+                    fragment.appendChild(li);
+                });
+                historyList.appendChild(fragment);
             }
-        });
 
-        historyList.addEventListener('click', (event) => {
-            if (event.target && event.target.nodeName === 'LI') {
-                const url = event.target.textContent;
-                searchInput.value = url;
-                searchButton.click();
+            function saveUrlToHistory(url) {
+                let history = getHistory();
+                // Remove the URL if it already exists to avoid duplicates and move it to the top
+                history = history.filter(item => item !== url);
+                history.unshift(url);
+                // Keep only the last N items
+                const newHistory = history.slice(0, MAX_HISTORY_ITEMS);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
             }
-        });
 
-        // --- PHẦN MỚI: Bắt sự kiện nhấn phím Enter ---
-        searchInput.addEventListener('keydown', (event) => {
-            // Kiểm tra xem phím được nhấn có phải là 'Enter' không
-            if (event.key === 'Enter') {
-                // Ngăn hành vi mặc định của phím Enter (như submit form)
-                event.preventDefault();
-                // Giả lập hành động nhấn nút search
-                searchButton.click();
+            function getUrlOrigin(urlString) {
+                try {
+                    let fullUrl = urlString;
+                    if (!/^(?:f|ht)tps?:\/\//.test(fullUrl)) {
+                        fullUrl = 'https://' + fullUrl;
+                    }
+                    const url = new URL(fullUrl);
+                    return url.origin;
+                } catch (e) {
+                    console.error("Invalid URL:", urlString);
+                    return null;
+                }
             }
-        });
 
-        // Hiển thị lịch sử ngay khi trang được tải
-        document.addEventListener('DOMContentLoaded', renderHistory);
+            function handleSearch() {
+                const urlValue = searchInput.value.trim();
+                if (!urlValue) return;
+
+                const urlOrigin = getUrlOrigin(urlValue);
+                if (urlOrigin) {
+                    saveUrlToHistory(urlValue);
+                    renderHistory();
+                    const fakeUrl = `app://updateGoUrl?url=${encodeURIComponent(urlOrigin)}`;
+                    window.location.href = fakeUrl;
+                }
+            }
+
+            searchButton.addEventListener('click', handleSearch);
+
+            historyList.addEventListener('click', (event) => {
+                if (event.target && event.target.matches('li')) {
+                    const url = event.target.textContent;
+                    searchInput.value = url;
+                    handleSearch();
+                }
+            });
+
+            searchInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleSearch();
+                }
+            });
+
+            // Initial render on page load
+            document.addEventListener('DOMContentLoaded', renderHistory);
+        })();
     </script>
 
 </body>
