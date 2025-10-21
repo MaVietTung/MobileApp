@@ -29,7 +29,8 @@
             '[id*=footer]',
             'footer',
             'a[href*="https://strmd.link"]',
-            'div[role*=alert]'
+            'div[role*=alert]',
+            '.header__logo'
         ],
         IMAGE_SELECTORS_TO_UPDATE: [
             'img[src*=logo]',
