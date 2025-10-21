@@ -37,7 +37,7 @@
             'img[src*=" Popcorn"]' // The space is intentional
         ],
         TEXT_REPLACEMENTS: {
-            'streamed': 'Livesport',
+            'soccerway': 'Livesport',
         },
         LINK_UPDATES: [{
             selector: 'a#logo',
